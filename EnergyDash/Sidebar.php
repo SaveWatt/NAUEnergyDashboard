@@ -58,7 +58,7 @@
         <li>55 Mountain View Hall</li>
         <li>58 Conference Center</li>
         <li>59 Hilltop</li>
-        <li><a href="Graph.php">60 SAS</a></li>
+        <li><a href="http://localhost:8888/EnergyDash/drawgraph.php">60 SAS</a></li>
         <li>62 McConnell Hall</li>
         <li>64 Dubois (South Dining)</li>
         <li>65 SBS East</li>
@@ -144,7 +144,7 @@
         <li>Riles (15)</li>
         <li>Rosebury (13A)</li>
         <li>San Fran Parking Garage (96B)</li>
-        <li><a href="Graph.php">SAS (60)</a></li>
+        <li><a href="http://localhost:8888/EnergyDash/drawgraph.php">SAS (60)</a></li>
         <li>SBS East (65)</li>
         <li>SBS West (70)</li>
         <li>Science & Health (36)</li>
