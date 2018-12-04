@@ -1,0 +1,152 @@
+@font-face {
+    font-family: "Anson";
+    src: url('Fonts/Anson/anson-regular-webfont.woff2') format('woff2'), url('anson-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width:100%;
+  height:100%;
+  font-family: 'Anson';
+}
+ul {
+  list-style-type: none;
+  text-align: left;
+}
+ul#sidemenu{
+  padding: 0;
+}
+li{
+  text-align: left;
+  max-width: inherit;
+}
+button{
+  background-color: #003467;
+  color: white;
+  width: 10em;
+  height: 3em;
+  font-family: 'Anson';
+  font-size: 12px;
+  margin-left: 45%;
+  margin-top: 25%;
+  outline: none;
+  border: none;
+}
+#rightcont{
+  width: 100%;
+  height:100%;
+}
+div .leftdiv{
+  height: 100%;
+  width: fit-content;
+}
+div .rightdiv{
+  height: 100%;
+  width: fit-content;
+}
+div#div-container{
+  width: inherit;
+  height: 50%;
+}
+canvas#line-chart{
+  width: 100%;
+  height: 100%;
+}
+.sidebar {
+    background-color: #003467;
+    overflow: scroll;
+    position: fixed;
+    left: 0;
+    height: -webkit-fill-available;
+    display: inline-block;
+    margin:0;
+    padding: .5%;
+    color: white;
+}
+.imgborder{
+  background-color: white;
+  background-color: rgba(255,255,255,.2);
+  width: inherit;
+  height: inherit;
+
+}
+.sideheader{
+  background-color: #003467;
+  text-align: center;
+}
+h1{
+  font-family: 'Anson';
+  color: white;
+  text-align: center;
+}
+.sidebar a{
+  display: block;
+  font-family: 'Anson';
+  text-decoration: none;
+  width: fit-content;
+  color: white;
+}
+.container{
+  width: 100%;
+  height: 100%;
+  display: inline-flex;
+}
+.topnav {
+    background-color: #003467;
+    overflow: hidden;
+    position: sticky;
+    top: 0px;
+    right: 0px;
+    padding: 0px;
+    z-index: 1;
+    clear: both;
+}
+.topnav a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    font-family: 'Anson';
+    text-decoration: none;
+    width: fit-content;
+}
+.topnav#links{
+  float: left;
+  width: fit-content;
+}
+.topnav#links a{
+  font-size: 25px;
+}
+.graphcont{
+  display: block;
+  width: -webkit-fill-available;
+}
+div .topnav#settings{
+  float: right;
+  width: fit-content;
+}
+div .topnav#settings a{
+  font-size: 12px;
+}
+.topnav a:hover {
+    background-color: #ffcc01;
+    color: Black;
+}
+button:hover {
+    background-color: #ffcc01;
+    color: Black;
+}
+img#logo{
+  width: inherit;
+  height: inherit;
+  opacity: 1;
+}
+#namesub {
+  display: none;
+}
+#numbersub {
+  display: none;
+}
