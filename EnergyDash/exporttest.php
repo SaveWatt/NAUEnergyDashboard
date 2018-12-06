@@ -56,11 +56,6 @@ if (mysqli_num_rows($result) > 0) {
       <div id='rightdiv' style="float: left; width:-webkit-fill-available;">
         <?php include 'Header.php'; ?>
         <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h2>Export Data from MySQL to CSV</h2>
-                </div>
-            </div>
             <div class="form-group">
                 <?php echo $users ?>
             </div>
