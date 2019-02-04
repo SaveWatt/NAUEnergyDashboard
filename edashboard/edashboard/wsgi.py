@@ -1,5 +1,5 @@
 """
-WSGI config for eDash project.
+WSGI config for edashboard project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
