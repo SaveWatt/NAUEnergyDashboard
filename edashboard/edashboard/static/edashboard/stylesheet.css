@@ -148,8 +148,9 @@ img#logo{
   height: 100%;
 }
 #right-cont{
+  padding: 1%;
   float: right;
-  width: auto;
+  width: 30%;
   height: 100%;
 }
 div#banner{
@@ -167,7 +168,8 @@ h1#head{
   color: #003467;
 }
 .chart-container {
-   width: inherit;
+  margin: 0;
+   width: auto;
    height: auto;
 }
 #greencomp{
@@ -193,8 +195,9 @@ table.greencomp td{
 #switches{
   display: inline-block;
   position: relative;
-  width: auto;
+  width: -webkit-fill-available;
   height: auto;
+  padding: 3%;
 }
 #switches button{
   text-align: center;
@@ -202,6 +205,7 @@ table.greencomp td{
   float: left;
   color: #003467;
   background-color: #e3e3e3;
+  width: 20%;
 }
 #switches button:hover {
     background-color: #ffcc01;
@@ -210,8 +214,37 @@ h1#chartTitle{
   color: #003467;
   text-align: center;
 }
-h2#chartNum{
+h2#chartNum, #chartLabel{
   color: #003467;
   text-align: center;
 
+}
+#Labels{
+  position: relative;
+  align-items: center;
+  text-align: -webkit-center;
+  padding: 1%;
+}
+
+#elec, #heat, #cool{
+  display: inline-block;
+  position: inherit;
+  left: 5px;
+  top: 5px;
+}
+
+table .label{
+  table-layout:fixed;
+  height: auto;
+  width: 40%;
+  text-align: center;
+  border-collapse: separate;
+  border-spacing: 2%;
+}
+.label tr{
+  border: 5px solid transparent;
+}
+.label td{
+  text-align: center;
+  margin:10%;
 }

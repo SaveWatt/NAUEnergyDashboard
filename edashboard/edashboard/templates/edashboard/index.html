@@ -40,17 +40,30 @@
       </div>
       <div id="right-cont">
         <div class="chart-container">
+          <!--Chart Title-->
           <h1 id="chartTitle">Current Campus Usage For Monitored Buildings: </h1>
-          <h2 id="chartNum">245,882,754 BTU/HOUR</h2>
+          <h2 id="chartNum">245,882,754 BTU/HOURS</h2>
+          <!--Chart-->
           <canvas id="pie-chart" width="800" height="450"></canvas>
         </div>
+        <!--Chart Labels-->
+        <div id="Labels">
+          <table class="label" cellpadding="8" width:"30%">
+            <tr><td bgcolor="#e3e3e3">Electricity</td><td id=eval>32483943</td><td class="Labels">BTU/HOURS</td></tr>
+            <tr><td bgcolor="#003467" style="color:white">Cooling</td><td id=cval>342342</td><td class="Labels">BTU/HOURS</td></tr>
+            <tr><td bgcolor="#ffcc01">Heating</td><td id=hval>324234</td><td class="Labels">BTU/HOURS</td></tr>
+          </table>
+        </div>
+          <!-- Need python functions to Convert from BTU to kW, Ton, Gas, Dollars and for all combos -->
         <div id="switWrap">
+          <!--Units buttons-->
+          <h3 style="margin:0;padding:2%;">Compare Usage In Equivalent Units:</h3>
           <div id="switches">
-            <button>BTU</button>
-            <button>kW</button>
-            <button>Tons</button>
-            <button>Gasoline</button>
-            <button>Cost</button>
+            <button id="btu" onclick="chgColor('btu')">BTU</button>
+            <button id="kw" onclick="chgColor('kw')">kW</button>
+            <button id="ton" onclick="chgColor('ton')">Tons</button>
+            <button id="gas" onclick="chgColor('gas')">Gasoline</button>
+            <button id="cost" onclick="chgColor('cost')">Cost</button>
           </div>
         </div>
       </div>
@@ -58,31 +71,75 @@
   </body>
 </html>
 <script>
+// Sets the defaults of the chart
+var currUnit = "BTU/HOUR";
+document.getElementById("btu").style.backgroundColor = "#ffcc01";
+
+// Toggles button color and the labels
+function chgColor(id) {
+  // Changes colors of buttons
+  if(document.getElementById("btu").style.backgroundColor == "rgb(255, 204, 1)"){
+    document.getElementById("btu").style.backgroundColor = "#e3e3e3";
+  }
+  else if(document.getElementById("kw").style.backgroundColor == "rgb(255, 204, 1)"){
+    document.getElementById("kw").style.backgroundColor = "#e3e3e3";
+  }
+  else if(document.getElementById("ton").style.backgroundColor == "rgb(255, 204, 1)"){
+    document.getElementById("ton").style.backgroundColor = "#e3e3e3";
+  }
+  else if(document.getElementById("gas").style.backgroundColor == "rgb(255, 204, 1)"){
+    document.getElementById("gas").style.backgroundColor = "#e3e3e3";
+  }
+  else{
+    document.getElementById("cost").style.backgroundColor = "#e3e3e3";
+  }
+
+  document.getElementById(id).style.backgroundColor = "#ffcc01";
+  // Changes displayed Labels
+  var elements = document.getElementsByClassName("Labels");
+  if (id== "kw"){
+    for(var i=0; i<elements.length; i++) {
+      elements[i].innerHTML= "kW/HOUR";
+    }
+  }
+  else if (id=="btu") {
+    for(var i=0; i<elements.length; i++) {
+      elements[i].innerHTML= "BTU/HOUR";
+    }
+  }
+  else if (id=="ton") {
+    for(var i=0; i<elements.length; i++) {
+      elements[i].innerHTML= "TONS";
+    }
+  }
+  else if (id=="gas") {
+    for(var i=0; i<elements.length; i++) {
+      elements[i].innerHTML= "GAS";
+    }
+  }
+  else {
+    for(var i=0; i<elements.length; i++) {
+      elements[i].innerHTML= "DOLLARS";
+    }
+  }
+}
+
+//Code for the chart
 new Chart(document.getElementById("pie-chart"), {
     type: 'pie',
     data: {
-      labels: ["Electricity: 2478", "Cooling: 5267", "Heating: 734"],
+      labels: ["Electricity","Cooling", "Heating"],
       datasets: [{
         label: "BTU/Hour",
         backgroundColor: ["#e3e3e3","#003467","#ffcc01"],
+        //Need to display 10,30,60 <- All need to add up to 100% not actual data value
+        // Need python function to call and return today's electricity, cooling, heating, and total from DB in array.
         data: [2478,5267,734]
       }]
     },
-    plugins: [{
-      beforeInit: function(chart) {
-        chart.data.labels.forEach(function(e, i, a) {
-          if (/\n/.test(e)) {
-              a[i] = e.split(/\n/);
-            }
-          });
-        }
-      }],
     options: {
       legend: {
-        position: 'bottom',
-        labels: {
-                fontSize:22
-              },
+        display: false,
             }
           }
         });
