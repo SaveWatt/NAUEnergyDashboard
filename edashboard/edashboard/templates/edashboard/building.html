@@ -1,4 +1,6 @@
 {% load static %}
+
+<!DOCTYPE html>
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="{% static 'stylesheet.css'%}">
@@ -7,14 +9,6 @@
   </head>
   <body>
     <div class="container" style="clear:both;">
-      <div id='leftdiv' style="float: left; height: 100%; width:fit-content;">
-        <div class='sideheader' id='sideheader' style="z-index: 2;">
-          <div class="imgborder">
-            <img id="logo" src="{% static 'edashboard/images/logo.png' %}" style="margin:1%;">
-          </div>
-        </div>
-        {% include "edashboard/sidebar.html" %}
-      </div>
       <div id='rightdiv' style="float: left; width:-webkit-fill-available;">
         {% include "edashboard/header.html" %}
         <div class="rightcont">
