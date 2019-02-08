@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import include, path
 from . import views
 from .views import *
+from django.conf import settings
+from django.conf.urls.static import static
 
 app_name = 'edashboard'
 urlpatterns = [
@@ -26,4 +28,4 @@ urlpatterns = [
     path('compare/', views.compare_view, name='compare'),
     path('export/', views.export_view, name='export'),
     path('help/', views.help_view, name='help'),
-]
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

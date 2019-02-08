@@ -1,106 +1,91 @@
 {% load static %}
+
+<!DOCTYPE html>
 <html>
-<style>
-  html,
-  body {
-    padding: 0;
-    margin: 0;
-  }
-  img{
-    position: absolute;
-    width: 15%;
-    height: auto;
-    align-items:center;
-    justify-content:center;
-  }
-  div#container{
-    background: url("{% static 'edashboard/images/NAU.jpg' %}");
-    height:100%;
-    width:100%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    overflow:hidden;
-  }
-  table{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform: translate(-50%,-50%);
-    text-align: center;
-    padding:12px;
-    border: none;
-    font-family: sans-serif;
-    background-color: #ffffff;
-    border-radius: 15px;
-    opacity: .75;
-  }
-  tr.labels{
-    font-family: Arial Black;
-    font-size: 20px;
-  }
-  .info{
-    font-size:140px;
-    font-family: sans-serif;
-  }
-</style>
   <head>
-    <link rel="stylesheet" type="text/css" href="{% static 'tempstyle.css'%}">
-    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'stylesheet.css'%}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
   </head>
   <body>
+    {% include "edashboard/header.html" %}
     <div id="container">
-      <img id="logo" src="{% static 'edashboard/images/logo.png' %}" style="margin:1%;">
-      <table cellpadding="20px">
-        <tr><th colspan="4"><h1>Energy Dashboard Coming Soon...</h1></th></tr>
-
-        <tr class="info">
-          <td id="day"></td>
-          <td id="hrs"></td>
-          <td id="min"></td>
-          <td id="sec"></td>
-        </tr>
-        <tr class="labels">
-          <td>Days</td>
-          <td>Hours</td>
-          <td>Minutes</td>
-          <td>Seconds</td>
-        </tr>
-      </table>
-      <script type="text/javascript">
-        function countDown(){
-          var today = new Date();
-          var eventDate = new Date("May 10,2019 00:00:00");
-
-          var currentTime = today.getTime();
-          var eventTime = eventDate.getTime();
-
-          var remTime= eventTime-currentTime;
-
-          var sec = Math.floor(remTime/1000);
-          var min = Math.floor(sec/60);
-          var hrs = Math.floor(min/60);
-          var days = Math.floor(hrs/24);
-
-          hrs=hrs%24;
-          min%=60;
-          sec%=60;
-
-          hrs = (hrs<10) ? "0"+hrs : hrs;
-          min = (min<10) ? "0"+min : min;
-          sec = (sec<10) ? "0"+sec : sec;
-
-
-          document.getElementById("day").innerHTML = days;
-          document.getElementById("hrs").innerHTML = hrs;
-          document.getElementById("min").innerHTML = min;
-          document.getElementById("sec").innerHTML = sec;
-
-          setTimeout(countDown,1000);
-
-        }
-        countDown();
-      </script>
+      <div id="left-cont">
+        <div id="descr">
+          <div id="banner">
+            <div id="innerbanner" style="background-image: url({% static 'edashboard/images/NAU2.jpg' %}); background-size:cover;">
+              <img id="logo" src="{% static 'edashboard/images/Logo2.png' %}" style="max-width: -webkit-fill-available;">
+            </div>
+          </div>
+          <div id="name">
+            <h1 id="head">Energy Dashboard</h1>
+          </div>
+        </div>
+        <div id="greencomp">
+          <table class="greencomp">
+            <tr>
+              <td>CARBON OFFSET</td>
+              <td>factory img</td>
+              <td>TREES SAVED</td>
+              <td>tree img</td>
+              <td>BARRELS OF OIL</td>
+              <td>barrel img</td>
+            </tr>
+            <td colspan="2" id=carOff>324349 Lbs.</td>
+            <td colspan="2" id=treSav>7456.3 Trees</td>
+            <td colspan="2" id=barOil>315.3 Barrels</td>
+            <tr>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div id="right-cont">
+        <div class="chart-container">
+          <h1 id="chartTitle">Current Campus Usage For Monitored Buildings: </h1>
+          <h2 id="chartNum">245,882,754 BTU/HOUR</h2>
+          <canvas id="pie-chart" width="800" height="450"></canvas>
+        </div>
+        <div id="switWrap">
+          <div id="switches">
+            <button>BTU</button>
+            <button>kW</button>
+            <button>Tons</button>
+            <button>Gasoline</button>
+            <button>Cost</button>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
+<script>
+new Chart(document.getElementById("pie-chart"), {
+    type: 'pie',
+    data: {
+      labels: ["Electricity: 2478", "Cooling: 5267", "Heating: 734"],
+      datasets: [{
+        label: "BTU/Hour",
+        backgroundColor: ["#e3e3e3","#003467","#ffcc01"],
+        data: [2478,5267,734]
+      }]
+    },
+    plugins: [{
+      beforeInit: function(chart) {
+        chart.data.labels.forEach(function(e, i, a) {
+          if (/\n/.test(e)) {
+              a[i] = e.split(/\n/);
+            }
+          });
+        }
+      }],
+    options: {
+      legend: {
+        position: 'bottom',
+        labels: {
+                fontSize:22
+              },
+            }
+          }
+        });
+
+
+</script>
