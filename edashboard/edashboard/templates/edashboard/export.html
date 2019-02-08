@@ -1,1 +1,31 @@
-<p>Test Export</p>
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="{% static 'stylesheet.css'%}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      {% include "edashboard/header.html" %}
+      <div id="left-cont">
+        <div id="descr">
+          <div id="banner">
+          </div>
+          <div id="name">
+            <h1 id="head">Energy Dashboard</h1>
+          </div>
+        </div>
+        <div id="greencomp">
+        </div>
+      </div>
+      <div id="right-cont">
+        <div id="graph">
+        </div>
+        <div id="switches">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
