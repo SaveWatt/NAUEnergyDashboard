@@ -11,6 +11,9 @@ from django.template import Template, Context
 def index(request):
     return render(request, 'edashboard/index.html')
 
+def construction(request):
+    return render(request, 'edashboard/construction.html')
+
 def building_view(request):
     return render(request, 'edashboard/building.html')
 
