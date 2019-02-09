@@ -20,20 +20,20 @@
             <h1 id="head">Energy Dashboard</h1>
           </div>
         </div>
-        <div id="greencomp">
+        <div class="greyell" id="greencomp">
           <table class="greencomp">
             <tr>
               <td>CARBON OFFSET</td>
-              <td>factory img</td>
+              <td><span class="circle"><img id="factory" src="{% static 'edashboard/images/factory.png' %}" style="max-width: -webkit-fill-available;"></span></td>
               <td>TREES SAVED</td>
-              <td>tree img</td>
+              <td><span class="circle"><img id="factory" src="{% static 'edashboard/images/tree.png' %}" style="max-width: -webkit-fill-available;"></span></td>
               <td>BARRELS OF OIL</td>
-              <td>barrel img</td>
+              <td><span class="circle"><img id="factory" src="{% static 'edashboard/images/barrel.png' %}" style="max-width: -webkit-fill-available;"></span></td>
             </tr>
-            <td colspan="2" id=carOff>324349 Lbs.</td>
-            <td colspan="2" id=treSav>7456.3 Trees</td>
-            <td colspan="2" id=barOil>315.3 Barrels</td>
-            <tr>
+            <tr id="compval">
+              <td colspan="2" id=carOff><b>324349 Lbs.</b></td>
+              <td colspan="2" id=treSav><b>7456.3 Trees</b></td>
+              <td colspan="2" id=barOil><b>315.3 Barrels</b></td>
             </tr>
           </table>
         </div>
@@ -41,7 +41,7 @@
       <div id="right-cont">
         <div class="chart-container">
           <!--Chart Title-->
-          <h1 id="chartTitle">Current Campus Usage For Monitored Buildings: </h1>
+          <h1 id="chartTitle">Current Campus Usage For Monitored Buildings:</h1>
           <h2 id="chartNum">245,882,754 BTU/HOURS</h2>
           <!--Chart-->
           <canvas id="pie-chart" width="800" height="450"></canvas>
@@ -57,7 +57,7 @@
           <!-- Need python functions to Convert from BTU to kW, Ton, Gas, Dollars and for all combos -->
         <div id="switWrap">
           <!--Units buttons-->
-          <h3 style="margin:0;padding:2%;">Compare Usage In Equivalent Units:</h3>
+          <h2 style="margin:0;padding:2%;">Compare Usage In Equivalent Units:</h2>
           <div id="switches">
             <button id="btu" onclick="chgColor('btu')">BTU</button>
             <button id="kw" onclick="chgColor('kw')">kW</button>

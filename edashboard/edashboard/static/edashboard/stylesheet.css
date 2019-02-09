@@ -157,7 +157,7 @@ div#banner{
   background: url("{% static 'edashboard/images/NAU2.jpg' %}");
   height: 15%;
   width: inherit;
-  margin: 1.5%;
+  margin: 5%;
   overflow: hidden;
   text-align: center;
 }
@@ -172,19 +172,29 @@ h1#head{
    width: auto;
    height: auto;
 }
-#greencomp{
+div.greyell{
   background-color: #e3e3e3;
   border-bottom: 3px solid #ffcc01;
-  margin: 2%;
 }
-table.greencomp{
+
+#greencomp{
+  margin: 5%;
+}
+.greencomp{
     table-layout:fixed;
     width: 100%;
+    text-align: center;
+    font-size: 30px;
+    color: #003467;
 }
-t
-table.greencomp td{
+.greencomp tr{
+  text-align: center;
+}
+.greencomp td{
+  position: inherit;
   white-space: normal;
   word-wrap: break-word;
+  text-align: center;
 }
 #switWrap{
   width: 100%;
@@ -213,11 +223,13 @@ table.greencomp td{
 h1#chartTitle{
   color: #003467;
   text-align: center;
+  margin-bottom: 1%;
 }
 h2#chartNum, #chartLabel{
   color: #003467;
   text-align: center;
-
+  font-weight: normal;
+  margin-top: 0;
 }
 #Labels{
   position: relative;
@@ -247,4 +259,12 @@ table .label{
 .label td{
   text-align: center;
   margin:10%;
+}
+.circle{
+  height: 75%;
+  width: 75%;
+  background-color: white;
+  border-radius: 50%;
+  display: inline-block;
+  border: 5px solid #ffcc01;
 }
