@@ -162,7 +162,7 @@ div#banner{
   text-align: center;
 }
 div#innerbanner{
-
+  padding: 2.5%;
 }
 h1#head{
   color: #003467;
@@ -216,6 +216,7 @@ div.greyell{
   color: #003467;
   background-color: #e3e3e3;
   width: 20%;
+  border-bottom: 3px solid #ffcc01;
 }
 #switches button:hover {
     background-color: #ffcc01;
@@ -248,7 +249,7 @@ h2#chartNum, #chartLabel{
 table .label{
   table-layout:fixed;
   height: auto;
-  width: 40%;
+  width: -webkit-fill-available;
   text-align: center;
   border-collapse: separate;
   border-spacing: 2%;

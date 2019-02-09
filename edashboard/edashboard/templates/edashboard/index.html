@@ -48,10 +48,10 @@
         </div>
         <!--Chart Labels-->
         <div id="Labels">
-          <table class="label" cellpadding="8" width:"30%">
-            <tr><td bgcolor="#e3e3e3">Electricity</td><td id=eval>32483943</td><td class="Labels">BTU/HOURS</td></tr>
-            <tr><td bgcolor="#003467" style="color:white">Cooling</td><td id=cval>342342</td><td class="Labels">BTU/HOURS</td></tr>
-            <tr><td bgcolor="#ffcc01">Heating</td><td id=hval>324234</td><td class="Labels">BTU/HOURS</td></tr>
+          <table class="label" cellpadding="8">
+            <tr><td bgcolor="#e3e3e3">Electricity</td><td id="eval">20</td><td class="Labels">BTU/HOURS</td></tr>
+            <tr><td bgcolor="#003467" style="color:white">Cooling</td><td id="cval">30</td><td class="Labels">BTU/HOURS</td></tr>
+            <tr><td bgcolor="#ffcc01">Heating</td><td id="hval">50</td><td class="Labels">BTU/HOURS</td></tr>
           </table>
         </div>
           <!-- Need python functions to Convert from BTU to kW, Ton, Gas, Dollars and for all combos -->
@@ -60,9 +60,9 @@
           <h2 style="margin:0;padding:2%;">Compare Usage In Equivalent Units:</h2>
           <div id="switches">
             <button id="btu" onclick="chgColor('btu')">BTU</button>
-            <button id="kw" onclick="chgColor('kw')">kW</button>
+            <button id="kw" onclick="chgColor('kw')">kWh</button>
             <button id="ton" onclick="chgColor('ton')">Tons</button>
-            <button id="gas" onclick="chgColor('gas')">Gasoline</button>
+            <button id="gas" onclick="chgColor('gas')">Gas</button>
             <button id="cost" onclick="chgColor('cost')">Cost</button>
           </div>
         </div>
@@ -71,56 +71,82 @@
   </body>
 </html>
 <script>
-// Sets the defaults of the chart
-var currUnit = "BTU/HOUR";
+// Initializes global const
+const curre = document.getElementById("eval").innerHTML;
+const currc = document.getElementById("cval").innerHTML;
+const currh = document.getElementById("hval").innerHTML;
 document.getElementById("btu").style.backgroundColor = "#ffcc01";
 
 // Toggles button color and the labels
 function chgColor(id) {
   // Changes colors of buttons
+  //Converts to BTUs
   if(document.getElementById("btu").style.backgroundColor == "rgb(255, 204, 1)"){
     document.getElementById("btu").style.backgroundColor = "#e3e3e3";
   }
+  // Converts to kWh
   else if(document.getElementById("kw").style.backgroundColor == "rgb(255, 204, 1)"){
     document.getElementById("kw").style.backgroundColor = "#e3e3e3";
   }
+  // Converts to Tons
   else if(document.getElementById("ton").style.backgroundColor == "rgb(255, 204, 1)"){
     document.getElementById("ton").style.backgroundColor = "#e3e3e3";
   }
+  // Converts to Gas
   else if(document.getElementById("gas").style.backgroundColor == "rgb(255, 204, 1)"){
     document.getElementById("gas").style.backgroundColor = "#e3e3e3";
   }
+  // Converts to Dollars
   else{
     document.getElementById("cost").style.backgroundColor = "#e3e3e3";
   }
-
+  // Changes the button to be highlighted
   document.getElementById(id).style.backgroundColor = "#ffcc01";
+  chgLabels(id);
+}
+
+function chgLabels(id){
   // Changes displayed Labels
-  var elements = document.getElementsByClassName("Labels");
+  var labels = document.getElementsByClassName("Labels");
   if (id== "kw"){
-    for(var i=0; i<elements.length; i++) {
-      elements[i].innerHTML= "kW/HOUR";
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "kW/HOUR";
     }
+    document.getElementById("eval").innerHTML= curre*.00029307107;
+    document.getElementById("cval").innerHTML= currc*.00029307107;
+    document.getElementById("hval").innerHTML= currh*.00029307107;
   }
   else if (id=="btu") {
-    for(var i=0; i<elements.length; i++) {
-      elements[i].innerHTML= "BTU/HOUR";
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "BTU/HOUR";
     }
+    document.getElementById("eval").innerHTML= curre;
+    document.getElementById("cval").innerHTML= currc;
+    document.getElementById("hval").innerHTML= currh;
   }
   else if (id=="ton") {
-    for(var i=0; i<elements.length; i++) {
-      elements[i].innerHTML= "TONS";
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "TONS";
     }
+    document.getElementById("eval").innerHTML= curre*.0008;
+    document.getElementById("cval").innerHTML= currc*.0008;
+    document.getElementById("hval").innerHTML= currh*.0008;
   }
   else if (id=="gas") {
-    for(var i=0; i<elements.length; i++) {
-      elements[i].innerHTML= "GAS";
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "GALLONS";
     }
+    document.getElementById("eval").innerHTML= (curre*.0007)/(8.887*(Math.pow(10,-3)));
+    document.getElementById("cval").innerHTML= (currc*.0007)/(8.887*(Math.pow(10,-3)));
+    document.getElementById("hval").innerHTML= (currh*.0007)/(8.887*(Math.pow(10,-3)));
   }
   else {
-    for(var i=0; i<elements.length; i++) {
-      elements[i].innerHTML= "DOLLARS";
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "DOLLARS";
     }
+    document.getElementById("eval").innerHTML= curre;
+    document.getElementById("cval").innerHTML= currc;
+    document.getElementById("hval").innerHTML= currh;
   }
 }
 
@@ -134,7 +160,7 @@ new Chart(document.getElementById("pie-chart"), {
         backgroundColor: ["#e3e3e3","#003467","#ffcc01"],
         //Need to display 10,30,60 <- All need to add up to 100% not actual data value
         // Need python function to call and return today's electricity, cooling, heating, and total from DB in array.
-        data: [2478,5267,734]
+        data: [20,30,50]
       }]
     },
     options: {
