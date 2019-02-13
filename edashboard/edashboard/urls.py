@@ -16,8 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from . import views
+from .views import *
+from django.conf import settings
+from django.conf.urls.static import static
 
+app_name = 'edashboard'
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
-]
+    path('admin/', admin.site.urls, name='admin'),
+    path('', views.construction, name='construction'),
+    path('edashboard/', views.index, name='index'),
+    path('building/', views.building_view, name='building'),
+    path('compare/', views.compare_view, name='compare'),
+    path('export/', views.export_view, name='export'),
+    path('help/', views.help_view, name='help'),
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

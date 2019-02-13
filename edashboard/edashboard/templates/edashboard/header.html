@@ -1,0 +1,18 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="/static/edashboard/stylesheet.css">
+<div class="topnav" id="Topnav" style="clear: both;">
+  <div style="height:50px; width:auto; display: inline-block; float: left;">
+    <img id="logo" src="{% static 'edashboard/images/logo.png' %}" style="margin:1%; max-height:inherit; width:auto;padding: 6px 17px;">
+  </div>
+  <div id="links" style="float: left; font-size: 25px;" >
+    <a href="{% url 'edashboard:index' %}" style="padding: 17px 17px;">Home</a>
+    <a href="{% url 'edashboard:export' %}" style="padding: 17px 17px;">Export</a>
+    <a href="{% url 'edashboard:building' %}" style="padding: 17px 17px;">Building</a>
+    <a href="{% url 'edashboard:compare' %}" style="padding: 17px 17px;">Comparison</a>
+  </div>
+  <div id="settings" style="float: right; font-size: 17px; display: inline-flex; text-align: right; width: fit-content; padding: .4% 1% 0 0;" >
+    <a href="{% url 'edashboard:help' %}" style="padding: 0 5%;">Help</a>
+    <a href="{% url 'admin:index' %}" style="padding: 0 5%;">Admin</a>
+    <a href="http://localhost:8888/EnergyDash/index.html" style="padding: 0 5%;">Logout</a>
+  </div>
+</div>

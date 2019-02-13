@@ -1,0 +1,91 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="{% static 'stylesheet.css'%}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+  </head>
+  <body>
+    {% include "edashboard/header.html" %}
+    <div id="container">
+      <div id="left-cont">
+        <div id="descr">
+          <div id="banner">
+            <div id="innerbanner" style="background-image: url({% static 'edashboard/images/NAU2.jpg' %}); background-size:cover;">
+              <img id="logo" src="{% static 'edashboard/images/Logo2.png' %}" style="max-width: -webkit-fill-available;">
+            </div>
+          </div>
+          <div id="name">
+            <h1 id="head">Energy Dashboard</h1>
+          </div>
+        </div>
+        <div id="greencomp">
+          <table class="greencomp">
+            <tr>
+              <td>CARBON OFFSET</td>
+              <td>factory img</td>
+              <td>TREES SAVED</td>
+              <td>tree img</td>
+              <td>BARRELS OF OIL</td>
+              <td>barrel img</td>
+            </tr>
+            <td colspan="2" id=carOff>324349 Lbs.</td>
+            <td colspan="2" id=treSav>7456.3 Trees</td>
+            <td colspan="2" id=barOil>315.3 Barrels</td>
+            <tr>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div id="right-cont">
+        <div class="chart-container">
+          <h1 id="chartTitle">Current Campus Usage For Monitored Buildings: </h1>
+          <h2 id="chartNum">245,882,754 BTU/HOUR</h2>
+          <canvas id="pie-chart" width="800" height="450"></canvas>
+        </div>
+        <div id="switWrap">
+          <div id="switches">
+            <button>BTU</button>
+            <button>kW</button>
+            <button>Tons</button>
+            <button>Gasoline</button>
+            <button>Cost</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+<script>
+new Chart(document.getElementById("pie-chart"), {
+    type: 'pie',
+    data: {
+      labels: ["Electricity: 2478", "Cooling: 5267", "Heating: 734"],
+      datasets: [{
+        label: "BTU/Hour",
+        backgroundColor: ["#e3e3e3","#003467","#ffcc01"],
+        data: [2478,5267,734]
+      }]
+    },
+    plugins: [{
+      beforeInit: function(chart) {
+        chart.data.labels.forEach(function(e, i, a) {
+          if (/\n/.test(e)) {
+              a[i] = e.split(/\n/);
+            }
+          });
+        }
+      }],
+    options: {
+      legend: {
+        position: 'bottom',
+        labels: {
+                fontSize:22
+              },
+            }
+          }
+        });
+
+
+</script>
