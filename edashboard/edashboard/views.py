@@ -23,6 +23,9 @@ def export_view(request):
 def help_view(request):
     return render(request, 'edashboard/help.html')
 
+def construction_view(request):
+    return render(request, 'edashboard/construction.html')
+
 '''FOR REFERENCE LATER
 #Pass in value and convert to kwH and convert based on string that conversion is.
 #CONVERSION LINK https://www.epa.gov/energy/greenhouse-gases-equivalencies-calculator-calculations-and-references

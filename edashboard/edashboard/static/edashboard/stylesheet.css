@@ -173,12 +173,14 @@ h1#head{
    height: auto;
 }
 div.greyell{
+  margin-top: 0;
   background-color: #e3e3e3;
   border-bottom: 3px solid #ffcc01;
 }
 
 #greencomp{
   margin: 5%;
+  margin-top: 0;
 }
 .greencomp{
     table-layout:fixed;
@@ -186,6 +188,7 @@ div.greyell{
     text-align: center;
     font-size: 25px;
     color: #003467;
+    padding: 2%;
 }
 .greencomp tr{
   text-align: center;
@@ -195,6 +198,11 @@ div.greyell{
   white-space: normal;
   word-wrap: break-word;
   text-align: center;
+}
+#greencomplabel{
+    margin-left: 5%;
+    margin-top: 10%;
+    color: #003467;
 }
 #switWrap{
   width: 100%;
