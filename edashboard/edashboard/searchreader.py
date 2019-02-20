@@ -1,43 +1,9 @@
-from django.shortcuts import render
-
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
-from django.views import generic
-from django.views.generic import TemplateView
-from django.template import Template, Context
+import datetime
+from django.db import models
+from django.utils import timezone
 from django import template
-from edashboard.models import Demo
 register = template.Library()
 
-
-def index(request):
-    return render(request, 'edashboard/index.html')
-
-def building_view(request):
-    return render(request, 'edashboard/building.html')
-
-def compare_view(request):
-    return render(request, 'edashboard/compare.html')
-
-def export_view(request):
-    db_data = Demo.objects.all().values_list('value', flat=True)
-    db_date = Demo.objects.all().values_list('date', flat=True)
-    db_id = Demo.objects.all().values_list('id', flat=True)
-    return render(request, 'edashboard/export.html',{'db_data':db_data, 'db_id':db_id})
-
-def help_view(request):
-    return render(request, 'edashboard/help.html')
-
-def construction_view(request):
-    return render(request, 'edashboard/construction.html')
-
-def data(request):
-    db_data = Demo.objects.all().values_list('value', flat=True)
-    db_date = Demo.objects.all().values_list('date', flat=True)
-    return TemplateResponse(request, 'edashboard/export.html', {"db_data" : db_data})
-
-'''
 @register.building_name
 def getBuildingsName():
     building = []
@@ -62,6 +28,7 @@ def getBuildingsNumber():
     f.close()
     return building
 
+    '''
     FOR REFERENCE LATER
     #Pass in value and convert to kwH and convert based on string that conversion is.
     #CONVERSION LINK https://www.epa.gov/energy/greenhouse-gases-equivalencies-calculator-calculations-and-references

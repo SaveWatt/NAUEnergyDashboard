@@ -367,7 +367,8 @@ li.button-dropdown{
 /* Style items (options): */
 .select-items {
   position: absolute;
-  background-color: #ffcc01;
+  background-color: #e3e3e3;
+  border-bottom: 3px solid #ffcc01;
   top: 100%;
   left: 0;
   right: 0;

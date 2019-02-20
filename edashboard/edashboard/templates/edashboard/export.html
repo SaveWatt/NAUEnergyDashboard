@@ -34,6 +34,7 @@
     </div>
   </body>
 <script>
+//READING FROM .CSV CODE ****IN PROGRESS*****
 var buildings = [];
 $(document).ready(function() {
     $.ajax({
@@ -43,32 +44,16 @@ $(document).ready(function() {
         success: function(data) {processData(data);}
      });
 });
-
 function processData(allText) {
-    var allTextLines = allText.split(/\r\n|\n/);
-    var headers = allTextLines[0].split(',');
-    var lines = [];
 
-    for (var i=1; i<allTextLines.length; i++) {
-        var data = allTextLines[i].split(',');
-        //Ensures no empty column
-        if (data.length == headers.length) {
-            // Builing name (Builing number)
-            buildings.push(data[1]+"("+data[0]+")");
-        }
-    }
-    console.log(buildings);
 }
-
+//TIME RANGE CODE
 $(function() {
-
     var start = moment().subtract(29, 'days');
     var end = moment();
-
     function cb(start, end) {
         $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
     }
-
     $('#reportrange').daterangepicker({
         startDate: start,
         endDate: end,
@@ -82,17 +67,23 @@ $(function() {
            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
         }
     }, cb);
-
     cb(start, end);
-
 });
+// GRAPH CODE
+console.log( {% for data in db_data %}
+              {{ data }},
+              {% endfor %} );
   new Chart(document.getElementById("line-chart"), {
     type: 'line',
     data: {
-      labels: [ "10:20","10:40","11:00","11:20"],
+      labels: [{% for data in db_id %}
+                    {{ data }},
+                  {% endfor %}],
       fillOpacity: .3,
       datasets: [{
-          data: [ 10,20,10,25,23],
+          data: [{% for data in db_data %}
+                        {{ data }},
+                        {% endfor %}],
           label: "Week 1",
           borderColor: "#1f61a8",
           fill: origin,
