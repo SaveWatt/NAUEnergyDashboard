@@ -114,10 +114,17 @@ h1{
 }
 div .topnav#settings{
   float: right;
-  width: fit-content;
+  width: max-content;
+  padding: .4% 1% 0 0;
 }
 div .topnav#settings a{
   font-size: 12px;
+}
+div#settings{
+  float: right;
+  font-size: 17px;
+  display: inline-flex;
+  width: fit-content;
 }
 .topnav a:hover {
     background-color: #ffcc01;
@@ -314,7 +321,7 @@ button#Down-button{
   margin-top: 0;
   margin-top: 5%;
 }
-input#search{
+input.search{
   font-size: 20px;
 }
 li.button-dropdown{
@@ -408,4 +415,11 @@ div#selector input#reportrange{
 }
 button#graphdata{
   margin: 7.5% 0 0 0;
+}
+button#add-build{
+  margin-top: 0;
+  margin-left: 0;
+}
+.extrabuildings{
+  display: inline-flex;
 }

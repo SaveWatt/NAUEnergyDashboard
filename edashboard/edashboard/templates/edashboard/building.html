@@ -1,9 +1,10 @@
-{% load static %}
+{% load staticfiles %}
 
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="{% static 'stylesheet.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static '/edashboard/stylesheet.css'%}">
+    <link rel="shortcut icon" href="{% static '/edashboard/images/favicon.ico' %}" />
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
   </head>
@@ -65,11 +66,4 @@
 </html>
 
 <script>
-function fixdivs() {
-    var divw = document.getElementById('sidebar').offsetWidth;
-    document.getElementById('sideheader').style.width = divw + 'px';
-    var divh = document.getElementById('Topnav').offsetHeight;
-    document.getElementById('sideheader').style.height = divh + 'px';
-}
-  fixdivs();
 </script>

@@ -26,18 +26,28 @@ def export_view(request):
     db_id = Demo.objects.all().values_list('id', flat=True)
     return render(request, 'edashboard/export.html',{'db_data':db_data, 'db_id':db_id})
 
+def compare_view(request):
+    db_data = Demo.objects.all().values_list('value', flat=True)
+    db_date = Demo.objects.all().values_list('date', flat=True)
+    db_id = Demo.objects.all().values_list('id', flat=True)
+    return render(request, 'edashboard/compare.html',{'db_data':db_data, 'db_id':db_id})
+
 def help_view(request):
     return render(request, 'edashboard/help.html')
 
 def construction_view(request):
     return render(request, 'edashboard/construction.html')
-
+'''
 def data(request):
     db_data = Demo.objects.all().values_list('value', flat=True)
     db_date = Demo.objects.all().values_list('date', flat=True)
     return TemplateResponse(request, 'edashboard/export.html', {"db_data" : db_data})
 
-'''
+def data_com(request):
+    db_data = Demo.objects.all().values_list('value', flat=True)
+    db_date = Demo.objects.all().values_list('date', flat=True)
+    return TemplateResponse(request, 'edashboard/compare.html', {"db_data" : db_data})
+
 @register.building_name
 def getBuildingsName():
     building = []

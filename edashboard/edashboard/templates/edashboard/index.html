@@ -1,9 +1,10 @@
-{% load static %}
+{% load staticfiles %}
 
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="{% static 'stylesheet.css'%}">
+    <link rel="stylesheet" type="text/css" href={% static '/edashboard/stylesheet.css'%}>
+    <link rel="shortcut icon" href="{% static '/edashboard/images/favicon.ico' %}" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
   </head>
   <body>
@@ -12,7 +13,7 @@
       <div id="left-cont">
         <div id="descr">
           <div id="banner">
-            <div id="innerbanner" style="background-image: url({% static 'edashboard/images/NAU2.jpg' %}); background-size:cover;">
+            <div id="innerbanner" style="background-image: url({% static '/edashboard/images/NAU2.jpg' %}); background-size:cover;">
               <img id="logo" src="{% static 'edashboard/images/Logo2.png' %}" style="max-width: -webkit-fill-available;">
             </div>
           </div>
@@ -25,11 +26,11 @@
           <table class="greencomp">
             <tr>
               <td>COAL FIRED POWER PLANTS</td>
-              <td><span class="circle"><img id="factory" src="{% static 'edashboard/images/factory.png' %}" style="max-width: -webkit-fill-available;"></span></td>
+              <td><span class="circle"><img id="factory" src={% static 'edashboard/images/factory.png' %} style="max-width: -webkit-fill-available;"></span></td>
               <td>TREES PLANTED</td>
-              <td><span class="circle"><img id="factory" src="{% static 'edashboard/images/tree.png' %}" style="max-width: -webkit-fill-available;"></span></td>
+              <td><span class="circle"><img id="factory" src={% static 'edashboard/images/tree.png' %} style="max-width: -webkit-fill-available;"></span></td>
               <td>BARRELS OF OIL CONSUMED</td>
-              <td><span class="circle"><img id="factory" src="{% static 'edashboard/images/barrel.png' %}" style="max-width: -webkit-fill-available;"></span></td>
+              <td><span class="circle"><img id="factory" src={% static 'edashboard/images/barrel.png' %} style="max-width: -webkit-fill-available;"></span></td>
             </tr>
             <tr id="compval">
               <td colspan="2" id=carOff><b>324349 Lbs.</b></td>
@@ -70,7 +71,6 @@
       </div>
     </div>
   </body>
-</html>
 <script>
 // Initializes global const
 const curre = document.getElementById("eval").innerHTML;
@@ -194,3 +194,4 @@ new Chart(document.getElementById("pie-chart"), {
 
 
 </script>
+</html>

@@ -1,9 +1,10 @@
-{% load static %}
+{% load staticfiles %}
 
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="{% static 'stylesheet.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static "/edashboard/stylesheet.css" %}">
+    <link rel="shortcut icon" href="{% static '/edashboard/images/favicon.ico' %}" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
@@ -34,6 +35,7 @@
     </div>
   </body>
 <script>
+/*
 //READING FROM .CSV CODE ****IN PROGRESS*****
 var buildings = [];
 $(document).ready(function() {
@@ -46,7 +48,7 @@ $(document).ready(function() {
 });
 function processData(allText) {
 
-}
+}*/
 //TIME RANGE CODE
 $(function() {
     var start = moment().subtract(29, 'days');
@@ -70,9 +72,6 @@ $(function() {
     cb(start, end);
 });
 // GRAPH CODE
-console.log( {% for data in db_data %}
-              {{ data }},
-              {% endfor %} );
   new Chart(document.getElementById("line-chart"), {
     type: 'line',
     data: {
