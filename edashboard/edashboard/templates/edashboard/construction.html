@@ -1,56 +1,15 @@
-{% load static %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
 <html>
-<style>
-  html,
-  body {
-    padding: 0;
-    margin: 0;
-  }
-  img{
-    position: absolute;
-    width: 15%;
-    height: auto;
-    align-items:center;
-    justify-content:center;
-  }
-  div#container{
-    background: url("{% static 'edashboard/images/NAU.jpg' %}");
-    height:100%;
-    width:100%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    overflow:hidden;
-  }
-  table{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform: translate(-50%,-50%);
-    text-align: center;
-    padding:12px;
-    border: none;
-    font-family: sans-serif;
-    background-color: #ffffff;
-    border-radius: 15px;
-    opacity: .75;
-  }
-  tr.labels{
-    font-family: Arial Black;
-    font-size: 20px;
-  }
-  .info{
-    font-size:140px;
-    font-family: sans-serif;
-  }
-</style>
   <head>
-    <link rel="stylesheet" type="text/css" href="{% static 'tempstyle.css'%}">
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <link rel="shortcut icon" href={% static '/edashboard/images/favicon.ico' %} />
   </head>
   <body>
     <div id="container">
-      <img id="logo" src="{% static 'edashboard/images/logo.png' %}" style="margin:1%;">
+      <img id="logo" src={% static '/edashboard/images/logo.png' %} style="margin:1%;">
       <table cellpadding="20px">
         <tr><th colspan="4"><h1>Energy Dashboard Coming Soon...</h1></th></tr>
 
@@ -101,6 +60,49 @@
         }
         countDown();
       </script>
+      <style>
+        html,
+        body {
+          padding: 0;
+          margin: 0;
+        }
+        img{
+          position: absolute;
+          width: 15%;
+          height: auto;
+          align-items:center;
+          justify-content:center;
+        }
+        div#container{
+          background: url("{% static 'edashboard/images/NAU.jpg' %}");
+          height:100%;
+          width:100%;
+          background-size: cover;
+          background-repeat: no-repeat;
+          overflow:hidden;
+        }
+        table{
+          position:absolute;
+          top:50%;
+          left:50%;
+          transform: translate(-50%,-50%);
+          text-align: center;
+          padding:12px;
+          border: none;
+          font-family: sans-serif;
+          background-color: #ffffff;
+          border-radius: 15px;
+          opacity: .75;
+        }
+        tr.labels{
+          font-family: Arial Black;
+          font-size: 20px;
+        }
+        .info{
+          font-size:140px;
+          font-family: sans-serif;
+        }
+      </style>
     </div>
   </body>
 </html>

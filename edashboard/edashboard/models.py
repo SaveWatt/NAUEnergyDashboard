@@ -1,7 +1,7 @@
 import datetime
 from django.db import models
 from django.utils import timezone
-
+from django.contrib.auth.models import UserManager
 
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
@@ -21,3 +21,15 @@ class Choice(models.Model):
     votes = models.IntegerField(default=0)
     def __str__(self):
         return self.choice_text
+
+class Demo(models.Model):
+    date = models.DateTimeField('Event Date')
+    value = models.IntegerField()
+    objects = UserManager()
+    def getvalue(self):
+        return self.value
+    def getdate(self):
+        return self.date
+    class Meta:
+       managed = False
+       db_table = 'Demo'

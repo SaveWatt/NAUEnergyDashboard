@@ -8,102 +8,89 @@
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
   </head>
-  <body>
-    <div class="container" style="clear:both; height:100%; width:100%;">
-      <div style="float: left; width:-webkit-fill-available;">
-        {% include "edashboard/header.html" %}
-        <div id='stacked'>
-        <div id="topcont" style="margin-left:2%;margin-top: 0;">
-          <div id="buildimg">
-            <h1 style="color: #003467;text-align:left;height:fit-content;">Student Academic Services</h1>
-            <img src={% static '/edashboard/images/SAS.jpg' %} style="margin:1%;">
-          </div>
-          <div id="weather" class="greyell">
-          </div>
-          <div id="donutgraph" style="height: -webkit-fill-available;">
-          {% include "edashboard/donutgraph.html" %}
-          </div>
-        </div>
-        <div id="bottomcont">
-          <div id="Leftgraph" style="text-align: center;">
-            <h2 style="text-align:center;">Historical Data</h2>
-          <div id="switches">
-            <button id="hour" onclick="chgColor('btu')" style="width:50%">Hourly</button>
-            <button id="15m" onclick="chgColor('kw')" style="width:50%">15-Min</button>
-          </div>
-          <div id="selectsens" class="custom-select" style="width:200px; margin:0;">
-            <li class="dropdown-toggle" style="display:none;">Sensor</li>
-            <h2 class="select">Select a Utility</h2>
-            <select>
-              <option>Heating</option>
-              <option>Cooling</option>
-              <option>Electricity</option>
-              <option>Gas</option>
-            </select>
-          </div>
-          <div>
-            <button style="margin:0; margin-top: 5%;">Download Data</button>
-          </div>
-        </div>
-          <div class="graphcont" style="margin:0; width: 50%; height: inherit;">
-            <canvas id="line-chart"></canvas>
-            <script>
-            new Chart(document.getElementById("line-chart"), {
-              type: 'line',
-              data: {
-                labels: [ "10:20","10:40","11:00","11:20"],
-                fillOpacity: .3,
-                datasets: [{
-                    data: [ 10,20,10,25,23],
-                    label: "Week 1",
-                    borderColor: "#1f61a8",
-                    fill: origin,
-                    backgroundColor: "rgba(31,97,168,.3)",
-                  },
-                ]
-              },
-              options: {
-                responsive: false,
-                title: {
-                  display: true,
-                  text: "SAS Building Electricity usage",
-                },
-                scales: {
-                xAxes: [{
-                  scaleLabel: {
-                    display: true,
-                    labelString: 'Time'
-                  }
-                }],
-                yAxes: [{
-                  scaleLabel: {
-                    display: true,
-                    labelString: 'Electricity (kWh)'
-                  }
-                }]
-              }
-              }
-            });
-
-            // Toggles button color and the labels
-            function chgColor(id) {
-              // Changes colors of buttons
-              //Converts to BTUs
-              if(document.getElementById("15m").style.backgroundColor == "rgb(255, 204, 1)"){
-                document.getElementById("15m").style.backgroundColor = "#e3e3e3";
-              }
-              // Converts to kWh
-              else if(document.getElementById("hour").style.backgroundColor == "rgb(255, 204, 1)"){
-                document.getElementById("hour").style.backgroundColor = "#e3e3e3";
-              }
-              // Changes the button to be highlighted
-              document.getElementById(id).style.backgroundColor = "#ffcc01";
-              chgLabels(id);
-            }
-            </script>
-          </div>
-        </div>
+  <body style="height:fit-content;">
+    {% include "edashboard/header.html" %}
+    <div id="container" style="width: 100%; height: fit-content;">
+      <div id="left">
+      {% include "edashboard/adminsidebar.html" %}
       </div>
+      <div id="right">
+        <div class="adminsection">
+          <h1>User Settings</h1>
+          <div class="subsection greyell">
+            <h2>Add/Delete Users</h2>
+            <form>
+              <h3>Add User</h3>
+              <input type="text" placeholder="User Name...">
+              <div id="selectpermiss" class="custom-select" style="width:200px;">
+                <li class="dropdown-toggle" style="display:none;">Permission</li>
+                <h4 class="select">Choose the User's Permisson</h4>
+                <select>
+                  <option>Full Admin Control</option>
+                  <option>Read and Write</option>
+                  <option>Read Only</option>
+                </select>
+              </div>
+              <button style="margin-top:10%;">Add User</button>
+            </form>
+            <h3 style="margin-bottom:0; margin-top:2.5%;">Delete User</h3>
+            <form>
+              <input type="text" placeholder="User Name...">
+              <button style="margin-top:10%;">Delete User</button>
+            </form>
+          </div>
+          <div class="subsection  greyell">
+            <h2>Modify Permissions</h2>
+              <h3>Modify A User's Permission</h3>
+              <input class="search" type="text" placeholder="Search For User..."/>
+              <div id="selectpermiss" class="custom-select" style="width:200px; margin-left:5%">
+                <li class="dropdown-toggle" style="display:none;">Permission</li>
+                <h4 class="select">Choose the User's Permisson</h4>
+                <select>
+                  <option>Full Admin Control</option>
+                  <option>Read and Write</option>
+                  <option>Read Only</option>
+                </select>
+              </div>
+              <button style="margin:0;margin-left:5%;margin-top:2.5%;">Modify User</button>
+          </div>
+        </div>
+        <div class="adminsection">
+            <h1>Building Settings</h1>
+          <div class="subsection  greyell">
+            <h2>Add/Delete Buildings</h2>
+              <h3>Add Building</h3>
+              <input type="text" placeholder="Building Name...">
+              <div id="selectpermiss" class="custom-select" style="width:200px; margin-left:5%">
+                <li class="dropdown-toggle" style="display:none;">Permission</li>
+                <h4 class="select">Choose the User's Permisson</h4>
+                <select>
+                  <option>Full Admin Control</option>
+                  <option>Read and Write</option>
+                  <option>Read Only</option>
+                </select>
+              </div>
+              <button style="margin-top:2.5%; margin-left:5%;">Add Building</button>
+            <h3 style="margin-top:5%;margin-bottom:0;">Delete Building</h3>
+            <form>
+              <input class="search" type="text" placeholder="Search For Building..."/>
+              <button>Delete Building</button>
+            </form>
+          </div>
+          <div class="subsection  greyell">
+            <h2>Modify Existing Buildings</h2>
+            <form>
+              <h3>Choose the building</h3>
+              <input class="search" type="text" placeholder="Search For Building..."/>
+              <h3>New Name</h3>
+              <input type="text" placeholder="Change Building Name...">
+              <h3>New Number</h3>
+              <input type="text" placeholder="Change Building Number...">
+              <button>Modify Building</button>
+            </form>
+            <h3></h3>
+          </div>
+        </div>
       </div>
     </div>
   </body>
@@ -208,8 +195,4 @@
     }
   }
   </script>
-  </script>
 </html>
-
-<script>
-</script>
