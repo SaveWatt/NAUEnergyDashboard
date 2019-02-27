@@ -1,48 +1,38 @@
 import pandas as pd
 from pathlib import Path
+import pymssql as sql
 
+HOST = r'Sweetleaf.nau.froot.nau.edu\GPDEV'
+USER = r'NAU\idd6'
+PASS = "Itsuko23272147"
+BASE = 'EnergyCap'
 
 class StaticDataRetriever:
 
-    def __init__(self, in_file=None, out_file='SDR_Default.json'):
-        self.__csv = in_file
-        self.__json = out_file
-        self.__data_frame = None
+    def __init__(self):
+        self.__connection = sql.connect(host=HOST, user=USER,
+        password=PASS, database=BASE)
+        self.__table = None
 
-    @property
-    def csv(self):
-        return self.__csv
+    def print_rows(self):
+        cursor = self.__connection.cursor()
+        cursor.execute('SELECT * FROM tblTrendlog_0000601_0000000000')
+        count = 0
+        for row in cursor:
+            if count > 24:
+                break
+            print("Row %d: %r" % (count+1, row))
+            count += 1
 
-    @csv.setter
-    def csv(self, file_path):
-        self.__csv = file_path
-
-    @property
-    def json(self):
-        return self.__json
-
-    @json.setter
-    def json(self, file_name):
-        self.__json = file_name
-
-    @property
-    def data_frame(self):
-        return self.__data_frame
-
-    def csv_to_json(self):
-        in_file_path = Path(self.__csv)
-        if in_file_path.is_file():
-            self.__data_frame = pd.read_csv(self.__csv, sep=',', header=None)
-            return self.__data_frame.to_json(self.__json)
-        else:
-            return 'Error Code: Invalid file path'  # TODO: Create error code system
-
-
-sdr = StaticDataRetriever(in_file="/Users/ian/Computer_Science/Coursework/Capstone/"
-                                  "Tests/csv/tblTrendlog_0000601_0000000000.csv")
-sdr.csv_to_json()
-print(sdr.data_frame.to_string())
+    def store_table(self):
+        cursor = self.__connection.cursor(as_dict=True)
+        cursor.execute('SELECT * FROM tblTrendlog_0000601_0000000000')
+        self.__table = cursor.fetchall()
+        print(self.__table)
 
 
 
 
+sdr = StaticDataRetriever()
+sdr.print_rows()
+sdr.store_table()
