@@ -1,0 +1,37 @@
+<div class="sidebar" id="sidebar" style="z-index:1;  position: fixed;">
+  <h1>Admin Options</h1>
+  <ul id="sidemenu">
+    <li>
+      <a href="#" style="padding: 17px 17px;" class="numbuild"><h3 style="color:white;">User Settings</h3></a>
+      <ul id="Users">
+        <li><a href="profile">Profile</a></li>
+        <li><a href="modUsers">Add/Delete Users</a></li>
+        <li><a href="permissions">Modify Permissions</a></li>
+      </ul>
+    <li>
+    <li>
+      <a href="#" style="padding: 17px 17px;"><h3 style="color:white;">Building Settings</h3></a>
+      <ul id="Buildings">
+        <li><a href="modBuild">Modify Buildings</a></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<script>
+  $('#sidemenu li > #Users').parent().click(function() {
+  var submenu = $(this).children('#Users');
+  if ( $(submenu).is(':hidden') ) {
+    $(submenu).slideDown(200);
+  } else {
+    $(submenu).slideUp(200);
+  }
+  });
+  $('#sidemenu li > #Buildings').parent().click(function() {
+  var submenu = $(this).children('#Buildings');
+  if ( $(submenu).is(':hidden') ) {
+    $(submenu).slideDown(200);
+  } else {
+    $(submenu).slideUp(200);
+  }
+  });
+</script>

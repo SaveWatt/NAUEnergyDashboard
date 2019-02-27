@@ -27,6 +27,7 @@ button{
   margin-top: 25%;
   outline: none;
   border: none;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 #rightcont{
   width: 100%;
@@ -58,6 +59,7 @@ canvas{
     margin:0;
     padding: .5%;
     color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .imgborder{
   background-color: #003467;
@@ -93,6 +95,7 @@ h1{
     padding: 0px;
     z-index: 1;
     clear: both;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .topnav a {
     display: inline-block;
@@ -124,7 +127,12 @@ div#settings{
   float: right;
   font-size: 17px;
   display: inline-flex;
-  width: fit-content;
+  width: initial;
+  position: inherit;
+}
+div#settings a{
+  clear: both;
+  padding: 0 5%;
 }
 .topnav a:hover {
     background-color: #ffcc01;
@@ -223,7 +231,8 @@ div.greyell{
   position: relative;
   width: -webkit-fill-available;
   height: auto;
-  padding: 3%;
+  margin: 3%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 #switches button{
   text-align: center;
@@ -233,6 +242,7 @@ div.greyell{
   background-color: #e3e3e3;
   width: 20%;
   border-bottom: 3px solid #ffcc01;
+  box-shadow: none;
 }
 #switches button:hover {
     background-color: #ffcc01;
@@ -301,6 +311,9 @@ div#selector{
   text-align: -webkit-center;
   overflow: scroll;
 }
+input{
+  outline: none;
+}
 div#selector input{
   margin: 5% 0;
   width: -webkit-fill-available;
@@ -320,9 +333,6 @@ div.graph-cont{
 button#Down-button{
   margin-top: 0;
   margin-top: 5%;
-}
-input.search{
-  font-size: 20px;
 }
 li.button-dropdown{
   text-decoration: none;
@@ -413,6 +423,12 @@ div#selector input#reportrange{
   text-align: center;
   margin: 5% 0;
 }
+div#reportrange.greyell{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+div.select-selected{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
 button#graphdata{
   margin: 7.5% 0 0 0;
 }
@@ -422,4 +438,130 @@ button#add-build{
 }
 .extrabuildings{
   display: inline-flex;
+}
+div#buildingadder{
+  height: fit-content;
+}
+div#buildingadder input.search{
+  font-size: 20px;
+  border: none;
+  border-bottom: 3px solid #ffcc01;
+}
+img#logolog{
+  position: absolute;
+  width: 15%;
+  height: auto;
+  align-items:center;
+  justify-content:center;
+  max-width: 15%;
+}
+div#containerbg{
+  height:100%;
+  width:100%;
+  overflow:hidden;
+}
+div#formcontainer{
+  width: 50%;
+  margin-left: 25%;
+  margin-top: 15%;
+  text-align: center;
+}
+div#formcontainer form{
+  width: 75%;
+  text-align: center;
+  height: initial;
+  display: inline-grid;
+  background-color: rgba(255,255,255, .7);
+  padding: 2.5%;
+}
+button#login{
+  margin: 2.5%;
+}
+form#login h1, h3{
+  color: #003467;
+}
+form#login button{
+  margin: auto;
+  margin-top: 2.5%;
+}
+form#login input{
+  width: 50%;
+  font-size: 20px;
+  margin: auto;
+}
+div#right{
+width: 100%;
+height: fit-content;
+padding-left: 25%;
+
+}
+.adminsection h1,h2,h3, h4{
+  color: #003467;
+  text-align: left;
+}
+
+.adminsection h3{
+  padding-left: 5%;
+}
+div.subsection{
+  width: 85%;
+  margin-bottom: 5%;
+  padding: 1%;
+}
+div.subsection input{
+  font-size: 20px;
+  margin-left: 5%;
+}
+div.subsection form{
+  margin-left:5%;
+  display: inline-grid;
+}
+div.subsection form input{
+  font-size: 20px;
+  margin-top: 7.5%;
+  margin-left: 0;
+}
+div.subsection form button{
+  margin:0;
+  margin-top: 7.5%;
+}
+div.subsection form h3{
+  margin-bottom: 0;
+}
+div#selectpermiss button{
+  margin-left: 0;
+  margin-top: 0;
+}
+div#selectpermiss div.select-items{
+  background-color: white;
+}
+#stacked{
+  display: inline-grid;
+  width: 100%;
+  height: -webkit-fill-available;
+}
+#bottomcont{
+  display: -webkit-inline-box;
+  height: fit-content;
+}
+#topcont{
+  display: flex;
+ width: 100%;
+}
+div#buildimg{
+  width:33%;
+  height: fit-content;
+}
+div#buildimg img{
+  width: 65%;
+}
+div#donutgraph{
+  width:20%;
+  height: auto;
+}
+div#Leftgraph{
+  margin:5%;
+  width:20%;
+  height: fit-content;
+  text-align: center;
 }

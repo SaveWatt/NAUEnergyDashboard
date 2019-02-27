@@ -37,6 +37,12 @@ def help_view(request):
 
 def construction_view(request):
     return render(request, 'edashboard/construction.html')
+
+def login_view(request):
+    return render(request, 'edashboard/login.html')
+
+def admin_view(request):
+    return render(request, 'edashboard/admin.html')
 '''
 def data(request):
     db_data = Demo.objects.all().values_list('value', flat=True)
