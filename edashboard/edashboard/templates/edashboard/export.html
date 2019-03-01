@@ -19,13 +19,15 @@
         <div id="error-display">
 			  </div>
         <h1 id="downloadrep">Download Reports</h1>
+        <form method='POST'>{% csrf_token %}
         <div class="greyell" id="reportrange" style="cursor: pointer; padding: 5px 10px;">
             <i class="fa fa-calendar"></i>&nbsp;
             <span></span> <i class="fa fa-caret-down"></i>
         </div>
         {% include "edashboard/addbuilding.html" %}
-        <button id="graphdata" onClick="checkFields()">Graph Data</button>
+        <button id="graphdata" onClick="checkFields()" type="submit">Graph Data</button>
       </div>
+    </form>
       <div class="graph-cont" style=" display:inline-block;">
         <div class="chart-container" style="text-align: -webkit-center;">
           <canvas id="line-chart" width="800" height="450"></canvas>
@@ -50,11 +52,14 @@ function processData(allText) {
 
 }*/
 //TIME RANGE CODE
+var time = document.getElementById("reportrange").getElementsByTagName('span')[0];
+time.setAttribute("id","stringtime");
+time.setAttribute("name","stringtime");
 $(function() {
     var start = moment().subtract(29, 'days');
     var end = moment();
     function cb(start, end) {
-        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        $('#reportrange span').html(start.format('MMMM D, YYYY h:mm a') + ' - ' + end.format('MMMM D, YYYY h:mm a'));
     }
     $('#reportrange').daterangepicker({
         startDate: start,

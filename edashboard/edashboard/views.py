@@ -8,14 +8,13 @@ from django.views.generic import TemplateView
 from django.template import Template, Context
 from django import template
 from edashboard.models import Demo
+
+
 register = template.Library()
 
 
 def index(request):
     return render(request, 'edashboard/index.html')
-
-def construction(request):
-    return render(request, 'edashboard/construction.html')
 
 def building_view(request):
     return render(request, 'edashboard/building.html')
@@ -27,6 +26,11 @@ def export_view(request):
     db_data = Demo.objects.all().values_list('value', flat=True)
     db_date = Demo.objects.all().values_list('date', flat=True)
     db_id = Demo.objects.all().values_list('id', flat=True)
+    if(request.method =="POST"):
+        #form = TimeRange(request.POST)
+        form = request.POST.get("stringtime", "Nope")
+        #stringtime = request.POST.get('stringtime', None)
+        print("%s" % form)
     return render(request, 'edashboard/export.html',{'db_data':db_data, 'db_id':db_id})
 
 def compare_view(request):

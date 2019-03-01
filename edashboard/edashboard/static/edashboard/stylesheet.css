@@ -546,22 +546,28 @@ div#selectpermiss div.select-items{
 }
 #topcont{
   display: flex;
- width: 100%;
+  padding: 2%;
+ margin-top: 0;
+ width: -webkit-fill-available;
 }
 div#buildimg{
-  width:33%;
+  width:25%;
   height: fit-content;
 }
 div#buildimg img{
-  width: 65%;
+  width: 85%;
 }
 div#donutgraph{
-  width:20%;
   height: auto;
+  margin-left: 10%;
+  width:30%;
 }
 div#Leftgraph{
-  margin:5%;
+  margin:2.5%;
   width:20%;
   height: fit-content;
   text-align: center;
+}
+div#weather{
+  height: fit-content;
 }

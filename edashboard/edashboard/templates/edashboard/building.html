@@ -18,9 +18,10 @@
             <h1 style="color: #003467;text-align:left;height:fit-content;">Student Academic Services</h1>
             <img src={% static '/edashboard/images/SAS.jpg' %} style="margin:1%;">
           </div>
-          <div id="weather" class="greyell">
+          <div id="weather">
+            <img src={% static '/edashboard/images/weather.jpg' %} style="margin:1%; height: 200px;margin-top: 15%;">
           </div>
-          <div id="donutgraph" style="height: -webkit-fill-available;">
+          <div id="donutgraph" style="height: min-content;max-width:25%; height:auto;">
           {% include "edashboard/donutgraph.html" %}
           </div>
         </div>
@@ -31,7 +32,7 @@
             <button id="hour" onclick="chgColor('btu')" style="width:50%">Hourly</button>
             <button id="15m" onclick="chgColor('kw')" style="width:50%">15-Min</button>
           </div>
-          <div id="selectsens" class="custom-select" style="width:200px; margin:0;">
+          <div id="selectsens" class="custom-select" style="width:200px; margin:auto;">
             <li class="dropdown-toggle" style="display:none;">Sensor</li>
             <h2 class="select">Select a Utility</h2>
             <select>
