@@ -1,51 +1,135 @@
 from django.shortcuts import render
-
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from django.template import Template, Context
 from django import template
-from edashboard.models import Demo
+from edashboard.clean import *
+from edashboard.GetBuilding import *
+from edashboard.models import *
+from django.views import View
+from edashboard.forms import ExportForm
+from django.http import JsonResponse
+import json
+import time
+
 register = template.Library()
 
 
 def index(request):
-    return render(request, 'edashboard/index.html')
-
-def construction(request):
-    return render(request, 'edashboard/construction.html')
+    buildings = BuildingSearch.getBuildingString()
+    return render(request, 'edashboard/index.html',{'buildlist': buildings})
 
 def building_view(request):
-    return render(request, 'edashboard/building.html')
+    buildings = BuildingSearch.getBuildingString()
+    return render(request, 'edashboard/building.html',{'buildlist': buildings})
 
 def compare_view(request):
-    return render(request, 'edashboard/compare.html')
+    buildings = BuildingSearch.getBuildingString()
+    return render(request, 'edashboard/compare.html',{'buildlist': buildings})
 
-def export_view(request):
+class ExportView(View):
+    dates=[]
+    usages=[]
+
+    def get(self, request):
+        buildings = BuildingSearch.getBuildingString()
+        return render(request, 'edashboard/export.html',{'date':self.dates, 'usage':self.usages,'buildlist': buildings})
+
+    def post(self, request):
+        if request.is_ajax():
+            if(len(self.dates) != 0):
+                self.dates.clear()
+                self.usages.clear()
+            body_unicode = request.body.decode('utf-8')
+            body = json.loads(body_unicode)
+            #Gets start and end times
+            timestr = body['time']
+            times = timestr.split(" - ")
+            #Creates our variables needed for graphing
+            timestart = getTimes(times[0])
+            timeend = getTimes(times[1])
+            building = body['building']
+            util = body['util']
+            sensor = body['sensor']
+            buildings = BuildingSearch.getBuildingString()
+            usage = ExportBuilding.objects.filter(date__gte=timestart, date__lte=timeend).values('usage')
+            for i in usage:
+                self.usages.append(i.get('usage'))
+            date = ExportBuilding.objects.filter(date__gte=timestart, date__lte=timeend).values('date')
+            #usage = ExportBuilding.objects.filter(date__gte=timestart, date__lte=timeend).values('usage','date')
+            for i in date:
+                if (i.get('date') is not None):
+                    self.dates.append((str(i.get('date')).split("+")[0]))
+        return render(request, 'edashboard/export.html',{'date':json.dumps(self.dates), 'usage':json.dumps(self.usages),'buildlist': buildings})
+
+def get_data(request):
+    date = "Tues"
+    usage = 10
+    return JsonResponse({'data': usage,'date':date})
+
+
+def login(request):
+   username = 'not logged in'
+   if request.method == 'POST':
+      MyLoginForm = LoginForm(request.POST)
+      if MyLoginForm.is_valid():
+         username = MyLoginForm.cleaned_data['username']
+         request.session['username'] = username
+      else:
+         MyLoginForm = LoginForm()
+   return render(request, 'index.html', {"username" : username})
+
+def formView(request):
+   if request.session.has_key('username'):
+      username = request.session['username']
+      return render(request, 'index.html', {"username" : username})
+   else:
+      return render(request, 'login.html', {})
+
+def logout(request):
+   try:
+      del request.session['username']
+   except:
+      pass
+   return HttpResponse("<strong>You are logged out.</strong>")
+
+def validate_username(request):
+    username = request.GET.get('username', None)
+    data = {
+        'is_taken': User.objects.filter(username__iexact=username).exists()
+    }
+    if data['is_taken']:
+        data['error_message'] = 'A user with this username already exists.'
+    return JsonResponse(data)
+
+def compare_view(request):
     db_data = Demo.objects.all().values_list('value', flat=True)
     db_date = Demo.objects.all().values_list('date', flat=True)
     db_id = Demo.objects.all().values_list('id', flat=True)
-    return render(request, 'edashboard/export.html',{'db_data':db_data, 'db_id':db_id})
-
-def compare_view(request):
-    db_data = Demo.objects.all().values_list('value', flat=True)
-    db_date = Demo.objects.all().values_list('date', flat=True)
-    db_id = Demo.objects.all().values_list('id', flat=True)
-    return render(request, 'edashboard/compare.html',{'db_data':db_data, 'db_id':db_id})
+    buildings = BuildingSearch.getBuildingString()
+    print(db_id)
+    return render(request, 'edashboard/compare.html',{'db_data':db_data, 'db_id':db_id, 'buildlist': buildings})
 
 def help_view(request):
-    return render(request, 'edashboard/help.html')
+    buildings = BuildingSearch.getBuildingString()
+    return render(request, 'edashboard/help.html',{'buildlist': buildings})
 
 def construction_view(request):
-    return render(request, 'edashboard/construction.html')
+    buildings = BuildingSearch.getBuildingString()
+    return render(request, 'edashboard/construction.html',{'buildlist': buildings})
 
 def login_view(request):
-    return render(request, 'edashboard/login.html')
+    buildings = BuildingSearch.getBuildingString()
+    return render(request, 'edashboard/login.html',{'buildlist': buildings})
 
 def admin_view(request):
-    return render(request, 'edashboard/admin.html')
+    buildings = BuildingSearch.getBuildingString()
+    return render(request, 'edashboard/admin.html',{'buildlist': buildings})
 '''
 def data(request):
     db_data = Demo.objects.all().values_list('value', flat=True)

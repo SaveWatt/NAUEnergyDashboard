@@ -2,6 +2,7 @@ number,name
 1,Gamage
 2,Blome
 3,1899
+3A,Prochnow Auditorium
 4,Morton Hall
 8,Bury
 9,Taylor Hall
@@ -18,7 +19,7 @@ number,name
 18,Liberal Arts
 19,PhyScience
 21B,Biology Annex
-25,HLC
+25,Health and Learning Center
 26,Adel
 27,Eastburn
 27A,IHD
@@ -28,9 +29,9 @@ number,name
 30A,Stdnt Servs Vav Ovrw
 30B,Student Services
 30C,Dining Hall Exapnsion
-30D,Univ. Dining
+30D,University Dining
 31,Gillenwater Hall
-33,HRM
+33,Hotel Restaurant Management
 35,Bookstore
 36,Science & Health
 37,Performing Arts
@@ -48,17 +49,17 @@ number,name
 50A,ISP
 50B,McKay Village
 53,Gabaldon Hall
-54,ITS
+54,Information Technology Services
 54A,TelComm
 55,Mountain View Hall
 58,Conference Center
 59,Hilltop
-60,SAS
+60,Student Academic Services
 62,McConnell Hall
 64,Dubois (South Dining)
 65,SBS East
 69,College of EGR.
-70,SBS West
+70,Social and Behavioral Sciences West
 71,South Village Apts.
 73,Skydome
 75,McConnell Suites

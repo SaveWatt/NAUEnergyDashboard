@@ -1,0 +1,27 @@
+@font-face {
+    font-family: "Trendsetter";
+    src: url('../fonts/trendsetter/trendsetter-regular-webfont.woff2') format('woff2'), url('trendsetter-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: "Monument Valley";
+    src: url('../fonts/monumentvalley/monument_valley_1.2-regular-webfont.woff2') format('woff2'), url('fonts/monumentvalley/monument_valley_1.2-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width:100%;
+  height:100%;
+}
+div#div-container{
+  width: inherit;
+  height: 50%;
+}
+canvas#line-chart{
+  width: 100%;
+  height: 100%;
+}

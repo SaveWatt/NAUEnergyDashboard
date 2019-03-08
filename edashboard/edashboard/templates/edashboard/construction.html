@@ -9,7 +9,9 @@
   </head>
   <body>
     <div id="container">
-      <img id="logo" src={% static '/edashboard/images/logo.png' %} style="margin:1%;">
+      <a href="{% url 'home' %}">
+        <img id="logobg" src={% static '/edashboard/images/logo.png' %} style="margin:1%;">
+      </a>
       <table cellpadding="20px">
         <tr><th colspan="4"><h1>Energy Dashboard Coming Soon...</h1></th></tr>
 
@@ -29,7 +31,7 @@
       <script type="text/javascript">
         function countDown(){
           var today = new Date();
-          var eventDate = new Date("May 10,2019 00:00:00");
+          var eventDate = new Date("May 10,2019 11:00:00");
 
           var currentTime = today.getTime();
           var eventTime = eventDate.getTime();
@@ -74,9 +76,9 @@
           justify-content:center;
         }
         div#container{
-          background: url("{% static 'edashboard/images/NAU.jpg' %}");
-          height:100%;
-          width:100%;
+          background: url({% static '/edashboard/images/NAU.jpg' %});
+          height: -webkit-fill-available;
+          width: -webkit-fill-available;
           background-size: cover;
           background-repeat: no-repeat;
           overflow:hidden;

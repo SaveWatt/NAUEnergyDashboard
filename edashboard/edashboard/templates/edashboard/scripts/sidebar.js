@@ -1,27 +1,4 @@
-<div id="buildingadder">
-  <input id="buildingsearchexpcompsearch" class="search" type="text" placeholder="Search For Building..." autofocus/>
-  <ul id="autocomplete-results2"></ul>
-</div>
-<div id="selectutil"class="custom-select" style="width:200px;">
-  <li class="dropdown-toggle" style="display:none;">Utility</li>
-  <h2 class="select">Select a Utility</h2>
-  <select>
-    <option>Heating</option>
-    <option>Cooling</option>
-    <option>Electricity</option>
-  </select>
-</div>
-<div id="selectsens" class="custom-select" style="width:200px;">
-  <li class="dropdown-toggle" style="display:none;">Sensor</li>
-  <h2 class="select">Select a Sensor</h2>
-  <select>
-    <option>Filler1</option>
-    <option>Filler2</option>
-    <option>Filler3</option>
-  </select>
-</div>
-
-<script>
+{% load staticfiles %}
 jQuery(document).ready(function (e) {
     function t(t) {
         e(t).bind("click", function (t) {
@@ -121,4 +98,3 @@ function closeAllSelect(elmnt) {
     }
   }
 }
-</script>

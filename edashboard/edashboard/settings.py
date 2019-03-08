@@ -26,7 +26,7 @@ SECRET_KEY = 'qh(3m_k0mhp=eeo1^sb^#ue+=vhifu0=3l!@)3m^@3eiz0*$f6'
 DEBUG = True
 
 ALLOWED_HOSTS = ['felucia-dev.ceias.nau.edu',
-                 'localhost']
+                 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'mysite.urls'
+ROOT_URLCONF = 'edashboard.urls'
 
 TEMPLATES = [
     {
@@ -69,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'mysite.wsgi.application'
+WSGI_APPLICATION = 'edashboard.wsgi.application'
 
 
 # Database
@@ -126,8 +126,4 @@ MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR,EDASH_PATH,MEDIA_URL)
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR,EDASH_PATH,"static/")
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static/"),
-    "edashboard/edashboard/static/",
-]
+STATIC_ROOT = '/edashboard/edashboard/static/'

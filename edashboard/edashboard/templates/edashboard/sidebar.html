@@ -1,8 +1,5 @@
-<div class="sidebar" id="sidebar" style="z-index:2;  position: fixed;">
-  <h1>Building Selector</h1>
-  <ul id="sidemenu">
-    <li>
-      <a href="#" style="padding: 17px 17px;" class="numbuild"><h3>Buildings by number</h3></a>
+    <li class="links">
+      <a href="#" class="numbuild">Buildings by number</a>
       <ul id="numbersub">
         <li>1 Gamage</li>
         <li>2 Blome</li>
@@ -58,7 +55,7 @@
         <li>55 Mountain View Hall</li>
         <li>58 Conference Center</li>
         <li>59 Hilltop</li>
-        <li><a href="Graph.php">60 SAS</a></li>
+        <li>60 SAS</li>
         <li>62 McConnell Hall</li>
         <li>64 Dubois (South Dining)</li>
         <li>65 SBS East</li>
@@ -82,9 +79,9 @@
         <li>98D Campus Distriution Cntr</li>
         <li>98F Res Life Warehouse</li>
       </ul>
-    <li>
-    <li>
-      <a href="#" style="padding: 17px 17px;"><h3>Buildings by Name</h3></a>
+    </li>
+    <li class="links">
+      <a href="#">Buildings by Name</a>
       <ul id="namesub">
         <li>1899 (3)</li>
         <li>Adel (26)</li>
@@ -144,7 +141,7 @@
         <li>Riles (15)</li>
         <li>Rosebury (13A)</li>
         <li>San Fran Parking Garage (96B)</li>
-        <li><a href="Graph.php">SAS (60)</a></li>
+        <li>SAS (60)</li>
         <li>SBS East (65)</li>
         <li>SBS West (70)</li>
         <li>Science & Health (36)</li>
@@ -165,26 +162,3 @@
         <li>Wilson (45)</li>
       </ul>
     </li>
-    <a href="#" style="padding: 17px 17px;"><h3>All Metering</h3></a>
-    <a href="#" style="padding: 17px 17px;"><h3>Reports</h3></a>
-  </ul>
-</div>
-<script>
-  $('#sidemenu li > #numbersub').parent().click(function() {
-  var submenu = $(this).children('#numbersub');
-  if ( $(submenu).is(':hidden') ) {
-    $(submenu).slideDown(200);
-  } else {
-    $(submenu).slideUp(200);
-  }
-  });
-
-  $('#sidemenu li > #namesub').parent().click(function() {
-  var submenu = $(this).children('#namesub');
-  if ( $(submenu).is(':hidden') ) {
-    $(submenu).slideDown(200);
-  } else {
-    $(submenu).slideUp(200);
-  }
-  });
-</script>

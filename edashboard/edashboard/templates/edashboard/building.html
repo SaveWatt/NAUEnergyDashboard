@@ -6,7 +6,11 @@
     <link rel="stylesheet" type="text/css" href="{% static '/edashboard/stylesheet.css'%}">
     <link rel="shortcut icon" href="{% static '/edashboard/images/favicon.ico' %}" />
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://www.amcharts.com/lib/4/core.js"></script>
+    <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="https://www.amcharts.com/lib/3/gauge.js"></script>
   </head>
   <body>
     <div class="container" style="clear:both; height:100%; width:100%;">
@@ -18,20 +22,21 @@
             <h1 style="color: #003467;text-align:left;height:fit-content;">Student Academic Services</h1>
             <img src={% static '/edashboard/images/SAS.jpg' %} style="margin:1%;">
           </div>
-          <div id="weather" class="greyell">
+          <div id="weather">
+            <img src={% static '/edashboard/images/weather.jpg' %} style="margin:1%; height: 200px;margin-top: 15%;">
           </div>
-          <div id="donutgraph" style="height: -webkit-fill-available;">
-          {% include "edashboard/donutgraph.html" %}
+          <div id="donutgraph" style="height: min-content;max-width:25%; height:auto;">
+            <div id="chartdiv"></div>
           </div>
         </div>
         <div id="bottomcont">
           <div id="Leftgraph" style="text-align: center;">
             <h2 style="text-align:center;">Historical Data</h2>
           <div id="switches">
-            <button id="hour" onclick="chgColor('btu')" style="width:50%">Hourly</button>
-            <button id="15m" onclick="chgColor('kw')" style="width:50%">15-Min</button>
+            <button id="hour" onclick="chgColor('hour')" style="width:50%">Hourly</button>
+            <button id="15m" onclick="chgColor('15m')" style="width:50%">15-Min</button>
           </div>
-          <div id="selectsens" class="custom-select" style="width:200px; margin:0;">
+          <div id="selectsens" class="custom-select" style="width:200px; margin:auto;">
             <li class="dropdown-toggle" style="display:none;">Sensor</li>
             <h2 class="select">Select a Utility</h2>
             <select>
@@ -48,168 +53,48 @@
           <div class="graphcont" style="margin:0; width: 50%; height: inherit;">
             <canvas id="line-chart"></canvas>
             <script>
-            new Chart(document.getElementById("line-chart"), {
-              type: 'line',
-              data: {
-                labels: [ "10:20","10:40","11:00","11:20"],
-                fillOpacity: .3,
-                datasets: [{
-                    data: [ 10,20,10,25,23],
-                    label: "Week 1",
-                    borderColor: "#1f61a8",
-                    fill: origin,
-                    backgroundColor: "rgba(31,97,168,.3)",
-                  },
-                ]
-              },
-              options: {
-                responsive: false,
-                title: {
-                  display: true,
-                  text: "SAS Building Electricity usage",
-                },
-                scales: {
-                xAxes: [{
-                  scaleLabel: {
-                    display: true,
-                    labelString: 'Time'
-                  }
-                }],
-                yAxes: [{
-                  scaleLabel: {
-                    display: true,
-                    labelString: 'Electricity (kWh)'
-                  }
-                }]
-              }
-              }
-            });
-
+            {% include "edashboard/scripts/expgraph.js" %}
+            {% include "edashboard/scripts/sidebar.js" %}
+            {% include "edashboard/scripts/donutgraph.js" %}
+            document.getElementById("hour").style.backgroundColor = "rgb(255, 204, 1)";
             // Toggles button color and the labels
-            function chgColor(id) {
+            function chgColor(id){
+              console.log(id);
               // Changes colors of buttons
-              //Converts to BTUs
-              if(document.getElementById("15m").style.backgroundColor == "rgb(255, 204, 1)"){
-                document.getElementById("15m").style.backgroundColor = "#e3e3e3";
-              }
-              // Converts to kWh
-              else if(document.getElementById("hour").style.backgroundColor == "rgb(255, 204, 1)"){
+              document.getElementById(id).style.backgroundColor = "rgb(255, 204, 1)";
+              if(id == "15m"){
                 document.getElementById("hour").style.backgroundColor = "#e3e3e3";
               }
+              else if(id == "hour"){
+                document.getElementById("15m").style.backgroundColor = "#e3e3e3";
+              }
               // Changes the button to be highlighted
-              document.getElementById(id).style.backgroundColor = "#ffcc01";
               chgLabels(id);
             }
+
             </script>
+          </div>
+          <div id="stats">
+            <div id="innerstats" class="greyell">
+              <h1 style= "color:#003467" >Statistics</h1>
+              <div id="statdata">
+              <h4><b>Mean:</b> Need Data</h4>
+              <h4><b>Median:</b> Need Data</h4>
+              <h4><b>Mode:</b> Need Data</h4>
+            </div>
+            </div>
           </div>
         </div>
       </div>
       </div>
     </div>
+    <!-- Styles -->
+    <style>
+    #chartdiv {
+      width: 100%;
+      height: 500px;
+      margin: auto;
+    }
+    </style>
   </body>
-  <script>
-  jQuery(document).ready(function (e) {
-      function t(t) {
-          e(t).bind("click", function (t) {
-              t.preventDefault();
-              e(this).parent().fadeOut()
-          })
-      }
-      e(".dropdown-toggle").click(function () {
-          var t = e(this).parents(".button-dropdown").children(".dropdown-menu").is(":hidden");
-          e(".button-dropdown .dropdown-menu").hide();
-          e(".button-dropdown .dropdown-toggle").removeClass("active");
-          if (t) {
-              e(this).parents(".button-dropdown").children(".dropdown-menu").toggle().parents(".button-dropdown").children(".dropdown-toggle").addClass("active")
-          }
-      });
-      e(document).bind("click", function (t) {
-          var n = e(t.target);
-          if (!n.parents().hasClass("button-dropdown")) e(".button-dropdown .dropdown-menu").hide();
-      });
-      e(document).bind("click", function (t) {
-          var n = e(t.target);
-          if (!n.parents().hasClass("button-dropdown")) e(".button-dropdown .dropdown-toggle").removeClass("active");
-      })
-  });
-  var x, i, j, selElmnt, diva, divb, c;
-  //Gets custom sele elements
-  x = document.getElementsByClassName("custom-select");
-  for (i = 0; i < x.length; i++) {
-    selElmnt = x[i].getElementsByTagName("select")[0];
-    // For each element, create a new DIV
-    diva = document.createElement("DIV");
-    diva.setAttribute("class", "select-selected");
-    if(i==0){
-      diva.setAttribute("id","select-selected-util");
-    }
-    else{
-      diva.setAttribute("id","select-selected-sens");
-    }
-    diva.innerHTML = "Select";
-    x[i].appendChild(diva);
-    /* For each element, create a new DIV that will contain the option list: */
-    divb = document.createElement("DIV");
-    divb.setAttribute("class", "select-items select-hide");
-    for (j = 0; j < selElmnt.length; j++) {
-      // For each option in the original select element,
-      //create a new DIV that will act as an option item:
-      divc = document.createElement("DIV");
-      divc.innerHTML = selElmnt.options[j].innerHTML;
-      divc.addEventListener("click", function(e) {
-          // When an item is clicked, update the original select box,
-          //and the selected item:
-          var y, i, k, s, h;
-          s = this.parentNode.parentNode.getElementsByTagName("select")[0];
-          h = this.parentNode.previousSibling;
-          for (i = 0; i < s.length; i++) {
-            if (s.options[i].innerHTML == this.innerHTML) {
-              s.selectedIndex = i;
-              h.innerHTML = this.innerHTML;
-              y = this.parentNode.getElementsByClassName("same-as-selected");
-              for (k = 0; k < y.length; k++) {
-                y[k].removeAttribute("class");
-              }
-              this.setAttribute("class", "same-as-selected");
-              break;
-            }
-          }
-          h.click();
-      });
-      divb.appendChild(divc);
-    }
-    x[i].appendChild(divb);
-    diva.addEventListener("click", function(e) {
-      /* When the select box is clicked, close any other select boxes,
-      and open/close the current select box: */
-      e.stopPropagation();
-      closeAllSelect(this);
-      this.nextSibling.classList.toggle("select-hide");
-      this.classList.toggle("select-arrow-active");
-    });
-  }
-
-  function closeAllSelect(elmnt) {
-    //Closes all select boxes, except the current
-    var x, y, i, arrNo = [];
-    x = document.getElementsByClassName("select-items");
-    y = document.getElementsByClassName("select-selected");
-    for (i = 0; i < y.length; i++) {
-      if (elmnt == y[i]) {
-        arrNo.push(i)
-      } else {
-        y[i].classList.remove("select-arrow-active");
-      }
-    }
-    for (i = 0; i < x.length; i++) {
-      if (arrNo.indexOf(i)) {
-        x[i].classList.add("select-hide");
-      }
-    }
-  }
-  </script>
-  </script>
 </html>
-
-<script>
-</script>

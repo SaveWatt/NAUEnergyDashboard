@@ -1,21 +1,5 @@
-<!-- Styles -->
-<style>
-#chartdiv {
-  width: 100%;
-  height: 500px;
-  margin: auto;
-}
-</style>
+{% load staticfiles %}
 
-<!-- Resources -->
-<script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
-<script src="https://www.amcharts.com/lib/3/gauge.js"></script>
-<script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
-<link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
-<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
-
-<!-- Chart code -->
-<script>
 var gaugeChart = AmCharts.makeChart("chartdiv", {
   "type": "gauge",
   "theme": "none",
@@ -77,7 +61,3 @@ var gaugeChart = AmCharts.makeChart("chartdiv", {
     "enabled": true
   }
 });
-</script>
-
-<!-- HTML -->
-<div id="chartdiv"></div>
