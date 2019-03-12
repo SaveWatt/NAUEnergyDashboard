@@ -1,25 +1,7 @@
 class StaticDataRetriever:
 
-    def __init__(self, in_file=None, out_file='SDR_Default.json'):
-        self.__csv = in_file
-        self.__json = out_file
+    def __init__(self):
         self.__data_frame = None
-
-    @property
-    def csv(self):
-        return self.__csv
-
-    @csv.setter
-    def csv(self, file_path):
-        self.__csv = file_path
-
-    @property
-    def json(self):
-        return self.__json
-
-    @json.setter
-    def json(self, file_name):
-        self.__json = file_name
 
     @property
     def data_frame(self):
