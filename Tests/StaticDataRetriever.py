@@ -15,7 +15,7 @@ class StaticDataRetriever:
         self.__table = None
 
     def print_rows(self):
-        """bnamelst1 = ['gamage','B1','blome','B2','1899','B3', 'adel','B26', 'allen hall','B46',
+        bnamelst = ['gamage','B1','blome','B2','1899','B3', 'adel','B26', 'allen hall','B46',
         'athropology','B29', 'aquatic center','B49', 'ardey audit','B37A',
         'ashurst','B11','beaver street school','B93','biology annex','B21B',
         'bookstore','B35','bury','B5','bus barn', 'B83',
@@ -41,9 +41,9 @@ class StaticDataRetriever:
         'student services','B30B', 'studnt servs vav overw','B30A',
         'swing space','B98C', 'talor hall','B9', 'telcomm','B54A',
         'tinsley','B44', 'univ dinning','B30D', 'univ services','B90',
-        'wettaw','B88', 'wilson','B45']"""
+        'wettaw','B88', 'wilson','B45']
 
-        bnamelst = ['adel','B26', 'cline','B28', 'sas','B60',]
+        #bnamelst1 = ['adel','B26', 'cline','B28', 'sas','B60',]
 
         cursor = self.__connection.cursor(as_dict=True)
         # Get list of trendlogs
@@ -61,7 +61,9 @@ class StaticDataRetriever:
                     # Storing bname, logdesc, objname, TrendlogID in log_dict
                     log_dict[key] = [name, row['logdescription'],
                     row['objname'], row['TrendlogID']]
+
         # Querying for trendlogs based on log_dict info
+        lognum = 1
         for key in sorted(log_dict.keys()):
             # Creating string which identifies trendlog
             logstring = 'tblTrendlog_'
@@ -74,7 +76,8 @@ class StaticDataRetriever:
                 logstring += "0"
             logstring += logid[1]
 
-            print("logid: " + key + " logstring: " + logstring)
+            print(str(lognum) + ": logid: " + key + " logstring: " + logstring)
+            lognum +=1
 
             # Creating dynamic query for trendlog table
             query = ('SELECT * FROM %s' % logstring)
@@ -83,7 +86,7 @@ class StaticDataRetriever:
 
             count = 0
             for row in cursor:
-                if count > 5:
+                if count > 3:
                     break
                 print(row)
                 count+=1
@@ -95,9 +98,9 @@ class StaticDataRetriever:
             count+=1
             print(str(count) + ": " + key + ": " + str(dict[key]))
 
-    def store_table(self):
-        cursor = self.__connection.cursor(as_dict=True)
-        cursor.execute('SELECT * FROM tblTrendlog_0000601_0000000000')
+    def log_printer(self):
+        cursor = self.__connection.cursor()
+        cursor.execute('SELECT * FROM ')
         self.__table = cursor.fetchall()
         print(self.__table)
 
