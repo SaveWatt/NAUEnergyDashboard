@@ -17,22 +17,24 @@ from django.contrib import admin
 from django.urls import include, path
 from . import views
 from .views import *
+from edashboard import sessions
 from django.conf import settings
 from django.conf.urls.static import static
 
 app_name = 'edashboard'
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('home/', views.index, name='home'),
     path('', views.construction_view, name='index'),
+    path('login/', views.login, name='login'),
+    path('demo/', views.demo, name='demo'),
+    path('login/?', views.login, name='session'),
     path('building/', views.building_view, name='building'),
+    path('building/<buildnum>/', views.building_view, name='building'),
     path('compare/', views.compare_view, name='compare'),
-    path('export/', ExportView.as_view(), name='export'),
-    path('export/data/', ExportView.as_view(), name='exportdata'),
-    path('export/data/', views.get_data, name='exportdata'),
+    path('export/<builddata>/', views.export_view, name='export2'),
+    path('export/', views.exporth_view, name='export'),
     path('help/', views.help_view, name='help'),
-    path('login/', views.login_view, name='login'),
     path('adminsite/', views.admin_view, name='adminsite'),
     path('construction/', views.construction_view, name='construction'),
-    path('connection/',views.formView, name = 'loginform'),
-    path('loginn/', views.login, name='loginn'),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

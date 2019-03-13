@@ -23,3 +23,52 @@ def getTimes(times):
       mins = colon + mins
       time = str(hour) + mins + ":00"
     return year + "-" + months[month] + "-" + day + " " + time
+
+def getBuildInfo(str):
+    starr = str.split(" ")
+    bnum = starr[len(starr)-1]
+    bnum = bnum.replace("(","")
+    bnum = bnum.replace(")","")
+    bname = ""
+    for i in range(0,len(starr)-1):
+        bname += starr[i]
+    return [bname,bnum]
+
+def splitUrls(builddata,flag):
+    cleandata = []
+    months = ["January","February","March","April","May",
+    "June","July","August","September","October","November", "December"]
+    build = builddata.split("time=")
+    #If we recieved a sensor
+    if flag == "sens":
+        timesens = build[1].split("sensor=")
+        times = timesens[0]
+        sensor = timesens[1]
+    #If we recieved a Utility
+    if flag == "util":
+        timeutil = build[1].split("util=")
+        times = timeutil[0]
+        util = timeutil[1]
+    splitimes = times.split(" - ")
+    start = splitimes[0]
+    end = splitimes[1]
+    i=0
+    for i in range(0,len(months)-1):
+        if(months[i] in start):
+            monDay = start.split(",")
+            num = monDay[0].split(months[i])
+            start = "" + str(months[i]) + " " + str(num[1]) +","+ monDay[1]
+    finalbuild = build[0].split("build=")
+    #Adds building number
+    cleandata.append(finalbuild[1])
+    #Adds sensor
+    if flag == "sens":
+        cleandata.append(sensor)
+    #Adds util
+    if flag == "util":
+        cleandata.append(util)
+    #Adds start time
+    cleandata.append(start)
+    #Adds end time
+    cleandata.append(end)
+    return cleandata

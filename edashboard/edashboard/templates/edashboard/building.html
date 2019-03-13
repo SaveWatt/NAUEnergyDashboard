@@ -19,7 +19,7 @@
         <div id='stacked'>
         <div id="topcont" style="margin-left:2%;margin-top: 0;">
           <div id="buildimg">
-            <h1 style="color: #003467;text-align:left;height:fit-content;">Student Academic Services</h1>
+            <h1 style="color: #003467;text-align:left;height:fit-content;"> {{ bname|safe }} </h1>
             <img src={% static '/edashboard/images/SAS.jpg' %} style="margin:1%;">
           </div>
           <div id="weather">
@@ -53,7 +53,7 @@
           <div class="graphcont" style="margin:0; width: 50%; height: inherit;">
             <canvas id="line-chart"></canvas>
             <script>
-            {% include "edashboard/scripts/expgraph.js" %}
+            {% include "edashboard/scripts/buildgraph.js" %}
             {% include "edashboard/scripts/sidebar.js" %}
             {% include "edashboard/scripts/donutgraph.js" %}
             document.getElementById("hour").style.backgroundColor = "rgb(255, 204, 1)";

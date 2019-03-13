@@ -2,24 +2,30 @@
   <input id="buildingsearchexpcompsearch" class="search" type="text" placeholder="Search For Building..." autofocus/>
   <ul id="autocomplete-results2"></ul>
 </div>
-<div id="selectutil"class="custom-select" style="width:200px;">
-  <li class="dropdown-toggle" style="display:none;">Utility</li>
-  <h2 class="select">Select a Utility</h2>
-  <select>
-    <option>Heating</option>
-    <option>Cooling</option>
-    <option>Electricity</option>
-  </select>
-</div>
-<div id="selectsens" class="custom-select" style="width:200px;">
-  <li class="dropdown-toggle" style="display:none;">Sensor</li>
-  <h2 class="select">Select a Sensor</h2>
-  <select>
-    <option>Filler1</option>
-    <option>Filler2</option>
-    <option>Filler3</option>
-  </select>
-</div>
+{% block content %}
+  {% if username is None %}
+    <div id="selectutil"class="custom-select" style="width:200px;">
+      <li class="dropdown-toggle" style="display:none;">Utility</li>
+      <h2 class="select">Select a Utility</h2>
+      <select>
+        <option>Heating</option>
+        <option>Cooling</option>
+        <option>Electricity</option>
+      </select>
+    </div>
+  {% else %}
+    <div id="selectsens" class="custom-select" style="width:200px;">
+      <li class="dropdown-toggle" style="display:none;">Sensor</li>
+      <h2 class="select">Select a Sensor</h2>
+      <select>
+        <option>Filler1</option>
+        <option>Filler2</option>
+        <option>Filler3</option>
+      </select>
+    </div>
+  {% endif %}
+{% endblock%}
+
 
 <script>
 jQuery(document).ready(function (e) {

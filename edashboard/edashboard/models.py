@@ -52,11 +52,23 @@ class BuildingSearch(models.Model):
         f.close()
         return buildings
 
+class Users(models.Model):
+    username = models.CharField(max_length=20)
+    password = models.CharField(max_length=25)
+    def getuname(self):
+        return self.username
+    def getpass(self):
+        return self.password
+    def __str__(self):
+        return self.username
+    class Meta:
+       managed = False
+       db_table = 'edashboard_user'
+
+
 class LoginForm(models.Model):
     username = models.CharField(max_length=200)
     password = models.CharField(max_length=200)
-
-
 
 class ExportBuilding(models.Model):
     date = models.DateTimeField()

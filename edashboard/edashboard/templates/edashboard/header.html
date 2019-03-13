@@ -5,7 +5,7 @@
     <img id="logo" src={% static '/edashboard/images/logo.png' %}  style="margin-top: 4%; max-height:inherit; width:auto;">
   </div>
   <div id="links" style="float: left; font-size: 25px;" >
-    <a href="{% url 'index' %}" style="padding: 17px 17px;">Contstruction</a>
+    <a href="{% url 'index' %}" style="padding: 17px 17px;">Construction</a>
     <a href="{% url 'home' %}" style="padding: 17px 17px;">Home</a>
     <a href="{% url 'export' %}" style="padding: 17px 17px;">Export</a>
     <div id="dd" class="dropdown-content">
@@ -127,16 +127,18 @@
   function FillInput1(listid){
     listName = document.getElementById(listid).innerHTML;
     document.getElementById("buildingsearch header-search").value = listName;
-    document.getElementById("autocomplete-results").innerHTML = ''
+    document.getElementById("autocomplete-results").innerHTML = '';
     document.getElementById("autocomplete-results").style.backgroundColor = 'white';
-    if(flag == "building"){
-      window.location.href = "{% url 'building' %}";
-    }
-    else{
-      window.location.href = "{% url 'export' %}";
-    }
+    var num = getNum(listName);
+    window.location.href = "{% url 'building' %}B" + num + "/";
+
     return 0;
   }
 
+function getNum(buildstr) {
+  var num = buildstr.split(" ");
+  var last = (num[num.length-1]).substring(1);
+  return last.substring(0, last.length - 1);
+}
   </script>
 </div>

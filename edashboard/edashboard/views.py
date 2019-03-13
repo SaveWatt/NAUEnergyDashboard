@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -9,10 +10,10 @@ from django.views.generic import TemplateView
 from django.template import Template, Context
 from django import template
 from edashboard.clean import *
+from edashboard.sessions import *
 from edashboard.GetBuilding import *
 from edashboard.models import *
 from django.views import View
-from edashboard.forms import ExportForm
 from django.http import JsonResponse
 import json
 import time
@@ -24,72 +25,54 @@ def index(request):
     buildings = BuildingSearch.getBuildingString()
     return render(request, 'edashboard/index.html',{'buildlist': buildings})
 
-def building_view(request):
+def building_view(request,buildnum):
     buildings = BuildingSearch.getBuildingString()
-    return render(request, 'edashboard/building.html',{'buildlist': buildings})
+    buildname = "Test"
+    return render(request, 'edashboard/building.html',{'buildlist': buildings, 'bnum': buildnum,'bname':buildname})
 
 def compare_view(request):
     buildings = BuildingSearch.getBuildingString()
     return render(request, 'edashboard/compare.html',{'buildlist': buildings})
 
-class ExportView(View):
-    dates=[]
-    usages=[]
+def export_view(request,builddata=None):
+    flag = ""
+    sensor = ""
+    util = ""
+    if "util=" in str(builddata):
+        flag = "util"
+    if "sensor=" in str(builddata):
+        flag = "sens"
+    data = splitUrls(builddata, flag)
+    buildnum = data[0]
+    starttime = getTimes(data[2])
+    endtime = getTimes(data[3])
+    if flag == "util":
+        util = data[1]
+    if flag == "sens":
+        sensor = data[1]
+    buildings = BuildingSearch.getBuildingString()
+    return render(request, 'edashboard/export.html',{'buildlist': buildings,'builddata':builddata})
 
-    def get(self, request):
-        buildings = BuildingSearch.getBuildingString()
-        return render(request, 'edashboard/export.html',{'date':self.dates, 'usage':self.usages,'buildlist': buildings})
-
-    def post(self, request):
-        if request.is_ajax():
-            if(len(self.dates) != 0):
-                self.dates.clear()
-                self.usages.clear()
-            body_unicode = request.body.decode('utf-8')
-            body = json.loads(body_unicode)
-            #Gets start and end times
-            timestr = body['time']
-            times = timestr.split(" - ")
-            #Creates our variables needed for graphing
-            timestart = getTimes(times[0])
-            timeend = getTimes(times[1])
-            building = body['building']
-            util = body['util']
-            sensor = body['sensor']
-            buildings = BuildingSearch.getBuildingString()
-            usage = ExportBuilding.objects.filter(date__gte=timestart, date__lte=timeend).values('usage')
-            for i in usage:
-                self.usages.append(i.get('usage'))
-            date = ExportBuilding.objects.filter(date__gte=timestart, date__lte=timeend).values('date')
-            #usage = ExportBuilding.objects.filter(date__gte=timestart, date__lte=timeend).values('usage','date')
-            for i in date:
-                if (i.get('date') is not None):
-                    self.dates.append((str(i.get('date')).split("+")[0]))
-        return render(request, 'edashboard/export.html',{'date':json.dumps(self.dates), 'usage':json.dumps(self.usages),'buildlist': buildings})
+def exporth_view(request):
+    buildings = BuildingSearch.getBuildingString()
+    return render(request, 'edashboard/export.html',{'buildlist': buildings})
 
 def get_data(request):
     date = "Tues"
     usage = 10
     return JsonResponse({'data': usage,'date':date})
 
-
 def login(request):
-   username = 'not logged in'
-   if request.method == 'POST':
-      MyLoginForm = LoginForm(request.POST)
-      if MyLoginForm.is_valid():
-         username = MyLoginForm.cleaned_data['username']
-         request.session['username'] = username
-      else:
-         MyLoginForm = LoginForm()
-   return render(request, 'index.html', {"username" : username})
+   return render(request, 'edashboard/login.html',{
+       'form': form_login,
+       'username': username})
 
 def formView(request):
    if request.session.has_key('username'):
       username = request.session['username']
-      return render(request, 'index.html', {"username" : username})
+      return render(request, 'edashboard/login.html', {"username" : username})
    else:
-      return render(request, 'login.html', {})
+      return render(request, 'edashboard/login.html', {})
 
 def logout(request):
    try:
@@ -126,6 +109,10 @@ def construction_view(request):
 def login_view(request):
     buildings = BuildingSearch.getBuildingString()
     return render(request, 'edashboard/login.html',{'buildlist': buildings})
+
+def demo(request):
+    buildings = BuildingSearch.getBuildingString()
+    return render(request, 'edashboard/forms_demo.html',{'buildlist': buildings})
 
 def admin_view(request):
     buildings = BuildingSearch.getBuildingString()

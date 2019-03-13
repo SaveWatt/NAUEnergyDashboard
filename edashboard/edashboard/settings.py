@@ -119,11 +119,13 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOGIN_REDIRECT_URL = '/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR,EDASH_PATH,MEDIA_URL)
 
+ADMIN_MEDIA_PREFIX = '/static/admin/'
 STATIC_URL = '/static/'
 STATIC_ROOT = '/edashboard/edashboard/static/'

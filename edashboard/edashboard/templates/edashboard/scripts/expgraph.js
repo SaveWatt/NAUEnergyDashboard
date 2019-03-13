@@ -21,7 +21,7 @@
       responsive: false,
       title: {
         display: true,
-        text: "SAS Building Electricity usage",
+        text: "{{ bname|safe }} Building usage",
       },
       scales: {
       xAxes: [{
