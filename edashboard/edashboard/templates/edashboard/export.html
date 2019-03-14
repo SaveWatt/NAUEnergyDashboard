@@ -49,12 +49,8 @@
 
   function downloadData(event){
     event.preventDefault();
-    alert("hello?");
-    console.log({{ usage|safe }});
-    console.log({{ date|safe }});
     var dataset = [{{usage|safe}}, "date", {{date|safe}}];
     var durl = "{% url 'down_export' data=0%}".replace(/0/, dataset);
-    console.log(durl);
     window.location.href = "" + durl.toString() + "";
   }
 
