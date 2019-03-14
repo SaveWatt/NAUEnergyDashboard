@@ -39,6 +39,7 @@ def splitUrls(builddata,flag):
     months = ["January","February","March","April","May",
     "June","July","August","September","October","November", "December"]
     build = builddata.split("time=")
+    times=""
     #If we recieved a sensor
     if flag == "sens":
         timesens = build[1].split("sensor=")
@@ -49,6 +50,7 @@ def splitUrls(builddata,flag):
         timeutil = build[1].split("util=")
         times = timeutil[0]
         util = timeutil[1]
+    print(times)
     splitimes = times.split(" - ")
     start = splitimes[0]
     end = splitimes[1]

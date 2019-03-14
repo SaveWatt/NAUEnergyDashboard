@@ -33,6 +33,7 @@ urlpatterns = [
     path('building/<buildnum>/', views.building_view, name='building'),
     path('compare/', views.compare_view, name='compare'),
     path('export/<builddata>/', views.export_view, name='export2'),
+    path('exportdata/<data>/', views.down_export, name='down_export'),
     path('export/', views.exporth_view, name='export'),
     path('help/', views.help_view, name='help'),
     path('adminsite/', views.admin_view, name='adminsite'),

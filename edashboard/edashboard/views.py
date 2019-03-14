@@ -5,6 +5,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
+import csv
+from django.utils.encoding import smart_str
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from django.template import Template, Context
@@ -51,7 +53,32 @@ def export_view(request,builddata=None):
     if flag == "sens":
         sensor = data[1]
     buildings = BuildingSearch.getBuildingString()
-    return render(request, 'edashboard/export.html',{'buildlist': buildings,'builddata':builddata})
+    usage=[1,5,8,3,5]
+    date=[1,2,3,4,5]
+    return render(request, 'edashboard/export.html',{'buildlist': buildings,'builddata':builddata,'usage':usage,'date':date})
+
+def down_export(request,data):
+    buildings = BuildingSearch.getBuildingString()
+    i=0
+    finalstr="USAGE,DATE\n"
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=data_usage.csv'
+    writer = csv.writer(response, csv)
+    response.write(u'\ufeff'.encode('utf8'))
+    writer.writerow([
+        smart_str(u"USAGE"),
+        smart_str(u"DATE"),
+    ])
+    cleandata = data.split(",")
+    j=cleandata.index("date")+1
+    for i in range(0,cleandata.index("date")):
+        writer.writerow([
+            smart_str(cleandata[i]),
+            smart_str(cleandata[j]),
+        ])
+        j+=1
+    return response
+
 
 def exporth_view(request):
     buildings = BuildingSearch.getBuildingString()
