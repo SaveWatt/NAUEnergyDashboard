@@ -12,8 +12,6 @@ from django.views.generic import TemplateView
 from django.template import Template, Context
 from django import template
 from edashboard.clean import *
-from edashboard.sessions import *
-from edashboard.GetBuilding import *
 from edashboard.models import *
 from django.views import View
 from django.http import JsonResponse
