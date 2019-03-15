@@ -20,6 +20,9 @@ from django.http import JsonResponse
 from edashboard.forms import *
 import json
 import time
+from edashboard.StaticDataRetriever import StaticDataRetriever
+import statistics as stats
+import datetime
 
 register = template.Library()
 
@@ -66,9 +69,14 @@ def compare_view(request):
     for building in buildings:
         b_string = building.b_name + ' (' + building.b_num + ')'
         b_strings.append(b_string)
+<<<<<<< HEAD
     return render(request, 'edashboard/compare.html',{'buildlist': b_strings})
+=======
+    return render(request, 'edashboard/compare.html', {'buildlist': b_strings})
+>>>>>>> parent of f5b2290... redirect
 
 def export_view(request,builddata=None):
+    sdr = StaticDataRetriever()
     flag = ""
     sensor = ""
     util = ""
@@ -89,9 +97,27 @@ def export_view(request,builddata=None):
     for building in buildings:
         b_string = building.b_name + ' (' + building.b_num + ')'
         b_strings.append(b_string)
-    print (b_strings)
-    usage=[1,5,8,3,5]
-    date=[1,2,3,4,5]
+    usage = []
+    date = []
+    print(buildnum)
+    if buildnum and buildnum != 'B':
+        building = Building.objects.get(b_num=buildnum)
+        buildname = building.b_name
+        build_id = building.id
+        try:
+            sens = Sensor.objects.get(building_id=build_id, s_type=util)
+        except:
+            sens = Sensor.objects.get(building_id=57, s_log='601_2')
+        log_dict = sdr.get_log(sens.s_log)
+        count = 0
+        for key in reversed(sorted(log_dict.keys())):
+            if count > 99:
+                break;
+            date.append(log_dict[key][0].strftime("%Y-%m-%d %H:%M:%S"))
+            usage.append(log_dict[key][1])
+            count += 1
+        for d in date:
+            print(d)
     return render(request, 'edashboard/export.html',{'buildlist': b_strings,'builddata':builddata,'usage':usage,'date':date})
 
 def down_export(request,data):
@@ -107,15 +133,15 @@ def down_export(request,data):
     writer = csv.writer(response, csv)
     response.write(u'\ufeff'.encode('utf8'))
     writer.writerow([
-        smart_str(u"USAGE"),
         smart_str(u"DATE"),
+        smart_str(u"USAGE"),
     ])
     cleandata = data.split(",")
     j=cleandata.index("date")+1
     for i in range(0,cleandata.index("date")):
         writer.writerow([
-            smart_str(cleandata[i]),
             smart_str(cleandata[j]),
+            smart_str(cleandata[i]),
         ])
         j+=1
     return response
@@ -145,7 +171,7 @@ def register(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return render(request, 'edashboard/login.html',{'buildlist': buildings})
+            return render(request, 'edashboard/index.html',{'buildlist': buildings})
     else:
         form = RegistrationForm()
     return render(request, 'edashboard/register.html',{'form':form})
