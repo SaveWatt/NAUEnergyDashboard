@@ -15,6 +15,7 @@ from edashboard.clean import *
 from edashboard.models import *
 from django.views import View
 from django.http import JsonResponse
+from edashboard.forms import *
 import json
 import time
 
@@ -92,12 +93,17 @@ def login(request):
        'form': form_login,
        'username': username})
 
-def formView(request):
-   if request.session.has_key('username'):
-      username = request.session['username']
-      return render(request, 'edashboard/login.html', {"username" : username})
-   else:
-      return render(request, 'edashboard/login.html', {})
+def register(request):
+    buildings = BuildingSearch.getBuildingString()
+    if request.method =="POST":
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'edashboard/index.html',{'buildlist': buildings})
+    else:
+        form = RegistrationForm()
+        args = {'form': form}
+        return render(request, 'edashboard/register.html',{'buildlist': buildings,'form':form})
 
 def logout(request):
    try:
@@ -115,13 +121,51 @@ def validate_username(request):
         data['error_message'] = 'A user with this username already exists.'
     return JsonResponse(data)
 
-def compare_view(request):
-    db_data = Demo.objects.all().values_list('value', flat=True)
-    db_date = Demo.objects.all().values_list('date', flat=True)
-    db_id = Demo.objects.all().values_list('id', flat=True)
+def compareh_view(request):
     buildings = BuildingSearch.getBuildingString()
-    print(db_id)
-    return render(request, 'edashboard/compare.html',{'db_data':db_data, 'db_id':db_id, 'buildlist': buildings})
+    return render(request, 'edashboard/compare.html',{'buildlist': buildings})
+
+def compare_view(request,builddata=None):
+    flag = ""
+    sensor = ""
+    util = ""
+    if "util=" in str(builddata):
+        flag = "util"
+    if "sensor=" in str(builddata):
+        flag = "sens"
+    data = splitUrls(builddata, flag)
+    buildnum = data[0]
+    starttime = getTimes(data[2])
+    endtime = getTimes(data[3])
+    if flag == "util":
+        util = data[1]
+    if flag == "sens":
+        sensor = data[1]
+    usage=[1,5,8,3,5]
+    date=[1,2,3,4,5]
+    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'builddata':builddata,'usage':usage,'date':date})
+
+def down_compare(request, data):
+        buildings = BuildingSearch.getBuildingString()
+        i=0
+        finalstr="USAGE,DATE\n"
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=data_usage.csv'
+        writer = csv.writer(response, csv)
+        response.write(u'\ufeff'.encode('utf8'))
+        writer.writerow([
+            smart_str(u"USAGE"),
+            smart_str(u"DATE"),
+        ])
+        cleandata = data.split(",")
+        j=cleandata.index("date")+1
+        for i in range(0,cleandata.index("date")):
+            writer.writerow([
+                smart_str(cleandata[i]),
+                smart_str(cleandata[j]),
+            ])
+            j+=1
+        return response
 
 def help_view(request):
     buildings = BuildingSearch.getBuildingString()

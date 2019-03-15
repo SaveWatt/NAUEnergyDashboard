@@ -2,12 +2,17 @@
 
 {% load static %}
 
-{% block branding %}
-    <div class="head">
-        <h1 id="name">Admin Dashboard</h1>
-    </div>
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "/admin/adminstyle.css" %}">
 {% endblock %}
 
+{% block header %}
 {% block nav-global %}
-    <img class="brand_img" src="{% static 'images/ic_launcher.png'%}" width="50" height="50" alt="logo">
+    <img class="brand_img" src="{% static 'edashboard/images/logo.png'%}"  height="-webkit-fill-available" alt="logo">
+{% endblock %}
+{% block branding %}
+    <div class="head">
+        <h1 id="name">Energy Dashboard Admin</h1>
+    </div>
+{% endblock %}
 {% endblock %}

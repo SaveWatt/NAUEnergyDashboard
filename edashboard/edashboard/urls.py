@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import include, path
 from . import views
 from .views import *
@@ -22,18 +23,22 @@ from django.conf.urls.static import static
 
 app_name = 'edashboard'
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('home/', views.index, name='home'),
-    path('', views.construction_view, name='index'),
-    path('login/', views.login, name='login'),
+    path('', views.index, name='index'),
+    path('login/', LoginView.as_view(template_name='edashboard/login.html'), name='login'),
+    path('logout/', LogoutView.as_view(template_name='edashboard/index.html'), name='logout'),
     path('demo/', views.demo, name='demo'),
-    path('login/?', views.login, name='session'),
+    path('login/', views.login, name='session'),
+    path('register/', views.register, name='register'),
     path('building/', views.building_view, name='building'),
     path('building/<buildnum>/', views.building_view, name='building'),
-    path('compare/', views.compare_view, name='compare'),
+    path('compare/', views.compareh_view, name='compare'),
+    path('compare/<builddata>/', views.compare_view, name='compare'),
+    path('compare/<data>/', views.down_compare, name='compare'),
+    path('export/', views.exporth_view, name='export'),
     path('export/<builddata>/', views.export_view, name='export2'),
     path('exportdata/<data>/', views.down_export, name='down_export'),
-    path('export/', views.exporth_view, name='export'),
     path('help/', views.help_view, name='help'),
     path('adminsite/', views.admin_view, name='adminsite'),
     path('construction/', views.construction_view, name='construction'),

@@ -9,9 +9,9 @@
 <body>
   <div id="containerbg" style="background: url({% static 'edashboard/images/NAU.jpg' %});background-size: cover; background-repeat: no-repeat;">
     <img id="logolog" src={% static '/edashboard/images/logo.png' %} style="margin:1%;">
-    <div id="formcontainer">
+    <div id="formcontainer" style="margin-top: 5%">
         <form id="login" method='post'>
-          <h1>Administrator Login</h1>
+          <h1>Sign up with us!</h1>
           {% csrf_token %}
           {{ form.as_p }}
           <button id="loginb" type="submit" value="Submit">Login</button>

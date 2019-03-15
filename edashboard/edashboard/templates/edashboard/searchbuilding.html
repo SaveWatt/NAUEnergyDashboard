@@ -1,17 +1,6 @@
 <div id="buildingadder"><input class="search" type="text" placeholder="Search For Building..." autofocus/></div>
 <button id="add-build" onClick="addBuilding()">Add Building +</button>
-{% block content %}
-{% if username is None %}
-  <div id="selectutil"class="custom-select" style="width:200px;">
-    <li class="dropdown-toggle" style="display:none;">Utility</li>
-    <h2 class="select">Select a Utility</h2>
-    <select>
-      <option>Heating</option>
-      <option>Cooling</option>
-      <option>Electricity</option>
-    </select>
-  </div>
-{% else %}
+{% if user.is_authenticated %}
   <div id="selectsens" class="custom-select" style="width:200px;">
     <li class="dropdown-toggle" style="display:none;">Sensor</li>
     <h2 class="select">Select a Sensor</h2>
@@ -21,8 +10,17 @@
       <option>Filler3</option>
     </select>
   </div>
+{% else %}
+  <div id="selectutil"class="custom-select" style="width:200px;">
+    <li class="dropdown-toggle" style="display:none;">Utility</li>
+    <h2 class="select">Select a Utility</h2>
+    <select>
+      <option>Heating</option>
+      <option>Cooling</option>
+      <option>Electricity</option>
+    </select>
+  </div>
 {% endif %}
-{% endblock%}
 <script>
 jQuery(document).ready(function (e) {
     function t(t) {
@@ -49,7 +47,7 @@ jQuery(document).ready(function (e) {
     })
 });
 var x, i, j, selElmnt, diva, divb, c;
-//Gets custom sele elements
+//Gets custom selected elements
 x = document.getElementsByClassName("custom-select");
 for (i = 0; i < x.length; i++) {
   selElmnt = x[i].getElementsByTagName("select")[0];
