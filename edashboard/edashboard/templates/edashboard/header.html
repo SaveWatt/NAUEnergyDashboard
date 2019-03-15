@@ -1,18 +1,144 @@
 {% load static %}
-<link rel="stylesheet" type="text/css" href="/static/edashboard/stylesheet.css">
-<div class="topnav" id="Topnav" style="clear: both;">
+<link rel="stylesheet" type="text/css" href={% static '/edashboard/stylesheet.css' %}>
+<div class="topnav clearfix" id="Topnav" style="clear: both;">
   <div style="height:50px; width:auto; display: inline-block; float: left;">
-    <img id="logo" src="{% static 'edashboard/images/logo.png' %}" style="margin:1%; max-height:inherit; width:auto;padding: 6px 17px;">
+    <img id="logo" src={% static '/edashboard/images/logo.png' %}  style="margin-top: 4%; max-height:inherit; width:auto;">
   </div>
   <div id="links" style="float: left; font-size: 25px;" >
-    <a href="{% url 'edashboard:index' %}" style="padding: 17px 17px;">Home</a>
-    <a href="{% url 'edashboard:export' %}" style="padding: 17px 17px;">Export</a>
-    <a href="{% url 'edashboard:building' %}" style="padding: 17px 17px;">Building</a>
-    <a href="{% url 'edashboard:compare' %}" style="padding: 17px 17px;">Comparison</a>
+    <a href="{% url 'index' %}" style="padding: 17px 17px;">Construction</a>
+    <a href="{% url 'home' %}" style="padding: 17px 17px;">Home</a>
+    <a href="{% url 'export' %}" style="padding: 17px 17px;">Export</a>
+    <div id="dd" class="dropdown-content">
+      <a href="#" style="padding: 17px 33px;">Building</a>
+      <ul class="dropdown" style="max-height: 600px;overflow: scroll; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+        <li class="links"><input type="text" id="buildingsearch header-search" class="search" placeholder="Search for Building..." style="color:black; font-size:20px;border: none;padding: 10px;">
+        <ul id="autocomplete-results" class="sidemenu"></ul></li>
+        {% include "edashboard/sidebar.html" %}
+      </ul>
+    </div>
+    <a href="{% url 'compare' %}" style="padding: 17px 17px;">Comparison</a>
   </div>
-  <div id="settings" style="float: right; font-size: 17px; display: inline-flex; text-align: right; width: fit-content; padding: .4% 1% 0 0;" >
-    <a href="{% url 'edashboard:help' %}" style="padding: 0 5%;">Help</a>
-    <a href="{% url 'admin:index' %}" style="padding: 0 5%;">Admin</a>
-    <a href="http://localhost:8888/EnergyDash/index.html" style="padding: 0 5%;">Logout</a>
+  <div id="settings">
+    <a href="{% url 'help' %}">Help</a>
+    <a href="{% url 'adminsite' %}">Admin</a>
+    <a href="{% url 'index' %}">Logout</a>
+    <span class="clear"></span>
   </div>
+  <script>
+    $('.dropdown li > #numbersub').parent().click(function() {
+    var submenu = $(this).children('#numbersub');
+    if ( $(submenu).is(':hidden') ) {
+      $(submenu).slideDown(200);
+    } else {
+      $(submenu).slideUp(200);
+    }
+    });
+
+    $('.dropdown li > #namesub').parent().click(function() {
+    var submenu = $(this).children('#namesub');
+    if ( $(submenu).is(':hidden') ) {
+      $(submenu).slideDown(200);
+    } else {
+      $(submenu).slideUp(200);
+    }
+    });
+    function DropDown(el) {
+    this.dd = el;
+    this.initEvents();
+  }
+  DropDown.prototype = {
+    initEvents : function() {
+      var obj = this;
+      obj.dd.on("click", function(event){
+        $(this).toggleClass('active');
+        $(this).toggleClass('hide-arrow');
+        event.stopPropagation();
+      });
+    }
+  }
+
+  $( ".search" ).click(function( event ) {
+  event.stopPropagation();
+});
+
+  $('.links').on('click', function(e) {
+    event.stopPropagation();
+  });
+
+  $(function() {
+    var dd = new DropDown( $('#dd') );
+    var dl = new DropDown( $('.links') );
+  	$(document).click(function() {
+  	  $('dropdown-content').removeClass('active');
+  	});
+  });
+
+  var input = document.getElementById('buildingsearch header-search');
+  var flag = "building";
+  var buildings = {{ buildlist|safe }} ;
+  var results;
+
+  // functions
+  function autocomplete(val) {
+    var build_return = [];
+    for (i = 0; i < buildings.length; i++) {
+      if(buildings[i].includes(val)){
+        build_return.push(buildings[i]);
+      }}
+    return build_return;
+  }
+
+  // events
+  input.onkeyup = function(e) {
+    input_val = this.value; // updates the variable on each ocurrence
+
+    if(Number.isInteger(input_val)){
+      flag = "sensor";
+    }
+    else{
+      flag = "building";
+    }
+
+    if (input_val.length > 0) {
+      var build_to_show = [];
+      autocomplete_results = document.getElementById("autocomplete-results");
+      autocomplete_results.innerHTML = '';
+      build_to_show = autocomplete(input_val);
+      if(build_to_show.length != 0){
+        for (i = 0; i < build_to_show.length; i++) {
+          autocomplete_results.innerHTML += '<li class=\'searchsug\'id="list'+i+'" onclick="FillInput1(\'list'+i+'\')">' + build_to_show[i] + '</li>';
+        }
+        autocomplete_results.style.display = 'block';
+        autocomplete_results.style.backgroundColor = '#e3e3e3';
+      }
+      else{
+        build_to_show = [];
+        autocomplete_results.innerHTML = '';
+        autocomplete_results.style.backgroundColor = 'white';
+      }
+    }
+
+    else {
+      build_to_show = [];
+      autocomplete_results.innerHTML = '';
+      autocomplete_results.style.backgroundColor = 'white';
+    }
+  }
+  function FillInput1(listid){
+    listName = document.getElementById(listid).innerHTML;
+    document.getElementById("buildingsearch header-search").value = listName;
+    document.getElementById("autocomplete-results").innerHTML = '';
+    document.getElementById("autocomplete-results").style.backgroundColor = 'white';
+    var num = getNum(listName);
+    window.location.href = "{% url 'building' %}B" + num + "/";
+
+    return 0;
+  }
+
+function getNum(buildstr) {
+  var num = buildstr.split(" ");
+  var last = (num[num.length-1]).substring(1);
+  return last.substring(0, last.length - 1);
+}
+  </script>
 </div>

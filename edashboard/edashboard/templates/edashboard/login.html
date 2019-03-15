@@ -1,0 +1,55 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="{% static '/edashboard/stylesheet.css'%}">
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <link rel="shortcut icon" href={% static '/edashboard/images/favicon.ico' %} />
+  </head>
+  <body>
+    <div id="containerbg" style="background: url({% static 'edashboard/images/NAU.jpg' %});background-size: cover; background-repeat: no-repeat;">
+      <img id="logolog" src={% static '/edashboard/images/logo.png' %} style="margin:1%;">
+      <div id="formcontainer">
+        {% block content %}
+        {% if username is None %}
+          <form id="login" method='post'>
+            {% csrf_token %}
+            <h1>Administrator Login</h1>
+            <h3>Username:</h3>
+            <input id="username" type="text"></input>
+            <h3>Password:</h3>
+            <input id="password" type="password"></input>
+            <button id="loginb" type="submit" value="Submit">Login</button>
+          </form>
+        {% else %}
+          <h3> You are signed in as {{ username }}</h3>
+          <a href="{% url "login" %}?action=logout">Logout</a>
+        {% endif %}
+        {% endblock%}
+      </div>
+      <script>
+      $("#login").submit(function(event) {
+        var timestr = $("span#stringtime").text();
+        var username = $('#username').val();
+        var password = $('#password').val();
+        myevent = {'username':username,'password':password}
+        $.ajax({
+            url: "/login/",
+            cache: 'false',
+            type: 'POST',
+            headers: {'X-Requested-With': 'XMLHttpRequest','X-CSRFToken': '{{ csrf_token }}'},
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(myevent),
+            crossDomain: false,
+             error: function(){
+                            alert("Boooo");
+                        },
+              });
+          });
+      </script>
+    </div>
+  </body>
+</html>

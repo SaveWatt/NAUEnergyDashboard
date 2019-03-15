@@ -1,9 +1,12 @@
-{% load static %}
+{% load staticfiles %}
 
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="{% static 'stylesheet.css'%}">
+    <link rel="stylesheet" type="text/css" href={% static '/edashboard/stylesheet.css'%}>
+    <link rel="shortcut icon" href="{% static '/edashboard/images/favicon.ico' %}" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
   </head>
   <body>
@@ -12,7 +15,7 @@
       <div id="left-cont">
         <div id="descr">
           <div id="banner">
-            <div id="innerbanner" style="background-image: url({% static 'edashboard/images/NAU2.jpg' %}); background-size:cover;">
+            <div id="innerbanner" style="background-image: url({% static '/edashboard/images/NAU2.jpg' %}); background-size:cover;">
               <img id="logo" src="{% static 'edashboard/images/Logo2.png' %}" style="max-width: -webkit-fill-available;">
             </div>
           </div>
@@ -20,72 +23,177 @@
             <h1 id="head">Energy Dashboard</h1>
           </div>
         </div>
-        <div id="greencomp">
+        <h2 id="greencomplabel">TODAY'S ENVIRONMENTAL BENEFITS</h2>
+        <div class="greyell" id="greencomp">
           <table class="greencomp">
             <tr>
-              <td>CARBON OFFSET</td>
-              <td>factory img</td>
-              <td>TREES SAVED</td>
-              <td>tree img</td>
-              <td>BARRELS OF OIL</td>
-              <td>barrel img</td>
+              <td>COAL FIRED POWER PLANTS</td>
+              <td><span class="circle"><img id="factory" src={% static 'edashboard/images/factory.png' %} style="max-width: -webkit-fill-available;"></span></td>
+              <td>TREES PLANTED</td>
+              <td><span class="circle"><img id="factory" src={% static 'edashboard/images/tree.png' %} style="max-width: -webkit-fill-available;"></span></td>
+              <td>BARRELS OF OIL CONSUMED</td>
+              <td><span class="circle"><img id="factory" src={% static 'edashboard/images/barrel.png' %} style="max-width: -webkit-fill-available;"></span></td>
             </tr>
-            <td colspan="2" id=carOff>324349 Lbs.</td>
-            <td colspan="2" id=treSav>7456.3 Trees</td>
-            <td colspan="2" id=barOil>315.3 Barrels</td>
-            <tr>
+            <tr id="compval">
+              <td colspan="2" id=carOff><b>324349 Lbs.</b></td>
+              <td colspan="2" id=treSav><b>7456.3 Trees</b></td>
+              <td colspan="2" id=barOil><b>315.3 Barrels</b></td>
             </tr>
           </table>
         </div>
       </div>
       <div id="right-cont">
         <div class="chart-container">
-          <h1 id="chartTitle">Current Campus Usage For Monitored Buildings: </h1>
-          <h2 id="chartNum">245,882,754 BTU/HOUR</h2>
+          <!--Chart Title-->
+          <h1 id="chartTitle">Current Campus Usage For Monitored Buildings:</h1>
+          <h2 id="chartNum">245,882,754 BTU/HOURS</h2>
+          <!--Chart-->
           <canvas id="pie-chart" width="800" height="450"></canvas>
         </div>
+        <!--Chart Labels-->
+        <div id="Labels">
+          <table class="label" cellpadding="8">
+            <tr><td bgcolor="#e3e3e3">Electricity</td><td id="eval">20</td><td class="Labels">BTU/HOURS</td></tr>
+            <tr><td bgcolor="#003467" style="color:white">Cooling</td><td id="cval">30</td><td class="Labels">BTU/HOURS</td></tr>
+            <tr><td bgcolor="#ffcc01">Heating</td><td id="hval">50</td><td class="Labels">BTU/HOURS</td></tr>
+          </table>
+        </div>
+          <!-- Need python functions to Convert from BTU to kW, Ton, Gas, Dollars and for all combos -->
         <div id="switWrap">
+          <!--Units buttons-->
+          <h2 style="margin:0;padding:2%;">Compare Usage In Equivalent Units:</h2>
           <div id="switches">
-            <button>BTU</button>
-            <button>kW</button>
-            <button>Tons</button>
-            <button>Gasoline</button>
-            <button>Cost</button>
+            <button id="btu" onclick="chgColor('btu')">BTU</button>
+            <button id="kw" onclick="chgColor('kw')">kWh</button>
+            <button id="ton" onclick="chgColor('ton')">Tons</button>
+            <button id="gas" onclick="chgColor('gas')">Gas</button>
+            <button id="cost" onclick="chgColor('cost')">Cost</button>
           </div>
         </div>
       </div>
     </div>
   </body>
-</html>
 <script>
+// Initializes global const
+const curre = document.getElementById("eval").innerHTML;
+const currc = document.getElementById("cval").innerHTML;
+const currh = document.getElementById("hval").innerHTML;
+document.getElementById("btu").style.backgroundColor = "#ffcc01";
+
+// Gets the total usage from the header
+var total = document.getElementById("chartNum").innerHTML + '';
+total = total.split(" ", 1);
+total = total[0].replace(/,/g, '');
+total = parseInt(total);
+greencomp(total);
+
+function greencomp(num){
+  //Converts to kwh
+  num=num*.00029307107;
+  // converts to metric tons
+  num = Math.ceil(num*.0007);
+  // Converts to green comparisons
+  trees = Math.round(num/.06054008285);
+  oil = Math.round(num/0.43);
+  gas = (num/8.887*Math.pow(10,-3)).toFixed(4);
+  document.getElementById("carOff").innerHTML = gas;
+  document.getElementById("treSav").innerHTML = trees;
+  document.getElementById("barOil").innerHTML = oil;
+}
+
+// Toggles button color and the labels
+function chgColor(id) {
+  // Changes colors of buttons
+  //Converts to BTUs
+  if(document.getElementById("btu").style.backgroundColor == "rgb(255, 204, 1)"){
+    document.getElementById("btu").style.backgroundColor = "#e3e3e3";
+  }
+  // Converts to kWh
+  else if(document.getElementById("kw").style.backgroundColor == "rgb(255, 204, 1)"){
+    document.getElementById("kw").style.backgroundColor = "#e3e3e3";
+  }
+  // Converts to Tons
+  else if(document.getElementById("ton").style.backgroundColor == "rgb(255, 204, 1)"){
+    document.getElementById("ton").style.backgroundColor = "#e3e3e3";
+  }
+  // Converts to Gas
+  else if(document.getElementById("gas").style.backgroundColor == "rgb(255, 204, 1)"){
+    document.getElementById("gas").style.backgroundColor = "#e3e3e3";
+  }
+  // Converts to Dollars
+  else{
+    document.getElementById("cost").style.backgroundColor = "#e3e3e3";
+  }
+  // Changes the button to be highlighted
+  document.getElementById(id).style.backgroundColor = "#ffcc01";
+  chgLabels(id);
+}
+
+function chgLabels(id){
+  // Changes displayed Labels
+  var labels = document.getElementsByClassName("Labels");
+  if (id== "kw"){
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "kW/HOUR";
+    }
+    document.getElementById("eval").innerHTML= (curre*.00029307107).toFixed(4);
+    document.getElementById("cval").innerHTML= (currc*.00029307107).toFixed(4);
+    document.getElementById("hval").innerHTML= (currh*.00029307107).toFixed(4);
+  }
+  else if (id=="btu") {
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "BTU/HOUR";
+    }
+    document.getElementById("eval").innerHTML= curre;
+    document.getElementById("cval").innerHTML= currc;
+    document.getElementById("hval").innerHTML= currh;
+  }
+  else if (id=="ton") {
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "TONS";
+    }
+    document.getElementById("eval").innerHTML= (curre*.0008).toFixed(4);
+    document.getElementById("cval").innerHTML= (currc*.0008).toFixed(4);
+    document.getElementById("hval").innerHTML= (currh*.0008).toFixed(4);
+  }
+  else if (id=="gas") {
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "GALLONS";
+    }
+    document.getElementById("eval").innerHTML= ((curre*.0007)/(8.887*(Math.pow(10,-3)))).toFixed(4);
+    document.getElementById("cval").innerHTML= ((currc*.0007)/(8.887*(Math.pow(10,-3)))).toFixed(4);
+    document.getElementById("hval").innerHTML= ((currh*.0007)/(8.887*(Math.pow(10,-3)))).toFixed(4);
+  }
+  else {
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "DOLLARS";
+    }
+    document.getElementById("eval").innerHTML= (curre).toFixed(4);
+    document.getElementById("cval").innerHTML= (currc).toFixed(4);
+    document.getElementById("hval").innerHTML= (currh).toFixed(4);
+  }
+}
+
+//Code for the chart
 new Chart(document.getElementById("pie-chart"), {
     type: 'pie',
     data: {
-      labels: ["Electricity: 2478", "Cooling: 5267", "Heating: 734"],
+      labels: ["Electricity","Cooling", "Heating"],
       datasets: [{
         label: "BTU/Hour",
         backgroundColor: ["#e3e3e3","#003467","#ffcc01"],
-        data: [2478,5267,734]
+        //Need to display 10,30,60 <- All need to add up to 100% not actual data value
+        // Need python function to call and return today's electricity, cooling, heating, and total from DB in array.
+        data: [20,30,50]
       }]
     },
-    plugins: [{
-      beforeInit: function(chart) {
-        chart.data.labels.forEach(function(e, i, a) {
-          if (/\n/.test(e)) {
-              a[i] = e.split(/\n/);
-            }
-          });
-        }
-      }],
     options: {
       legend: {
-        position: 'bottom',
-        labels: {
-                fontSize:22
-              },
+        display: false,
             }
           }
         });
 
 
 </script>
+</html>

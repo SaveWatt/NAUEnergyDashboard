@@ -1,75 +1,100 @@
-{% load static %}
+{% load staticfiles %}
 
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="{% static 'stylesheet.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static '/edashboard/stylesheet.css'%}">
+    <link rel="shortcut icon" href="{% static '/edashboard/images/favicon.ico' %}" />
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://www.amcharts.com/lib/4/core.js"></script>
+    <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="https://www.amcharts.com/lib/3/gauge.js"></script>
   </head>
   <body>
-    <div class="container" style="clear:both;">
-      <div id='rightdiv' style="float: left; width:-webkit-fill-available;">
+    <div class="container" style="clear:both; height:100%; width:100%;">
+      <div style="float: left; width:-webkit-fill-available;">
         {% include "edashboard/header.html" %}
-        <div class="rightcont">
-          <div class="graphcont" style=" display:inline-block;">
-
-            <div id="div-container">
+        <div id='stacked'>
+        <div id="topcont" style="margin-left:2%;margin-top: 0;">
+          <div id="buildimg">
+            <h1 style="color: #003467;text-align:left;height:fit-content;"> {{ bname|safe }} </h1>
+            <img src={% static '/edashboard/images/SAS.jpg' %} style="margin:1%;">
+          </div>
+          <div id="weather">
+            <img src={% static '/edashboard/images/weather.jpg' %} style="margin:1%; height: 200px;margin-top: 15%;">
+          </div>
+          <div id="donutgraph" style="height: min-content;max-width:25%; height:auto;">
+            <div id="chartdiv"></div>
+          </div>
+        </div>
+        <div id="bottomcont">
+          <div id="Leftgraph" style="text-align: center;">
+            <h2 style="text-align:center;">Historical Data</h2>
+          <div id="switches">
+            <button id="hour" onclick="chgColor('hour')" style="width:50%">Hourly</button>
+            <button id="15m" onclick="chgColor('15m')" style="width:50%">15-Min</button>
+          </div>
+          <div id="selectsens" class="custom-select" style="width:200px; margin:auto;">
+            <li class="dropdown-toggle" style="display:none;">Sensor</li>
+            <h2 class="select">Select a Utility</h2>
+            <select>
+              <option>Heating</option>
+              <option>Cooling</option>
+              <option>Electricity</option>
+              <option>Gas</option>
+            </select>
+          </div>
+          <div>
+            <button style="margin:0; margin-top: 5%;">Download Data</button>
+          </div>
+        </div>
+          <div class="graphcont" style="margin:0; width: 50%; height: inherit;">
             <canvas id="line-chart"></canvas>
-            </div>
             <script>
-            new Chart(document.getElementById("line-chart"), {
-              type: 'line',
-              data: {
-                labels: [ "10:20","10:40","11:00","11:20"],
-                fillOpacity: .3,
-                datasets: [{
-                    data: [ 10,20,10,25,23],
-                    label: "Week 1",
-                    borderColor: "#1f61a8",
-                    fill: origin,
-                    backgroundColor: "rgba(31,97,168,.3)",
-                  },
-                ]
-              },
-              options: {
-                responsive: false,
-                title: {
-                  display: true,
-                  text: "SAS Building Electricity usage",
-                },
-                scales: {
-                xAxes: [{
-                  scaleLabel: {
-                    display: true,
-                    labelString: 'Time'
-                  }
-                }],
-                yAxes: [{
-                  scaleLabel: {
-                    display: true,
-                    labelString: 'Electricity (kWh)'
-                  }
-                }]
+            {% include "edashboard/scripts/buildgraph.js" %}
+            {% include "edashboard/scripts/sidebar.js" %}
+            {% include "edashboard/scripts/donutgraph.js" %}
+            document.getElementById("hour").style.backgroundColor = "rgb(255, 204, 1)";
+            // Toggles button color and the labels
+            function chgColor(id){
+              console.log(id);
+              // Changes colors of buttons
+              document.getElementById(id).style.backgroundColor = "rgb(255, 204, 1)";
+              if(id == "15m"){
+                document.getElementById("hour").style.backgroundColor = "#e3e3e3";
               }
+              else if(id == "hour"){
+                document.getElementById("15m").style.backgroundColor = "#e3e3e3";
               }
-            });
+              // Changes the button to be highlighted
+              chgLabels(id);
+            }
+
             </script>
-
-
+          </div>
+          <div id="stats">
+            <div id="innerstats" class="greyell">
+              <h1 style= "color:#003467" >Statistics</h1>
+              <div id="statdata">
+              <h4><b>Mean:</b> Need Data</h4>
+              <h4><b>Median:</b> Need Data</h4>
+              <h4><b>Mode:</b> Need Data</h4>
+            </div>
+            </div>
           </div>
         </div>
       </div>
+      </div>
     </div>
+    <!-- Styles -->
+    <style>
+    #chartdiv {
+      width: 100%;
+      height: 500px;
+      margin: auto;
+    }
+    </style>
   </body>
 </html>
-
-<script>
-function fixdivs() {
-    var divw = document.getElementById('sidebar').offsetWidth;
-    document.getElementById('sideheader').style.width = divw + 'px';
-    var divh = document.getElementById('Topnav').offsetHeight;
-    document.getElementById('sideheader').style.height = divh + 'px';
-}
-  fixdivs();
-</script>

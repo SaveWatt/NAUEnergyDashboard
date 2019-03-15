@@ -1,84 +1,43 @@
-{% load static %}
+{% load staticfiles %}
+<!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="{% static 'stylesheet.css'%}">
-    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static '/edashboard/stylesheet.css'%}">
+    <link rel="shortcut icon" href="{% static '/edashboard/images/favicon.ico' %}" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   </head>
   <body>
-    <div class="container" style="clear:both;">
-      <div id='leftdiv' style="float: left; height: 100%; width:fit-content;">
-        <div class='sideheader' id='sideheader' style="z-index: 2;">
+    {% include "edashboard/header.html" %}
+    <div class="exp-container">
+      <div id="selector">
+        <div id="error-display">
+			  </div>
+        <h1 id="downloadrep">Compare Data</h1>
+        <div class="greyell" id="reportrange" style="cursor: pointer; padding: 5px 10px;">
+            <i class="fa fa-calendar"></i>&nbsp;
+            <span></span> <i class="fa fa-caret-down"></i>
         </div>
+        {% include "edashboard/searchbuilding.html" %}
+        <button id="graphdata" onClick="checkFields()">Graph Data</button>
       </div>
-      <div id='rightdiv' style="float: left; width:-webkit-fill-available;">
-        {% include "edashboard/header.html" %}
-        <div class="rightcont">
-          <div class="graphcont" style=" display:inline-block;">
-
-            <div id="div-container">
-            <canvas id="line-chart"></canvas>
-            </div>
-            <script>
-            new Chart(document.getElementById("line-chart"), {
-              type: 'line',
-              data: {
-                labels: [ "10:20","10:40","11:00","11:20"],
-                fillOpacity: .3,
-                datasets: [{
-                    data: [ 10,20,10,25,23],
-                    label: "Week 1",
-                    borderColor: "#1f61a8",
-                    fill: origin,
-                    backgroundColor: "rgba(31,97,168,.3)",
-                  },
-                  {
-                      data: [20,25,5,2,35,10,0],
-                      label: "Week 2",
-                      borderColor: "#ffcc01",
-                      fill: origin,
-                      backgroundColor: "rgba(255,204,1,.3)",
-                    }
-                ]
-              },
-              options: {
-                responsive: false,
-                title: {
-                  display: true,
-                  text: "SAS Building Electricity usage",
-                },
-                scales: {
-                xAxes: [{
-                  scaleLabel: {
-                    display: true,
-                    labelString: 'Time'
-                  }
-                }],
-                yAxes: [{
-                  scaleLabel: {
-                    display: true,
-                    labelString: 'Electricity (kWh)'
-                  }
-                }]
-              }
-              }
-            });
-            </script>
-
-
-          </div>
+      <div class="graph-cont" style=" display:inline-block;">
+        <div class="chart-container" style="text-align: -webkit-center;">
+          <canvas id="line-chart" width="800" height="450"></canvas>
         </div>
+        <button id="Down-button">Download .CSV</button>
       </div>
     </div>
   </body>
-</html>
-
 <script>
-function fixdivs() {
-    var divw = document.getElementById('sidebar').offsetWidth;
-    document.getElementById('sideheader').style.width = divw + 'px';
-    var divh = document.getElementById('Topnav').offsetHeight;
-    document.getElementById('sideheader').style.height = divh + 'px';
-}
-  fixdivs();
+  {% include "edashboard/scripts/compgraph.js" %}
+  {% include "edashboard/scripts/checkcfields.js" %}
+/* If the user clicks anywhere outside the select box,
+then close all select boxes: */
+document.addEventListener("click", closeAllSelect);
 </script>
+</html>

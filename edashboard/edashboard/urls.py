@@ -22,11 +22,19 @@ from django.conf.urls.static import static
 
 app_name = 'edashboard'
 urlpatterns = [
-    path('admin/', admin.site.urls, name='admin'),
-    path('', views.construction, name='construction'),
-    path('edashboard/', views.index, name='index'),
+    path('admin/', admin.site.urls),
+    path('home/', views.index, name='home'),
+    path('', views.construction_view, name='index'),
+    path('login/', views.login, name='login'),
+    path('demo/', views.demo, name='demo'),
+    path('login/?', views.login, name='session'),
     path('building/', views.building_view, name='building'),
+    path('building/<buildnum>/', views.building_view, name='building'),
     path('compare/', views.compare_view, name='compare'),
-    path('export/', views.export_view, name='export'),
+    path('export/<builddata>/', views.export_view, name='export2'),
+    path('exportdata/<data>/', views.down_export, name='down_export'),
+    path('export/', views.exporth_view, name='export'),
     path('help/', views.help_view, name='help'),
+    path('adminsite/', views.admin_view, name='adminsite'),
+    path('construction/', views.construction_view, name='construction'),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,0 +1,7 @@
+AuthUserFile /edashboard/edashboard/.htpasswd
+AuthGroupFile /dev/null
+AuthName "edashboard"
+AuthType Basic
+<Limit GET POST>
+require valid-user
+</Limit>
