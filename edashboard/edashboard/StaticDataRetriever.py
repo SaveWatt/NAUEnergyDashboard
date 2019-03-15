@@ -1,6 +1,6 @@
 import pandas as pd
 from pathlib import Path
-
+#from edashboard.models import Building, Sensor
 import pymssql as sql
 
 class StaticDataRetriever:
@@ -10,12 +10,7 @@ class StaticDataRetriever:
         self.__user = r'NAU\idd6'
         self.__pass = "Itsuko23272147"
         self.__base = 'EnergyCap'
-        self.__connection = sql.connect(host=self.__host, user=self.__user,
-        password=self.__pass, database=self.__base)
-        self.__table = None
-
-    def print_rows(self):
-        b_identifiers = {'B1': 'gammage',
+        self.__b_identifiers = {'B1': 'gammage',
                          'B2': 'blome',
                          'B3': 'north union',
                          'B4': 'morton hall',
@@ -95,31 +90,58 @@ class StaticDataRetriever:
                          'B98C': 'swing space',
                          'B98D': 'campus distribution center',
                          'B98F': 'res life warehouse'}
+        self.__connection = sql.connect(host=self.__host, user=self.__user,
+        password=self.__pass, database=self.__base)
+        self.__log_dict = {}
 
+    def update_buildings(self):
+        for key in self.__b_identifiers.keys():
+            num_results = Building.objects.filter(b_num = key).count()
+            if num_results < 1:
+                b = Building(b_name='lol', b_num=key, b_alias=self.__b_identifiers[key])
+                b.save()
+
+    def update_sensors(self):
+        if not self.__log_dict:
+            self.make_log_dict()
+        for key in sorted(self.__log_dict.keys()):
+            num_results = Sensor.objects.filter(s_log = key).count()
+            if num_results < 1:
+                b = Building.objects.get(pk=self.__log_dict[key][0])
+                s = b.sensor_set.create(s_name=self.__log_dict[key][2], s_type=self.__log_dict[key][4], s_log=key)
+                s.save()
+
+    def make_log_dict(self):
         #bnamelst1 = ['adel','B26 ', 'cline','B28 ', 'sas','B60 ']
+        types = ['Current Demand KW', 'Dom Water Gallons',
+                 'Reclaimed Water Gallons', 'Steam KBTU']
 
         cursor = self.__connection.cursor(as_dict=True)
         # Get list of trendlogs
         cursor.execute('SELECT * FROM tblTrendloglist')
         # Create a dictionary to store log information. Keys logdevnum_loginst
-        log_dict = {}
         for row in cursor:
-            for num in b_identifiers.keys():
+            for num in self.__b_identifiers.keys():
                 desc = row['logdescription'].upper()
                 # Searching for any instance of building name in all logdesc
                 #if num+" " in desc or num in desc or num[1:] in desc:
-                if 'B60 ' in desc or 'B60' in desc or 'SAS' in desc:
+                if num+" " in desc or num in desc or self.__b_identifiers[num].upper() in desc:
                     # Creating key
                     logdevnum = str(row['logdevnum'])
                     loginst = str(row['loginst'])
                     key = logdevnum+"_"+loginst
                     # Storing bname, logdesc, objname, TrendlogID in log_dict
-                    log_dict[key] = ['B60', row['logdescription'],
-                    row['objname'], row['TrendlogID']]
+                    self.__log_dict[key] = [num, row['logdescription'],
+                    row['objname'], row['TrendlogID'], 'None']
+                    for t in types:
+                        if t.upper() in desc:
+                            self.__log_dict[key][4] = t
+        self.dict_printer()
 
+    def update_logs(self):
         # Querying for trendlogs based on log_dict info
         lognum = 1
-        for key in sorted(log_dict.keys()):
+        for key in sorted(self.__log_dict.keys()):
             # Creating string which identifies trendlog
             logstring = 'tblTrendlog_'
             logid = key.split("_")
@@ -136,10 +158,17 @@ class StaticDataRetriever:
             print("--- " + log_dict[key][1])
             lognum +=1
 
+            num_results = Building.objects.filter(b_num = key).count()
+            if num_results < 1:
+                b = Building(b_name='lol', b_num=key, b_alias=self.__b_identifiers[key])
+                b.save()
+
             # Creating dynamic query for trendlog table
             #query = ('SELECT * FROM %s' % logstring)
             # Querying for trendlog table
             #cursor.execute(query, ())
+
+
 
             #count = 0
             #for row in cursor:
@@ -148,13 +177,11 @@ class StaticDataRetriever:
             #    print(row)
             #    count+=1
 
-        #self.dict_printer(log_dict)
-
-    def dict_printer(self, dict):
+    def dict_printer(self):
         count = 0
-        for key in sorted(dict.keys()):
+        for key in sorted(self.__log_dict.keys()):
             count+=1
-            print(str(count) + ": " + key + ": " + str(dict[key]))
+            print(str(count) + ": " + key + ": " + str(self.__log_dict[key]))
 
     def log_printer(self):
         cursor = self.__connection.cursor()
@@ -164,7 +191,9 @@ class StaticDataRetriever:
 
 
 
-
+#print("Hello from SDR")
 sdr = StaticDataRetriever()
-sdr.print_rows()
-#sdr.store_table()
+#sdr.update_buildings()
+sdr.make_log_dict()
+#sdr.find_logs()
+#sdr.store_table()'''

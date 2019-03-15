@@ -32,14 +32,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'edashboard.apps.PollsConfig',
+    'edashboard.apps.EdashboardConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'edashboard'
 ]
 
 MIDDLEWARE = [
