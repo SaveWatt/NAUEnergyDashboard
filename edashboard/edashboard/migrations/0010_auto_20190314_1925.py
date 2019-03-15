@@ -22,17 +22,4 @@ class Migration(migrations.Migration):
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL)),
             ],
         ),
-        migrations.RemoveField(
-            model_name='choice',
-            name='question',
-        ),
-        migrations.DeleteModel(
-            name='LoginForm',
-        ),
-        migrations.DeleteModel(
-            name='Choice',
-        ),
-        migrations.DeleteModel(
-            name='Question',
-        ),
     ]
