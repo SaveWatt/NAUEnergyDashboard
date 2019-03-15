@@ -1,8 +1,5 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-<<<<<<< HEAD
-
-=======
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
@@ -23,7 +20,7 @@ import json
 import time
 
 register = template.Library()
->>>>>>> master
+
 
 
 def index(request):
