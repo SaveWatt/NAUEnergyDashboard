@@ -1,6 +1,6 @@
 import pandas as pd
 from pathlib import Path
-#from edashboard.models import Building, Sensor
+from edashboard.models import Building, Sensor
 import pymssql as sql
 
 class StaticDataRetriever:
@@ -10,86 +10,86 @@ class StaticDataRetriever:
         self.__user = r'NAU\idd6'
         self.__pass = "Itsuko23272147"
         self.__base = 'EnergyCap'
-        self.__b_identifiers = {'B1': 'gammage',
-                         'B2': 'blome',
-                         'B3': 'north union',
-                         'B4': 'morton hall',
-                         'B8': 'bury',
-                         'B9': 'taylor hall',
-                         'B10': 'old main',
-                         'B11': 'ashurst',
-                         'B12': 'geology',
-                         'B13': 'geology annex',
-                         'B13A': 'rosebury appartments',
-                         'B14': 'native american cultural center',
-                         'B15': 'riles',
-                         'B16': 'communication',
-                         'B16A': 'distance learning center',
-                         'B17': 'nau lab',
-                         'B18': 'liberal arts',
-                         'B19': 'physical sciences',
-                         'B21B': 'biology annex',
-                         'B25': 'hlc',
-                         'B26': 'adel',
-                         'B27': 'eastburn',
-                         'B27A': 'ihd',
-                         'B28': 'cline',
-                         'B29': 'calderon',
-                         'B30': 'fieldhouse',
-                         'B30A': 'student services vav overview',
-                         'B30B': 'student services',
-                         'B30C': 'dining hall expansion',
-                         'B30D': 'university dining',
-                         'B31': 'gillenwater hall',
-                         'B33': 'hrm',
-                         'B35': 'bookstore',
-                         'B36': 'shb',
-                         'B37': 'performing arts',
-                         'B37A': 'ardrey auditorium',
-                         'B38': 'cowden hall',
-                         'B39': 'raymond hall',
-                         'B40': 'mcdonald hall',
-                         'B41': 'honors hall',
-                         'B42': 'sechrist hall',
-                         'B43': 'gateway',
-                         'B44': 'tinsley hall',
-                         'B45': 'wilson hall',
-                         'B46': 'allen hall',
-                         'B48': 'reilly hall',
-                         'B49': 'anthropology',
-                         'B50': 'campus heights',
-                         'B50A': 'isp',
-                         'B50B': 'mckay village',
-                         'B53': 'gabaldon hall',
-                         'B54': 'its',
-                         'B54A': 'telcomm',
-                         'B55': 'mountain view hall',
-                         'B58': 'conference center',
-                         'B59': 'hilltop',
-                         'B60': 'sas',
-                         'B62': 'mcconnell hall',
-                         'B64': 'dubois',
-                         'B65': 'sbs east',
-                         'B66': 'health professions',
-                         'B69': 'engineering',
-                         'B70': 'sbs west',
-                         'B71': 'south village apartments',
-                         'B73': 'skydome',
-                         'B75': 'mcconnell suites',
-                         'B81': 'business',
-                         'B82': 'forestry',
-                         'B83': 'bus barn',
-                         'B86': 'aquatic center',
-                         'B87': 'skyview',
-                         'B88': 'wettaw',
-                         'B90': 'nareh',
-                         'B91': 'parking services',
-                         'B93': 'beaver street school',
-                         'B95': 'pine ridge village',
-                         'B96B': 'san fran paraking garage',
-                         'B98C': 'swing space',
-                         'B98D': 'campus distribution center',
-                         'B98F': 'res life warehouse'}
+        self.__b_identifiers = {'B1': ['Gammage','gamage'],
+                         'B2': ['Blome', 'blome'],
+                         'B3': ['1899 Bar and Grill', 'north union'],
+                         'B4': ['Morton Hall', 'morton hall'],
+                         'B8': ['Bury', 'bury'],
+                         'B9': ['Taylor Hall', 'taylor'],
+                         'B10': ['Old Main', 'old main'],
+                         'B11': ['Ashurst', 'ashurst'],
+                         'B12': ['Geology', 'geology'],
+                         'B13': ['Geology Annex', 'geo annex'],
+                         'B13A': ['Rosebury Apartments', 'rosebury'],
+                         'B14': ['Native American Cultural Center', 'nacc'],
+                         'B15': ['Riles', 'riles'],
+                         'B16': ['Communication', 'communication'],
+                         'B16A': ['University Marketing and Operations', 'dlc'],
+                         'B17': ['Science Lab Facility', 'science lab'],
+                         'B18': ['Liberal Arts', 'liberal arts'],
+                         'B19': ['Physical Sciences', 'physcience'],
+                         'B21B': ['Biological Sciences Annex', 'biology annex'],
+                         'B25': ['Health and Learning Center', 'hlc'],
+                         'B26': ['Adel Mathematics', 'adel'],
+                         'B27': ['Eastburn Education Center', 'eastburn'],
+                         'B27A': ['Institute for Human Development', 'ihd'],
+                         'B28': ['Cline Library', 'cline'],
+                         'B29': ['Ernest Calderon Learning Community', 'calderone'],
+                         'B30': ['University Union Fieldhouse', 'fieldhouse'],
+                         'B30A': ['University Union Dining Services', 'student services vav overview'],
+                         'B30B': ['University Union Student Services','student services'],
+                         'B30C': ['University Union Food Court', 'dining hall expansion'],
+                         'B30D': ['University Union Dining Expansion', 'university dining'],
+                         'B31': ['Gillenwater Hall', 'gillenwates hall'],
+                         'B33': ['Hotel and Restaurant Management', 'hrm'],
+                         'B35': ['NAU Bookstore', 'bookstore'],
+                         'B36': ['Science and Health Building', 'shb'],
+                         'B37': ['Performing and Fine Arts', 'performing arts'],
+                         'B37A': ['Ardrey Auditorium', 'ardrey'],
+                         'B38': ['Cowden Hall', 'cowden'],
+                         'B39': ['Raymond Hall', 'raymond'],
+                         'B40': ['McDonald Hall', 'mcdonald'],
+                         'B41': ['Honors Living and Learning Community', 'honors'],
+                         'B42': ['Sechrist Hall', 'sechrist'],
+                         'B43': ['Gateway Student Success Center', 'gateway'],
+                         'B44': ['Tinsley Hall', 'tinsley'],
+                         'B45': ['Wilson Hall', 'wilson'],
+                         'B46': ['Allen Hall', 'allen'],
+                         'B48': ['Reilly Hall', 'reilly'],
+                         'B49': ['Anthropology Laboratory', 'anthropology'],
+                         'B50': ['Campus Heights Apartments', 'campus heights'],
+                         'B50A': ['International Pavillion', 'isp'],
+                         'B50B': ['McKay Village', 'mckay'],
+                         'B53': ['Gabaldon Hall', 'gabaldon'],
+                         'B54': ['Information Technology Services', 'its'],
+                         'B54A': ['Information Technology Telecomm', 'telcomm'],
+                         'B55': ['Moiuntain View Hall', 'mountain view'],
+                         'B58': ['High Country Conference Center', 'conference'],
+                         'B59': ['Hilltop Townhomes', 'hilltop'],
+                         'B60': ['Student and Academic Services', 'sas'],
+                         'B62': ['McConnell Hall', 'mcconnell'],
+                         'B64': ['DuBois South Union', 'dubois'],
+                         'B65': ['Social and Behavioral Sciences (Castro)', 'sbs east'],
+                         'B66': ['Health Professions', 'health professions'],
+                         'B69': ['Engineering and Technology', 'engineering'],
+                         'B70': ['Social and Behavioral Sciences (West)', 'sbs west'],
+                         'B71': ['South Village Apartments', 'south village'],
+                         'B73': ['Walkup Skydome', 'skydome'],
+                         'B75': ['The Suites', 'suites'],
+                         'B81': ['Franke College of Business', 'business'],
+                         'B82': ['South West Forestry Science Complex', 'forestry'],
+                         'B83': ['KNAU/Mountain Campus Transit', 'bus barn'],
+                         'B86': ['Aquatic and Tennis Complex', 'aquatic center'],
+                         'B87': ['Skyview Apartments', 'skyview'],
+                         'B88': ['Wettaw', 'wettaw'],
+                         'B90': ['School of Infomatics, Computing and Cyber Systems', 'nareh'],
+                         'B91': ['Centennial', 'parking services'],
+                         'B93': ['South Beaver School', 'beaver'],
+                         'B95': ['Pine Ridge Village', 'pine ridge village'],
+                         'B96B': ['San Francisco Parking Garage', 'san fran paraking garage'],
+                         'B98C': ['Engineering Research', 'swing space'],
+                         'B98D': ['Extended Campus Operation Center', 'campus distribution center'],
+                         'B98F': ['RLSS Warehouse', 'res life warehouse']}
         self.__connection = sql.connect(host=self.__host, user=self.__user,
         password=self.__pass, database=self.__base)
         self.__log_dict = {}
@@ -98,7 +98,7 @@ class StaticDataRetriever:
         for key in self.__b_identifiers.keys():
             num_results = Building.objects.filter(b_num = key).count()
             if num_results < 1:
-                b = Building(b_name='lol', b_num=key, b_alias=self.__b_identifiers[key])
+                b = Building(b_name=self.__b_identifiers[key][0], b_num=key, b_alias=self.__b_identifiers[key][1])
                 b.save()
 
     def update_sensors(self):
@@ -107,8 +107,8 @@ class StaticDataRetriever:
         for key in sorted(self.__log_dict.keys()):
             num_results = Sensor.objects.filter(s_log = key).count()
             if num_results < 1:
-                b = Building.objects.get(pk=self.__log_dict[key][0])
-                s = b.sensor_set.create(s_name=self.__log_dict[key][2], s_type=self.__log_dict[key][4], s_log=key)
+                b = Building.objects.get(b_num=self.__log_dict[key][0])
+                s = b.sensor_set.create(s_name=self.__log_dict[key][1], s_type=self.__log_dict[key][4], s_log=key)
                 s.save()
 
     def make_log_dict(self):
@@ -125,7 +125,7 @@ class StaticDataRetriever:
                 desc = row['logdescription'].upper()
                 # Searching for any instance of building name in all logdesc
                 #if num+" " in desc or num in desc or num[1:] in desc:
-                if num+" " in desc or num in desc or self.__b_identifiers[num].upper() in desc:
+                if num+" " in desc or num in desc or self.__b_identifiers[num][1].upper() in desc:
                     # Creating key
                     logdevnum = str(row['logdevnum'])
                     loginst = str(row['loginst'])
@@ -136,7 +136,7 @@ class StaticDataRetriever:
                     for t in types:
                         if t.upper() in desc:
                             self.__log_dict[key][4] = t
-        self.dict_printer()
+        #self.dict_printer()
 
     def update_logs(self):
         # Querying for trendlogs based on log_dict info
