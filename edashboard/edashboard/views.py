@@ -69,11 +69,7 @@ def compare_view(request):
     for building in buildings:
         b_string = building.b_name + ' (' + building.b_num + ')'
         b_strings.append(b_string)
-<<<<<<< HEAD
     return render(request, 'edashboard/compare.html',{'buildlist': b_strings})
-=======
-    return render(request, 'edashboard/compare.html', {'buildlist': b_strings})
->>>>>>> parent of f5b2290... redirect
 
 def export_view(request,builddata=None):
     sdr = StaticDataRetriever()
