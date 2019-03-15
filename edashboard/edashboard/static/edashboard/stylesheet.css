@@ -1,3 +1,10 @@
+@font-face {
+    font-family: "Anson";
+    src: url('Fonts/Anson/anson-regular-webfont.woff2') format('woff2'), url('anson-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 html,
 body {
   margin: 0;
@@ -22,6 +29,7 @@ button{
   color: white;
   width: 10em;
   height: 3em;
+  font-family: 'Anson';
   font-size: 12px;
   margin-left: 45%;
   margin-top: 25%;
@@ -72,11 +80,13 @@ canvas{
   text-align: center;
 }
 h1{
+  font-family: 'Anson';
   color: white;
   text-align: center;
 }
 .sidebar a{
   display: block;
+  font-family: 'Anson';
   text-decoration: none;
   width: fit-content;
   color: white;
@@ -100,6 +110,7 @@ h1{
     display: inline-block;
     color: white;
     text-align: center;
+    font-family: 'Anson';
     text-decoration: none;
     width: fit-content;
 }
@@ -175,6 +186,8 @@ li.links a{
 #numbersub li:hover{
   background-color: rgba(0, 0, 0, 0.1);
 }
+<<<<<<< HEAD
+=======
 #container{
   width: 100%;
   height:auto;

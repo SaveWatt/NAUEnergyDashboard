@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from django.template import RequestContext
@@ -20,6 +21,7 @@ import json
 import time
 
 register = template.Library()
+
 
 
 def index(request):
