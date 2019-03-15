@@ -143,15 +143,7 @@ class StaticDataRetriever:
         lognum = 1
         for key in sorted(self.__log_dict.keys()):
             # Creating string which identifies trendlog
-            logstring = 'tblTrendlog_'
-            logid = key.split("_")
-            for i in range(7-len(logid[0])):
-                logstring += "0"
-            logstring += logid[0]
-            logstring += "_"
-            for i in range(10 - len(logid[1])):
-                logstring += "0"
-            logstring += logid[1]
+            logstring = self.__create_trend_string(key)
 
             print(str(lognum) + ": logid: " + key + " logstring: " + logstring +
             " building: " + log_dict[key][0])
@@ -176,6 +168,36 @@ class StaticDataRetriever:
             #        break
             #    print(row)
             #    count+=1
+
+    def __create_trend_string(self, log_id):
+        # Creating string which identifies trendlog
+        logstring = 'tblTrendlog_'
+        logid = log_id.split("_")
+        for i in range(7-len(logid[0])):
+            logstring += "0"
+        logstring += logid[0]
+        logstring += "_"
+        for i in range(10 - len(logid[1])):
+            logstring += "0"
+        logstring += logid[1]
+        return logstring
+
+    def get_log(self, log_id):
+        # Creating string which identifies trendlog
+        logstring = self.__create_trend_string(log_id)
+        # Creating cursor to parse database
+        cursor = self.__connection.cursor(as_dict=True)
+        # Creating dynamic query for trendlog table
+        query = ('SELECT * FROM %s' % logstring)
+        # Querying for trendlog table
+        cursor.execute(query, ())
+
+        ret_dict = {}
+
+        for row in cursor:
+            ret_dict[row['Sequence']] = [row['TimeOfSample'], row['SampleValue']]
+
+        return ret_dict
 
     def dict_printer(self):
         count = 0

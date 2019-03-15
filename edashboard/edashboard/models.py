@@ -15,7 +15,7 @@ class Building(models.Model):
     b_alias = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.b_num
+        return str(self.b_name)
 
 class Sensor(models.Model):
     building = models.ForeignKey(Building, on_delete=models.CASCADE)
@@ -24,7 +24,7 @@ class Sensor(models.Model):
     s_log = models.CharField(max_length=200)
 
     def __str__(self):
-        return str((self.s_log, self.s_type))
+        return str((self.s_log, self.s_name))
 
 def create_model(db_table):
     class LogMeta(ModelBase):
@@ -66,7 +66,6 @@ class ExportBuilding(models.Model):
     class Meta:
        managed = False
        db_table = 'export_demo'
-<<<<<<< HEAD
 
 class UserProfile(models.Model):
    user = models.OneToOneField(User, on_delete=models.PROTECT)
@@ -81,5 +80,3 @@ def create_profile(sender, **kwargs):
        user_profile = UserProfile.objects.create(user=kwargs['instance'])
 
 post_save.connect(create_profile, sender=User)
-=======
->>>>>>> ian

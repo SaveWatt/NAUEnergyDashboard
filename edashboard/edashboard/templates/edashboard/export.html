@@ -46,7 +46,6 @@
   var time = document.getElementById("reportrange").getElementsByTagName('span')[0];
   time.setAttribute("id","stringtime");
   time.setAttribute("name","stringtime");
-
   function downloadData(event){
     event.preventDefault();
     var dataset = [{{usage|safe}}, "date", {{date|safe}}];
@@ -59,9 +58,9 @@
     var times = ($("span#stringtime").text()).replace(" ","");
     var buildingname = $('#buildingsearchexpcompsearch').val();
     buildingname = getNum(buildingname);
+    buildingname = buildingname
     var sensor = $('#select-selected-sens').clone().children().remove().end().text();
     var util = $('#select-selected-util').clone().children().remove().end().text();
-    console.log(sensor);
     if(sensor.toString() == ""){
       var details = "build=" + buildingname + "time=" + times + "util=" + util;
       var destinationUrl = "{% url 'export2' builddata=0 %}".replace(/0/, details.toString());

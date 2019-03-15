@@ -59,7 +59,6 @@
             document.getElementById("hour").style.backgroundColor = "rgb(255, 204, 1)";
             // Toggles button color and the labels
             function chgColor(id){
-              console.log(id);
               // Changes colors of buttons
               document.getElementById(id).style.backgroundColor = "rgb(255, 204, 1)";
               if(id == "15m"){
@@ -78,9 +77,8 @@
             <div id="innerstats" class="greyell">
               <h1 style= "color:#003467" >Statistics</h1>
               <div id="statdata">
-              <h4><b>Mean:</b> Need Data</h4>
-              <h4><b>Median:</b> Need Data</h4>
-              <h4><b>Mode:</b> Need Data</h4>
+              <h4><b>Mean:</b> {{mean|safe}}</h4>
+              <h4><b>Median:</b> {{median|safe}}</h4>
             </div>
             </div>
           </div>
