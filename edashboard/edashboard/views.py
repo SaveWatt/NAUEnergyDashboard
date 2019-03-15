@@ -54,10 +54,15 @@ def export_view(request,builddata=None):
         util = data[1]
     if flag == "sens":
         sensor = data[1]
-    buildings = BuildingSearch.getBuildingString()
+    buildings = Building.objects.all()
+    b_strings = []
+    for building in buildings:
+        b_string = building.b_name + ' (' + building.b_num + ')'
+        b_strings.append(b_string)
+    print (b_strings)
     usage=[1,5,8,3,5]
     date=[1,2,3,4,5]
-    return render(request, 'edashboard/export.html',{'buildlist': buildings,'builddata':builddata,'usage':usage,'date':date})
+    return render(request, 'edashboard/export.html',{'buildlist': b_strings,'builddata':builddata,'usage':usage,'date':date})
 
 def down_export(request,data):
     buildings = BuildingSearch.getBuildingString()
