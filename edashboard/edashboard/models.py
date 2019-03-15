@@ -9,7 +9,7 @@ time = models.DateTimeField(timezone.now())
 
 class Building(models.Model):
     b_name = models.CharField(max_length=200)
-    b_num = models.CharField(max_length=10, primary_key=True)
+    b_num = models.CharField(max_length=10)
     b_alias = models.CharField(max_length=200)
 
     def __str__(self):
@@ -64,4 +64,3 @@ class ExportBuilding(models.Model):
     class Meta:
        managed = False
        db_table = 'export_demo'
-        return self.choice_text'''
