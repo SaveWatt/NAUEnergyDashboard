@@ -18,4 +18,4 @@ class UserProfileAdmin(admin.ModelAdmin):
     def user_permis(self, obj):
         return obj.permission
 
-admin.site.register(UserProfile, UserProfileA
+admin.site.register(UserProfile, UserProfileAdmin)
