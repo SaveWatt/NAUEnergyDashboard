@@ -10,7 +10,7 @@ class StaticDataRetriever:
         self.__user = r'NAU\idd6'
         self.__pass = "Itsuko23272147"
         self.__base = 'EnergyCap'
-        self.__b_identifiers = {'B1': ['Gammage','gammage'],
+        self.__b_identifiers = {'B1': ['Gammage','gamage'],
                          'B2': ['Blome', 'blome'],
                          'B3': ['1899 Bar & Grill', 'north union'],
                          'B4': ['Morton Hall', 'morton hall'],
