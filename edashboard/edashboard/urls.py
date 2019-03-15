@@ -29,7 +29,6 @@ urlpatterns = [
     path('login/', LoginView.as_view(template_name='edashboard/login.html'), name='login'),
     path('logout/', LogoutView.as_view(template_name='edashboard/index.html'), name='logout'),
     path('demo/', views.demo, name='demo'),
-    path('login/', views.login, name='session'),
     path('register/', views.register, name='register'),
     path('building/', views.building_view, name='building'),
     path('building/<buildnum>/', views.building_view, name='building'),

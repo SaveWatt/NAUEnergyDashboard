@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 import csv
+from django.contrib import auth
 from django.utils.encoding import smart_str
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
@@ -96,16 +97,16 @@ def login(request):
        'username': username})
 
 def register(request):
-    buildings = BuildingSearch.getBuildingString()
     if request.method =="POST":
+        buildings = BuildingSearch.getBuildingString()
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
             return render(request, 'edashboard/index.html',{'buildlist': buildings})
     else:
         form = RegistrationForm()
-        args = {'form': form}
-        return render(request, 'edashboard/register.html',{'buildlist': buildings,'form':form})
+    return render(request, 'edashboard/register.html',{'form':form})
+
 
 def logout(request):
    try:

@@ -69,7 +69,7 @@ class ExportBuilding(models.Model):
 
 class UserProfile(models.Model):
    user = models.OneToOneField(User, on_delete=models.PROTECT)
-   description = models.CharField(max_length=100, default='')
+   description = models.CharField(max_length=100, default='Low Level User')
    permission = models.IntegerField(default=1)
 
    def __str__(self):
