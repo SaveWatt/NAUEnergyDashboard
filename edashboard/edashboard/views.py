@@ -33,7 +33,6 @@ def index(request):
         b_strings.append(b_string)
     return render(request, 'edashboard/index.html',{'buildlist': b_strings})
 
-<<<<<<< HEAD
 def building_view(request, buildnum):
     sdr = StaticDataRetriever()
     buildings = Building.objects.all()
@@ -68,12 +67,6 @@ def building_view(request, buildnum):
                                                         'percent_str':percent_str,
                                                         'mean': mean,
                                                         'median': median})
-=======
-def building_view(request,buildnum):
-    buildings = BuildingSearch.getBuildingString()
-    buildname = "Test"
-    return render(request, 'edashboard/building.html',{'buildlist': buildings, 'bnum': buildnum,'bname':buildname})
->>>>>>> f5b22908219719038c1c1bb86c8828f3827c64ea
 
 def compare_view(request):
     buildings = BuildingSearch.getBuildingString()
@@ -201,11 +194,7 @@ def compare_view(request,builddata=None):
         sensor = data[1]
     usage=[1,5,8,3,5]
     date=[1,2,3,4,5]
-<<<<<<< HEAD
     return render(request, 'edashboard/compare.html',{'buildlist': b_strings,'builddata':builddata,'usage':usage,'date':date})
-=======
-    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'usage':usage,'date':date})
->>>>>>> f5b22908219719038c1c1bb86c8828f3827c64ea
 
 def down_compare(request, data):
         buildings = Building.objects.all()
