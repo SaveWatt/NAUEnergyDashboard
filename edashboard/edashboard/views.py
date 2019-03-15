@@ -134,6 +134,7 @@ def compareh_view(request):
     return render(request, 'edashboard/compare.html',{'buildlist': buildings})
 
 def compare_view(request,builddata=None):
+    buildings = BuildingSearch.getBuildingString()
     flag = ""
     sensor = ""
     util = ""
