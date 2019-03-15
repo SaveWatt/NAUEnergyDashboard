@@ -6,37 +6,6 @@ from django.contrib.auth.models import UserManager
 
 time = models.DateTimeField(timezone.now())
 
-class Question(models.Model):
-    question_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
-    def __str__(self):
-        return self.question_text
-    def was_published_recently(self):
-        now = timezone.now()
-        return now - datetime.timedelta(days=1) <= self.pub_date <= now
-        was_published_recently.admin_order_field = 'pub_date'
-        was_published_recently.boolean = True
-        was_published_recently.short_description = 'Published recently?'
-
-class Choice(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField(default=0)
-    def __str__(self):
-        return self.choice_text
-
-class Demo(models.Model):
-    date = models.DateTimeField('Event Date')
-    value = models.IntegerField()
-    objects = UserManager()
-    def getvalue(self):
-        return self.value
-    def getdate(self):
-        return self.date
-    class Meta:
-       managed = False
-       db_table = 'Demo'
-
 class BuildingSearch(models.Model):
     choice_text = models.CharField(max_length=200)
     def getBuildingString():
@@ -51,24 +20,6 @@ class BuildingSearch(models.Model):
                     i+=1
         f.close()
         return buildings
-
-class Users(models.Model):
-    username = models.CharField(max_length=20)
-    password = models.CharField(max_length=25)
-    def getuname(self):
-        return self.username
-    def getpass(self):
-        return self.password
-    def __str__(self):
-        return self.username
-    class Meta:
-       managed = False
-       db_table = 'edashboard_user'
-
-
-class LoginForm(models.Model):
-    username = models.CharField(max_length=200)
-    password = models.CharField(max_length=200)
 
 class ExportBuilding(models.Model):
     date = models.DateTimeField()
