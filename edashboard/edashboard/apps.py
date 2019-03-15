@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class EdashConfig(AppConfig):
+class EdashboardConfig(AppConfig):
     name = 'edashboard'

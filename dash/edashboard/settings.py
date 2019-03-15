@@ -10,11 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
-import os,os.path
+import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-EDASH_PATH = '/dash/'
+#SETTINGS_PATH = os.path.normpath(os.path.dirname(__file__))
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -25,14 +26,13 @@ SECRET_KEY = 'qh(3m_k0mhp=eeo1^sb^#ue+=vhifu0=3l!@)3m^@3eiz0*$f6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['felucia-dev.ceias.nau.edu',
-                 'localhost']
+ALLOWED_HOSTS = []
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'edashboard',
+    'edashboard.apps.EdashboardConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,12 +51,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'edashboard.urls'
+ROOT_URLCONF = 'mysite.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'edashboard.wsgi.application'
+WSGI_APPLICATION = 'mysite.wsgi.application'
 
 
 # Database
@@ -77,12 +77,8 @@ WSGI_APPLICATION = 'edashboard.wsgi.application'
 
 DATABASES = {
     'default': {
-        'NAME' : 'edashboard',
-        'USER' : 'edashboard',
-        'PASSWORD': 'root',
-        'ENGINE' : 'django.db.backends.mysql',
-        'PORT' : '3306',
-        'HOST' : 'mysql.cefns.nau.edu'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -122,11 +118,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-MEDIA_URL = '/images/'
-MEDIA_ROOT = os.path.join(BASE_DIR,MEDIA_URL)
 
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR,"/static/")
-STATICFILES_DIRS = [
-    "/edashboard/edashboard/static/",
-]
+
+SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+STATICFILES_DIRS = (
+  os.path.join(SITE_ROOT, 'static/'),
+)
