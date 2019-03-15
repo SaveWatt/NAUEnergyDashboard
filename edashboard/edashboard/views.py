@@ -20,9 +20,6 @@ from django.http import JsonResponse
 from edashboard.forms import *
 import json
 import time
-from edashboard.StaticDataRetriever import StaticDataRetriever
-import statistics as stats
-import datetime
 
 register = template.Library()
 
@@ -32,47 +29,16 @@ def index(request):
     buildings = BuildingSearch.getBuildingString()
     return render(request, 'edashboard/index.html',{'buildlist': buildings})
 
-def building_view(request, buildnum):
-    sdr = StaticDataRetriever()
+def building_view(request,buildnum):
     buildings = BuildingSearch.getBuildingString()
-    building = Building.objects.get(b_num=buildnum)
-    buildname = building.b_name
-    build_id = building.id
-    sens = Sensor.objects.get(building_id=build_id, s_type='Current Demand KW')
-    log_dict = sdr.get_log(sens.s_log)
-    usage = []
-    date = []
-    count = 0
-    for key in reversed(sorted(log_dict.keys())):
-        if count > 99:
-            break;
-        date.append(log_dict[key][0])
-        usage.append(log_dict[key][1])
-        count += 1
-    percent = sum(usage)/10000*100
-    percent_str = ("%d%%" % round(percent, 2))
-    mean = round(sum(usage)/len(usage), 2)
-    median = round(stats.median(usage), 2)
-    return render(request, 'edashboard/building.html', {'buildlist': buildings,
-                                                        'bnum': buildnum,
-                                                        'bname':buildname,
-                                                        'usage':usage,
-                                                        'date':date,
-                                                        'percent':percent,
-                                                        'percent_str':percent_str,
-                                                        'mean': mean,
-                                                        'median': median})
+    buildname = "Test"
+    return render(request, 'edashboard/building.html',{'buildlist': buildings, 'bnum': buildnum,'bname':buildname})
 
 def compare_view(request):
-    buildings = Building.objects.all()
-    b_strings = []
-    for building in buildings:
-        b_string = building.b_name + ' (' + building.b_num + ')'
-        b_strings.append(b_string)
-    return render(request, 'edashboard/compare.html', {'buildlist': b_strings})
+    buildings = BuildingSearch.getBuildingString()
+    return render(request, 'edashboard/compare.html',{'buildlist': buildings})
 
 def export_view(request,builddata=None):
-    sdr = StaticDataRetriever()
     flag = ""
     sensor = ""
     util = ""
@@ -93,27 +59,9 @@ def export_view(request,builddata=None):
     for building in buildings:
         b_string = building.b_name + ' (' + building.b_num + ')'
         b_strings.append(b_string)
-    usage = []
-    date = []
-    print(buildnum)
-    if buildnum and buildnum != 'B':
-        building = Building.objects.get(b_num=buildnum)
-        buildname = building.b_name
-        build_id = building.id
-        try:
-            sens = Sensor.objects.get(building_id=build_id, s_type=util)
-        except:
-            sens = Sensor.objects.get(building_id=57, s_log='601_2')
-        log_dict = sdr.get_log(sens.s_log)
-        count = 0
-        for key in reversed(sorted(log_dict.keys())):
-            if count > 99:
-                break;
-            date.append(log_dict[key][0].strftime("%Y-%m-%d %H:%M:%S"))
-            usage.append(log_dict[key][1])
-            count += 1
-        for d in date:
-            print(d)
+    print (b_strings)
+    usage=[1,5,8,3,5]
+    date=[1,2,3,4,5]
     return render(request, 'edashboard/export.html',{'buildlist': b_strings,'builddata':builddata,'usage':usage,'date':date})
 
 def down_export(request,data):
@@ -125,27 +73,23 @@ def down_export(request,data):
     writer = csv.writer(response, csv)
     response.write(u'\ufeff'.encode('utf8'))
     writer.writerow([
-        smart_str(u"DATE"),
         smart_str(u"USAGE"),
+        smart_str(u"DATE"),
     ])
     cleandata = data.split(",")
     j=cleandata.index("date")+1
     for i in range(0,cleandata.index("date")):
         writer.writerow([
-            smart_str(cleandata[j]),
             smart_str(cleandata[i]),
+            smart_str(cleandata[j]),
         ])
         j+=1
     return response
 
 
 def exporth_view(request):
-    buildings = Building.objects.all()
-    b_strings = []
-    for building in buildings:
-        b_string = building.b_name + ' (' + building.b_num + ')'
-        b_strings.append(b_string)
-    return render(request, 'edashboard/export.html',{'buildlist': b_strings})
+    buildings = BuildingSearch.getBuildingString()
+    return render(request, 'edashboard/export.html',{'buildlist': buildings})
 
 def get_data(request):
     date = "Tues"
@@ -163,7 +107,7 @@ def register(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return render(request, 'edashboard/index.html',{'buildlist': buildings})
+            return render(request, 'edashboard/login.html',{'buildlist': buildings})
     else:
         form = RegistrationForm()
     return render(request, 'edashboard/register.html',{'form':form})
@@ -208,7 +152,7 @@ def compare_view(request,builddata=None):
         sensor = data[1]
     usage=[1,5,8,3,5]
     date=[1,2,3,4,5]
-    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'builddata':builddata,'usage':usage,'date':date})
+    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'usage':usage,'date':date})
 
 def down_compare(request, data):
         buildings = BuildingSearch.getBuildingString()
