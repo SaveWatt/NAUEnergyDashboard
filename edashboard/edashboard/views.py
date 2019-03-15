@@ -26,20 +26,12 @@ register = template.Library()
 
 
 def index(request):
-    buildings = Building.objects.all()
-    b_strings = []
-    for building in buildings:
-        b_string = building.b_name + ' (' + building.b_num + ')'
-        b_strings.append(b_string)
-    return render(request, 'edashboard/index.html',{'buildlist': b_strings})
+    buildings = BuildingSearch.getBuildingString()
+    return render(request, 'edashboard/index.html',{'buildlist': buildings})
 
 def building_view(request, buildnum):
     sdr = StaticDataRetriever()
-    buildings = Building.objects.all()
-    b_strings = []
-    for building in buildings:
-        b_string = building.b_name + ' (' + building.b_num + ')'
-        b_strings.append(b_string)
+    buildings = BuildingSearch.getBuildingString()
     building = Building.objects.get(b_num=buildnum)
     buildname = building.b_name
     build_id = building.id
@@ -58,7 +50,7 @@ def building_view(request, buildnum):
     percent_str = ("%d%%" % round(percent, 2))
     mean = round(sum(usage)/len(usage), 2)
     median = round(stats.median(usage), 2)
-    return render(request, 'edashboard/building.html', {'buildlist': b_strings,
+    return render(request, 'edashboard/building.html', {'buildlist': buildings,
                                                         'bnum': buildnum,
                                                         'bname':buildname,
                                                         'usage':usage,
@@ -176,19 +168,11 @@ def validate_username(request):
     return JsonResponse(data)
 
 def compareh_view(request):
-    buildings = Building.objects.all()
-    b_strings = []
-    for building in buildings:
-        b_string = building.b_name + ' (' + building.b_num + ')'
-        b_strings.append(b_string)
-    return render(request, 'edashboard/compare.html',{'buildlist': b_strings})
+    buildings = BuildingSearch.getBuildingString()
+    return render(request, 'edashboard/compare.html',{'buildlist': buildings})
 
 def compare_view(request,builddata=None):
-    buildings = Building.objects.all()
-    b_strings = []
-    for building in buildings:
-        b_string = building.b_name + ' (' + building.b_num + ')'
-        b_strings.append(b_string)
+    buildings = BuildingSearch.getBuildingString()
     flag = ""
     sensor = ""
     util = ""
@@ -206,14 +190,10 @@ def compare_view(request,builddata=None):
         sensor = data[1]
     usage=[1,5,8,3,5]
     date=[1,2,3,4,5]
-    return render(request, 'edashboard/compare.html',{'buildlist': b_strings,'builddata':builddata,'usage':usage,'date':date})
+    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'builddata':builddata,'usage':usage,'date':date})
 
 def down_compare(request, data):
-        buildings = Building.objects.all()
-        b_strings = []
-        for building in buildings:
-            b_string = building.b_name + ' (' + building.b_num + ')'
-            b_strings.append(b_string)
+        buildings = BuildingSearch.getBuildingString()
         i=0
         finalstr="USAGE,DATE\n"
         response = HttpResponse(content_type='text/csv')

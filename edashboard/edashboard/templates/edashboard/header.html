@@ -135,7 +135,7 @@
     document.getElementById("autocomplete-results").innerHTML = '';
     document.getElementById("autocomplete-results").style.backgroundColor = 'white';
     var num = getNum(listName);
-    window.location.href = "{% url 'building' %}" + num + "/";
+    window.location.href = "{% url 'building' %}B" + num + "/";
 
     return 0;
   }
