@@ -64,4 +64,3 @@ class ExportBuilding(models.Model):
     class Meta:
        managed = False
        db_table = 'export_demo'
-        return self.choice_text'''
