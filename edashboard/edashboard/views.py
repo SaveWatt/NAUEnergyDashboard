@@ -112,8 +112,8 @@ def export_view(request,builddata=None):
             date.append(log_dict[key][0].strftime("%Y-%m-%d %H:%M:%S"))
             usage.append(log_dict[key][1])
             count += 1
-        for d in date:
-            print(d)
+        #date = reversed(date)
+        #usage = reversed(usage)
     return render(request, 'edashboard/export.html',{'buildlist': b_strings,'builddata':builddata,'usage':usage,'date':date})
 
 def down_export(request,data):
