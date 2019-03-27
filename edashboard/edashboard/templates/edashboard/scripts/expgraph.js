@@ -3,14 +3,14 @@
     type: 'line',
     data: {
       labels: [{% for data in date %}
-                    "{{ data|safe}}",
+                    "{{ data|safe }}",
                   {% endfor %}],
       fillOpacity: .3,
       datasets: [{
           data: [{% for data in usage %}
                         {{ data|safe }},
                         {% endfor %}],
-          label: "Week 1",
+          label: "{{ type|safe }}",
           borderColor: "#1f61a8",
           fill: origin,
           backgroundColor: "rgba(31,97,168,.3)",
@@ -33,7 +33,7 @@
       yAxes: [{
         scaleLabel: {
           display: true,
-          labelString: 'Electricity (kWh)'
+          labelString: '{{ type|safe }}'
         }
       }]
     }

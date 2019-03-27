@@ -23,6 +23,7 @@ import time
 from edashboard.StaticDataRetriever import StaticDataRetriever
 import statistics as stats
 import datetime
+import numpy as np
 
 register = template.Library()
 
@@ -53,6 +54,9 @@ def building_view(request, buildnum):
     percent_str = ("%d%%" % round(percent, 2))
     mean = round(sum(usage)/len(usage), 2)
     median = round(stats.median(usage), 2)
+    quartile1 = round(np.percentile(usage,25), 2)
+    quartile3 = round(np.percentile(usage,75), 2)
+    iqr = round(quartile3 - quartile1, 2)
     return render(request, 'edashboard/building.html', {'buildlist': buildings,
                                                         'bnum': buildnum,
                                                         'bname':buildname,
@@ -61,7 +65,10 @@ def building_view(request, buildnum):
                                                         'percent':percent,
                                                         'percent_str':percent_str,
                                                         'mean': mean,
-                                                        'median': median})
+                                                        'median': median,
+                                                        'quartile1':quartile1,
+                                                        'quartile3':quartile3,
+                                                        'iqr':iqr})
 
 def compare_view(request):
     buildings = Building.objects.all()
@@ -69,7 +76,8 @@ def compare_view(request):
     for building in buildings:
         b_string = building.b_name + ' (' + building.b_num + ')'
         b_strings.append(b_string)
-    return render(request, 'edashboard/compare.html',{'buildlist': b_strings})
+
+    return render(request, 'edashboard/compare.html', {'buildlist': b_strings})
 
 def export_view(request,builddata=None):
     sdr = StaticDataRetriever()
@@ -112,9 +120,15 @@ def export_view(request,builddata=None):
             date.append(log_dict[key][0].strftime("%Y-%m-%d %H:%M:%S"))
             usage.append(log_dict[key][1])
             count += 1
-        #date = reversed(date)
-        #usage = reversed(usage)
-    return render(request, 'edashboard/export.html',{'buildlist': b_strings,'builddata':builddata,'usage':usage,'date':date})
+        for d in date:
+            print(d)
+    return render(request, 'edashboard/export.html',{'buildlist': b_strings,
+                                                     'builddata':builddata,
+                                                     'usage':usage,
+                                                     'date':date,
+                                                     'bname':buildname,
+                                                     'type':util,
+                                                     'sensor':sensor})
 
 def down_export(request,data):
     buildings = Building.objects.all()
