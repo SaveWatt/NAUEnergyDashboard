@@ -109,7 +109,7 @@ def export_view(request,builddata=None):
             count += 1
         #date = reversed(date)
         #usage = reversed(usage)
-    return render(request, 'edashboard/export.html',{'buildlist': BuildingSearch,'builddata':builddata,'usage':usage,'date':date})
+    return render(request, 'edashboard/export.html',{'buildlist': buildings,'builddata':builddata,'usage':usage,'date':date})
 
 def down_export(request,data):
     buildings = b.getBuildingStrings()
