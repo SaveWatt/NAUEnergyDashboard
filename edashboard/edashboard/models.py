@@ -15,7 +15,7 @@ class Building(models.Model):
     b_alias = models.CharField(max_length=200)
 
     def __str__(self):
-        return str(self.b_name)
+        return self.b_name + ' (' + self.b_num + ')'
 
 class Sensor(models.Model):
     building = models.ForeignKey(Building, on_delete=models.CASCADE)

@@ -112,7 +112,6 @@ class StaticDataRetriever:
                 s.save()
 
     def make_log_dict(self):
-        #bnamelst1 = ['adel','B26 ', 'cline','B28 ', 'sas','B60 ']
         types = ['Current Demand KW', 'Dom Water Gallons',
                  'Reclaimed Water Gallons', 'Steam KBTU']
 
