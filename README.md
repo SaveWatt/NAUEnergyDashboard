@@ -18,9 +18,11 @@ This solution eliminates the need for sifting through endless data, presenting d
 This is where it all starts. Aggregate Campus data is presented here as well as everything a user needs to navigate through our site.
 ![alt text][home]
 
+
 #### Exporting Data
 Here users are able to download data as a .CSV file. They simply select data from a sensor or about a specific utility and the rest is as simple as a click of a button!
 ![alt text][export]
+
 
 #### Viewing a Building
 Users can visit a page about each building on campus. Here they can see data regarding any of the building's sensors and utilities.
