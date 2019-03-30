@@ -1,7 +1,7 @@
 # The Northern Arizona University Energy Dashboard
 
 ## Overview
-Our sponsors are looking to make the most of NAU’s energy data. This project is sponsored by Jonathan Heitzinger and Dr. Truong Nghiem. Together they are looking to develop a web-based system which analyzes and elegantly presents NAU’s building operation data. They hope to create a product that impacts campus-wide sustainability. To facilitate the collection and analyzation of NAU’s energy data, we are developing the NAU Energy Dashboard.
+This project is sponsored by Jonathan Heitzinger and Dr. Truong Nghiem. Together they are looking to develop a web-based system which analyzes and elegantly presents NAU’s building operation data. They hope to create a product that impacts campus-wide sustainability. To facilitate the collection and analyzation of NAU’s energy data, we are developing the NAU Energy Dashboard.
 
 The NAU Energy Dashboard is a comprehensive web-based application which can retrieve, graphically display, export, and run basic analytics on NAU’s collected data. We plan to simplify the existing process with a tool that abstracts away the complexities that stifle current research efforts. Our users would like the NAU Energy Dashboard to:
 
