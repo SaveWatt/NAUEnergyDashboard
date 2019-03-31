@@ -20,14 +20,12 @@ from django.http import JsonResponse
 from edashboard.forms import *
 import json
 import time
-from edashboard.StaticDataRetriever import StaticDataRetriever
 import statistics as stats
 import datetime
-from edashboard.Backend import Backend
+from edashboard.backend import BackendRetriever as b
+from edashboard.backend import StaticDataRetriever as SDR
 
 register = template.Library()
-b = Backend()
-sdr = StaticDataRetriever()
 
 
 
@@ -36,7 +34,7 @@ def index(request):
     return render(request, 'edashboard/index.html',{'buildlist': buildings})
 
 def building_view(request, buildnum):
-    sdr = StaticDataRetriever()
+    sdr = SDR()
     buildings = b.getBuildingStrings()
     building = Building.objects.get(b_num=buildnum)
     buildname = building.b_name
@@ -46,12 +44,14 @@ def building_view(request, buildnum):
     usage = []
     date = []
     count = 0
-    for key in reversed(sorted(log_dict.keys())):
+    for key in sorted(log_dict.keys()):
         if count > 99:
             break;
         date.append(log_dict[key][0])
         usage.append(log_dict[key][1])
         count += 1
+    usage.reverse()
+    date.reverse()
     percent = sum(usage)/10000*100
     percent_str = ("%d%%" % round(percent, 2))
     mean = round(sum(usage)/len(usage), 2)
