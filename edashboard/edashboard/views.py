@@ -20,20 +20,26 @@ from django.http import JsonResponse
 from edashboard.forms import *
 import json
 import time
-from edashboard.StaticDataRetriever import StaticDataRetriever
+#from edashboard.StaticDataRetriever import StaticDataRetriever
 import statistics as stats
 import datetime
 from edashboard.Backend import Backend
 
 register = template.Library()
 b = Backend()
-sdr = StaticDataRetriever()
+bnum = b.getNumStrings()
+#sorts by name
+bname = b.getBuildingStrings()
+bname.sort()
+#sdr = StaticDataRetriever()
 
 
 
 def index(request):
+    #Sorts by number
     buildings = b.getBuildingStrings()
-    return render(request, 'edashboard/index.html',{'buildlist': buildings})
+    return render(request, 'edashboard/index.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def building_view(request, buildnum):
     sdr = StaticDataRetriever()
@@ -59,6 +65,8 @@ def building_view(request, buildnum):
     usage.reverse()
     date.reverse()
     return render(request, 'edashboard/building.html', {'buildlist': buildings,
+                                                        'buildlistname':bname,
+                                                        'buildlistnum':bnum,
                                                         'bnum': buildnum,
                                                         'bname':buildname,
                                                         'usage':usage,
@@ -70,7 +78,8 @@ def building_view(request, buildnum):
 
 def compare_view(request):
     buildings = b.getBuildingStrings()
-    return render(request, 'edashboard/compare.html',{'buildlist': buildings})
+    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def export_view(request,builddata=None):
     flag = ""
@@ -111,7 +120,9 @@ def export_view(request,builddata=None):
             count += 1
         #date = reversed(date)
         #usage = reversed(usage)
-    return render(request, 'edashboard/export.html',{'buildlist': buildings,'builddata':builddata,'usage':usage,'date':date})
+
+    return render(request, 'edashboard/export.html',{'buildlist': buildings,'builddata':builddata,'usage':usage,'date':date,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def down_export(request,data):
     buildings = b.getBuildingStrings()
@@ -138,12 +149,14 @@ def down_export(request,data):
 
 def exporth_view(request):
     buildings = b.getBuildingStrings()
-    return render(request, 'edashboard/export.html',{'buildlist': buildings})
+    return render(request, 'edashboard/export.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def get_data(request):
     date = "Tues"
     usage = 10
-    return JsonResponse({'data': usage,'date':date})
+    return JsonResponse({'data': usage,'date':date,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def login(request):
    return render(request, 'edashboard/login.html',{
@@ -180,7 +193,8 @@ def validate_username(request):
 
 def compareh_view(request):
     buildings = b.getBuildingStrings()
-    return render(request, 'edashboard/compare.html',{'buildlist': buildings})
+    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def compare_view(request,builddata=None):
     buildings = b.getBuildingStrings()
@@ -201,7 +215,8 @@ def compare_view(request,builddata=None):
         sensor = data[1]
     usage=[1,5,8,3,5]
     date=[1,2,3,4,5]
-    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'builddata':builddata,'usage':usage,'date':date})
+    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'builddata':builddata,'usage':usage,'date':date,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def down_compare(request, data):
         buildings = b.getBuildingStrings()
@@ -227,23 +242,28 @@ def down_compare(request, data):
 
 def help_view(request):
     buildings = b.getBuildingStrings()
-    return render(request, 'edashboard/help.html',{'buildlist': buildings})
+    return render(request, 'edashboard/help.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def construction_view(request):
     buildings = b.getBuildingStrings()
-    return render(request, 'edashboard/construction.html',{'buildlist': buildings})
+    return render(request, 'edashboard/construction.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def login_view(request):
     buildings = b.getBuildingStrings()
-    return render(request, 'edashboard/login.html',{'buildlist': buildings})
+    return render(request, 'edashboard/login.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def demo(request):
     buildings = b.getBuildingStrings()
-    return render(request, 'edashboard/forms_demo.html',{'buildlist': buildings})
+    return render(request, 'edashboard/forms_demo.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def admin_view(request):
     buildings = b.getBuildingStrings()
-    return render(request, 'edashboard/admin.html',{'buildlist': buildings})
+    return render(request, 'edashboard/admin.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum})
 '''
 def data(request):
     db_data = Demo.objects.all().values_list('value', flat=True)
