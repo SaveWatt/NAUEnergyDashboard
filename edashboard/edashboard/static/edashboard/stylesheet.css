@@ -1,10 +1,3 @@
-@font-face {
-    font-family: "Anson";
-    src: url('Fonts/Anson/anson-regular-webfont.woff2') format('woff2'), url('anson-regular-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
 html,
 body {
   margin: 0;
@@ -29,7 +22,7 @@ button{
   color: white;
   width: 10em;
   height: 3em;
-  font-family: 'Anson';
+  font-family: Arial;
   font-size: 12px;
   margin-left: 45%;
   margin-top: 25%;
@@ -80,13 +73,13 @@ canvas{
   text-align: center;
 }
 h1{
-  font-family: 'Anson';
+  font-family: Arial;
   color: white;
   text-align: center;
 }
 .sidebar a{
   display: block;
-  font-family: 'Anson';
+  font-family: Arial;
   text-decoration: none;
   width: fit-content;
   color: white;
@@ -110,7 +103,7 @@ h1{
     display: inline-block;
     color: white;
     text-align: center;
-    font-family: 'Anson';
+    font-family: Arial;
     text-decoration: none;
     width: fit-content;
 }
@@ -505,8 +498,6 @@ div#formcontainer form{
   text-align: center;
   height: initial;
   display: inline-grid;
-  background-color: rgba(255,255,255, .7);
-  padding: 2.5%;
 }
 button#login{
   margin: 2.5%;
