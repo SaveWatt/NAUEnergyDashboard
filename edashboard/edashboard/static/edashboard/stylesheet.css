@@ -734,3 +734,6 @@ div#Topnav.topnav li:hover a {
 #innerstats{
   padding: 5%;
 }
+form#login a{
+  color: #003467;
+}
