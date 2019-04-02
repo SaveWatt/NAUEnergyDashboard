@@ -22,27 +22,29 @@ import json
 import time
 import statistics as stats
 import datetime
-from edashboard.backend import BackendRetriever as b
+from edashboard.backend import BackendRetriever as BR
 from edashboard.backend import StaticDataRetriever as SDR
 from django.urls import reverse
-from urllib.parse import urlencode
+from urlliBR.parse import urlencode
 
 register = template.Library()
 
 
 
 def index(request):
-    buildings = b.getBuildingStrings()
+    buildings = BR.getBuildingStrings()
     return render(request, 'edashboard/index.html',{'buildlist': buildings})
 
-def building_view(request, buildnum):
+def building_view(request, b, s, i):
     #TODO: Have the selector pass an increment and sensor type
     sdr = SDR()
-    buildings = b.getBuildingStrings()
-    building = Building.objects.get(b_num=buildnum)
-    buildname = building.b_name
-    #data = b.getData(building, "Current Demand KW", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
-    data = b.getData(building, "Current Demand KW", datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=30)
+    buildings = BR.getBuildingStrings()
+    building = Building.objects.get(b_num=b)
+    b_name = building.b_name
+    sensors = Sensor.filter(building=building.id)
+    print(sensors)
+    #data = BR.getData(building, "Current Demand KW", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
+    data = BR.getData(building, "Current Demand KW", datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=30)
     usage = data[1]
     date = data[0]
     if usage:
@@ -56,7 +58,7 @@ def building_view(request, buildnum):
         mean = 0
         median = 0
     return render(request, 'edashboard/building.html', {'buildlist': buildings,
-                                                        'bnum': buildnum,
+                                                        'bnum': b,
                                                         'bname':buildname,
                                                         'usage':usage,
                                                         'date':date,
@@ -66,7 +68,7 @@ def building_view(request, buildnum):
                                                         'median': median})
 
 def compare_view(request):
-    buildings = b.getBuildingStrings()
+    buildings = BR.getBuildingStrings()
     return render(request, 'edashboard/compare.html',{'buildlist': buildings})
 
 def export_view(request,builddata=None):
@@ -88,7 +90,7 @@ def export_view(request,builddata=None):
     if flag == "sens":
         sensor = data[1]
     # buildings = Building.objects.all()
-    buildings = b.getBuildingStrings()
+    buildings = BR.getBuildingStrings()
     usage = []
     date = []
     if buildnum and buildnum != 'B':
@@ -112,7 +114,7 @@ def export_view(request,builddata=None):
     return render(request, 'edashboard/export.html',{'buildlist': buildings,'builddata':builddata,'usage':usage,'date':date})
 
 def down_export(request,data):
-    buildings = b.getBuildingStrings()
+    buildings = BR.getBuildingStrings()
     i=0
     finalstr="USAGE,DATE\n"
     response = HttpResponse(content_type='text/csv')
@@ -135,7 +137,7 @@ def down_export(request,data):
 
 
 def exporth_view(request):
-    buildings = b.getBuildingStrings()
+    buildings = BR.getBuildingStrings()
     return render(request, 'edashboard/export.html',{'buildlist': buildings})
 
 def get_data(request):
@@ -150,7 +152,7 @@ def login(request):
 
 def register(request):
     if request.method =="POST":
-        buildings = b.getBuildingStrings()
+        buildings = BR.getBuildingStrings()
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
@@ -177,11 +179,11 @@ def validate_username(request):
     return JsonResponse(data)
 
 def compareh_view(request):
-    buildings = b.getBuildingStrings()
+    buildings = BR.getBuildingStrings()
     return render(request, 'edashboard/compare.html',{'buildlist': buildings})
 
 def compare_view(request,builddata=None):
-    buildings = b.getBuildingStrings()
+    buildings = BR.getBuildingStrings()
     flag = ""
     sensor = ""
     util = ""
@@ -202,7 +204,7 @@ def compare_view(request,builddata=None):
     return render(request, 'edashboard/compare.html',{'buildlist': buildings,'builddata':builddata,'usage':usage,'date':date})
 
 def down_compare(request, data):
-        buildings = b.getBuildingStrings()
+        buildings = BR.getBuildingStrings()
         i=0
         finalstr="USAGE,DATE\n"
         response = HttpResponse(content_type='text/csv')
@@ -224,23 +226,23 @@ def down_compare(request, data):
         return response
 
 def help_view(request):
-    buildings = b.getBuildingStrings()
+    buildings = BR.getBuildingStrings()
     return render(request, 'edashboard/help.html',{'buildlist': buildings})
 
 def construction_view(request):
-    buildings = b.getBuildingStrings()
+    buildings = BR.getBuildingStrings()
     return render(request, 'edashboard/construction.html',{'buildlist': buildings})
 
 def login_view(request):
-    buildings = b.getBuildingStrings()
+    buildings = BR.getBuildingStrings()
     return render(request, 'edashboard/login.html',{'buildlist': buildings})
 
 def demo(request):
-    buildings = b.getBuildingStrings()
+    buildings = BR.getBuildingStrings()
     return render(request, 'edashboard/forms_demo.html',{'buildlist': buildings})
 
 def admin_view(request):
-    buildings = b.getBuildingStrings()
+    buildings = BR.getBuildingStrings()
     return render(request, 'edashboard/admin.html',{'buildlist': buildings})
 '''
 def data(request):
