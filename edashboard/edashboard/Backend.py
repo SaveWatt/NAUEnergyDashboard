@@ -1,4 +1,3 @@
-import pandas as pd
 from pathlib import Path
 from edashboard.models import Building, Sensor
 import pymssql as sql

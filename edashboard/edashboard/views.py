@@ -24,6 +24,8 @@ import statistics as stats
 import datetime
 from edashboard.backend import BackendRetriever as b
 from edashboard.backend import StaticDataRetriever as SDR
+from django.urls import reverse
+from urllib.parse import urlencode
 
 register = template.Library()
 
@@ -40,7 +42,7 @@ def building_view(request, buildnum):
     building = Building.objects.get(b_num=buildnum)
     buildname = building.b_name
     #data = b.getData(building, "Current Demand KW", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
-    data = b.getData(building, "Current Demand KW", datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
+    data = b.getData(building, "Current Demand KW", datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=30)
     usage = data[1]
     date = data[0]
     if usage:
@@ -89,7 +91,6 @@ def export_view(request,builddata=None):
     buildings = b.getBuildingStrings()
     usage = []
     date = []
-    print(buildnum)
     if buildnum and buildnum != 'B':
         building = Building.objects.get(b_num=buildnum)
         buildname = building.b_name
