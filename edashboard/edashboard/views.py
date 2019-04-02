@@ -34,28 +34,25 @@ def index(request):
     return render(request, 'edashboard/index.html',{'buildlist': buildings})
 
 def building_view(request, buildnum):
+    #TODO: Have the selector pass an increment and sensor type
     sdr = SDR()
     buildings = b.getBuildingStrings()
     building = Building.objects.get(b_num=buildnum)
     buildname = building.b_name
-    build_id = building.id
-    sens = Sensor.objects.get(building_id=build_id, s_type='Current Demand KW')
-    log_dict = sdr.get_log(sens.s_log)
-    usage = []
-    date = []
-    count = 0
-    for key in sorted(log_dict.keys()):
-        if count > 99:
-            break;
-        date.append(log_dict[key][0])
-        usage.append(log_dict[key][1])
-        count += 1
-    usage.reverse()
-    date.reverse()
-    percent = sum(usage)/10000*100
-    percent_str = ("%d%%" % round(percent, 2))
-    mean = round(sum(usage)/len(usage), 2)
-    median = round(stats.median(usage), 2)
+    #data = b.getData(building, "Current Demand KW", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
+    data = b.getData(building, "Current Demand KW", datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
+    usage = data[1]
+    date = data[0]
+    if usage:
+        percent = sum(usage)/10000*100
+        percent_str = ("%d%%" % round(percent, 2))
+        mean = round(sum(usage)/len(usage), 2)
+        median = round(stats.median(usage), 2)
+    else:
+        percent = 0
+        percent_str = 0
+        mean = 0
+        median = 0
     return render(request, 'edashboard/building.html', {'buildlist': buildings,
                                                         'bnum': buildnum,
                                                         'bname':buildname,
@@ -82,6 +79,8 @@ def export_view(request,builddata=None):
     buildnum = data[0]
     starttime = getTimes(data[2])
     endtime = getTimes(data[3])
+    print(starttime)
+    print(endtime)
     if flag == "util":
         util = data[1]
     if flag == "sens":

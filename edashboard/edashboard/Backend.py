@@ -5,8 +5,6 @@ import pymssql as sql
 
 class BackendRetriever:
 
-    sdr = StaticDataRetriever()
-
     def getBuildingStrings():
         buildings = Building.objects.all()
         b_strings = []
@@ -19,23 +17,19 @@ class BackendRetriever:
     and final date as inputs.
     The function returns sample values as an array to be passed to a chart builder.
     """
-    def getData(build_num, sens_type, init_date, fin_date):
-        building = Building.objects.get(b_num=build_num)
+    def getData(building, sens_type, init_date, fin_date, incr=1):
+        sdr = StaticDataRetriever()
         build_id = building.id
         sens = Sensor.objects.get(building_id=build_id, s_type=sens_type)
         log_dict = sdr.get_log(sens.s_log)
         usage = []
         date = []
-        count = 0
         for key in sorted(log_dict.keys()):
-            if count > 10:
-                break;
-            date.append(log_dict[key][0])
-            usage.append(log_dict[key][1])
-            count += 1
-        print(usage.reverse())
-        print(date.reverse())
-        return
+            if log_dict[key][0] >= init_date and log_dict[key][0] <= fin_date:
+                if log_dict[key][0].minute % incr == 0:
+                    date.append(log_dict[key][0])
+                    usage.append(log_dict[key][1])
+        return (date, usage)
 
 class StaticDataRetriever:
 
@@ -233,5 +227,3 @@ class StaticDataRetriever:
         cursor.execute('SELECT * FROM ')
         self.__table = cursor.fetchall()
         print(self.__table)
-
-BackendRetriever.getData("B60", "Current Demand KW", "112", "we")
