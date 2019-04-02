@@ -25,7 +25,7 @@ import datetime
 from edashboard.backend import BackendRetriever as BR
 from edashboard.backend import StaticDataRetriever as SDR
 from django.urls import reverse
-from urlliBR.parse import urlencode
+from urllib.parse import urlencode
 
 register = template.Library()
 
@@ -35,14 +35,16 @@ def index(request):
     buildings = BR.getBuildingStrings()
     return render(request, 'edashboard/index.html',{'buildlist': buildings})
 
-def building_view(request, b, s, i):
+def building_view(request, b, s=None, i=None):
     #TODO: Have the selector pass an increment and sensor type
     sdr = SDR()
     buildings = BR.getBuildingStrings()
     building = Building.objects.get(b_num=b)
     b_name = building.b_name
-    sensors = Sensor.filter(building=building.id)
-    print(sensors)
+    sensors = Sensor.objects.filter(building_id=building.id)
+    sensor_strs = []
+    for sens in sensors:
+        sensor_strs.append(str(sens))
     #data = BR.getData(building, "Current Demand KW", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
     data = BR.getData(building, "Current Demand KW", datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=30)
     usage = data[1]
@@ -59,13 +61,14 @@ def building_view(request, b, s, i):
         median = 0
     return render(request, 'edashboard/building.html', {'buildlist': buildings,
                                                         'bnum': b,
-                                                        'bname':buildname,
+                                                        'bname':b_name,
                                                         'usage':usage,
                                                         'date':date,
                                                         'percent':percent,
                                                         'percent_str':percent_str,
                                                         'mean': mean,
-                                                        'median': median})
+                                                        'median': median,
+                                                        'Sensors': sensor_strs}
 
 def compare_view(request):
     buildings = BR.getBuildingStrings()
