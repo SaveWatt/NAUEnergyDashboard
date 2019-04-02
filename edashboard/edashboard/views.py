@@ -18,20 +18,41 @@ from edashboard.models import *
 from django.views import View
 from django.http import JsonResponse
 from edashboard.forms import *
+from edashboard.conversion import *
 import json
 import time
 from edashboard.StaticDataRetriever import StaticDataRetriever
+from edashboard.graph_calc import *
 import statistics as stats
 import datetime
 import numpy as np
 
 register = template.Library()
 
-
-
 def index(request):
     buildings = BuildingSearch.getBuildingString()
-    return render(request, 'edashboard/index.html',{'buildlist': buildings})
+    usage_dom = dom_pie()
+    sum_dom = sum_usage(usage_dom)
+    usage_elec = elec_pie()
+    sum_elec = sum_usage(usage_elec)
+    usage_reclaimed = reclaimed_pie()
+    sum_reclaimed = sum_usage(usage_reclaimed)
+    usage_heat = heat_pie()
+    sum_heat = sum_usage(usage_heat)
+    usage_cool = cool_pie()
+    sum_cool = sum_usage(usage_cool)
+    usage_steam = steam_pie()
+    sum_steam = sum_usage(usage_steam)
+# 그래프 리스트들 자동적으로 불러올수 있도록
+#
+    return render(request, 'edashboard/index.html',{'buildlist': buildings,
+                                                    'list':list,
+                                                    'usage_dom':usage_dom,
+                                                    'usage_elec':usage_elec,
+                                                    'usage_reclaimed':usage_reclaimed,
+                                                    'sum_dom':sum_dom,
+                                                    'sum_elec':sum_elec,
+                                                    'sum_reclaimed':sum_reclaimed})
 
 def building_view(request, buildnum):
     sdr = StaticDataRetriever()
@@ -39,7 +60,8 @@ def building_view(request, buildnum):
     building = Building.objects.get(b_num=buildnum)
     buildname = building.b_name
     build_id = building.id
-    sens = Sensor.objects.get(building_id=build_id, s_type='Current Demand KW')
+    sens = Sensor.objects.get(building_id=build_id, s_type='Dom Water Gallons')
+    # ex b46, b60, b62
     log_dict = sdr.get_log(sens.s_log)
     usage = []
     date = []
@@ -50,6 +72,12 @@ def building_view(request, buildnum):
         date.append(log_dict[key][0])
         usage.append(log_dict[key][1])
         count += 1
+    list = []
+    list = Sensor.objects.filter(building_id=build_id)
+    # .values_list('s_log', flat=True)
+    list2 = []
+    for item in list:
+        list2.append(str(item))
     percent = sum(usage)/10000*100
     percent_str = ("%d%%" % round(percent, 2))
     mean = round(sum(usage)/len(usage), 2)
@@ -68,7 +96,36 @@ def building_view(request, buildnum):
                                                         'median': median,
                                                         'quartile1':quartile1,
                                                         'quartile3':quartile3,
-                                                        'iqr':iqr})
+                                                        'iqr':iqr,
+                                                        'list2':list2})
+
+
+def down_building(request,data):
+    buildings = Building.objects.all()
+    b_strings = []
+    for building in buildings:
+        b_string = building.b_name + ' (' + building.b_num + ')'
+        b_strings.append(b_string)
+    i=0
+    finalstr="USAGE,DATE\n"
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=data_usage.csv'
+    writer = csv.writer(response, csv)
+    response.write(u'\ufeff'.encode('utf8'))
+    writer.writerow([
+        smart_str(u"DATE"),
+        smart_str(u"USAGE"),
+    ])
+    cleandata = data.split(",")
+    j=cleandata.index("date")+1
+    for i in range(0,cleandata.index("date")):
+        writer.writerow([
+            smart_str(cleandata[j]),
+            smart_str(cleandata[i]),
+        ])
+        j+=1
+    return response
+
 
 def compare_view(request):
     buildings = Building.objects.all()
@@ -86,7 +143,7 @@ def export_view(request,builddata=None):
     util = ""
     if "util=" in str(builddata):
         flag = "util"
-    if "sensor=" in str(builddata):
+    elif "sensor=" in str(builddata):
         flag = "sens"
     data = splitUrls(builddata, flag)
     buildnum = data[0]
@@ -103,32 +160,49 @@ def export_view(request,builddata=None):
         b_strings.append(b_string)
     usage = []
     date = []
+    list = []
+    # list = Sensor.objects.filter(building_id=build_id)
+    # # .values_list('s_log', flat=True)
+    slist = []
+    ulist = ["Current Demand KW", "Dom Water Gallons", "Reclaimed Water Gallons", "Steam KBTU"]
+    # for item in list:
+    #     list2.append(str(item))
     print(buildnum)
     if buildnum and buildnum != 'B':
         building = Building.objects.get(b_num=buildnum)
         buildname = building.b_name
         build_id = building.id
         try:
-            sens = Sensor.objects.get(building_id=build_id, s_type=util)
+            if(util):
+                sens = Sensor.objects.get(building_id=build_id, s_type=util)
+            if(sensor):
+                sens = Sensor.objects.get(building_id=build_id, s_type=sensor)
+            log_dict = sdr.get_log(sens.s_log)
+            count = 0
+            for key in reversed(sorted(log_dict.keys())):
+                if count > 99:
+                    break;
+                date.append(log_dict[key][0].strftime("%Y-%m-%d %H:%M:%S"))
+                usage.append(log_dict[key][1])
+                count += 1
+            for d in date:
+                print(d)
         except:
-            sens = Sensor.objects.get(building_id=57, s_log='601_2')
-        log_dict = sdr.get_log(sens.s_log)
-        count = 0
-        for key in reversed(sorted(log_dict.keys())):
-            if count > 99:
-                break;
-            date.append(log_dict[key][0].strftime("%Y-%m-%d %H:%M:%S"))
-            usage.append(log_dict[key][1])
-            count += 1
-        for d in date:
-            print(d)
+            # sens = Sensor.objects.get(building_id=57, s_log='601_0')
+            list = Sensor.objects.filter(building_id=build_id)
+            for item in list:
+                slist.append(str(item))
+
+
     return render(request, 'edashboard/export.html',{'buildlist': b_strings,
                                                      'builddata':builddata,
                                                      'usage':usage,
                                                      'date':date,
                                                      'bname':buildname,
                                                      'type':util,
-                                                     'sensor':sensor})
+                                                     'sensor':sensor,
+                                                     'slist':slist,
+                                                     'ulist':ulist})
 
 def down_export(request,data):
     buildings = Building.objects.all()

@@ -1,5 +1,5 @@
 <div id="buildingadder">
-  <input id="buildingsearchexpcompsearch" class="search" type="text" placeholder="Search For Building..." autofocus/>
+  <input id="buildingsearchexpcompsearch" class="search" type="text" placeholder="Search For Building..." value="{{ bname|safe }}" autofocus />
   <ul id="autocomplete-results2"></ul>
 </div>
   {% if user.is_authenticated %}
@@ -7,9 +7,9 @@
       <li class="dropdown-toggle" style="display:none;">Sensor</li>
       <h2 class="select">Select a Sensor</h2>
       <select>
-        <option>Filler1</option>
-        <option>Filler2</option>
-        <option>Filler3</option>
+        {% for data in slist %}
+          <option>{{ data|safe }}</option>
+        {% endfor %}
       </select>
     </div>
   {% else %}
@@ -17,10 +17,9 @@
     <li class="dropdown-toggle" style="display:none;">Utility</li>
     <h2 class="select">Select a Utility</h2>
     <select>
-      <option>Current Demand KW</option>
-      <option>Dom Water Gallons</option>
-      <option>Reclaimed Water Gallons</option>
-      <option>Steam KBTU</option>
+      {% for data in ulist %}
+        <option>{{ data|safe }}</option>
+      {% endfor %}
     </select>
   </div>
   {% endif %}

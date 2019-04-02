@@ -199,6 +199,24 @@ class StaticDataRetriever:
 
         return ret_dict
 
+    def get_log_reverse1(self, log_id):
+        # Creating string which identifies trendlog
+        logstring = self.__create_trend_string(log_id)
+        # Creating cursor to parse database
+        cursor = self.__connection.cursor(as_dict=True)
+        # Creating dynamic query for trendlog table
+        query = ("SELECT TOP 1 * FROM %s ORDER BY 'TimeOfSample' DESC" % logstring)
+        # Querying for trendlog table
+        cursor.execute(query, ())
+
+        ret_dict = {}
+
+        for row in cursor:
+            ret_dict[row['Sequence']] = [row['TimeOfSample'], row['SampleValue']]
+
+        return ret_dict
+
+
     def dict_printer(self):
         count = 0
         for key in sorted(self.__log_dict.keys()):

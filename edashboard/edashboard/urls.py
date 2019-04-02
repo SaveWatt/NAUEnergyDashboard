@@ -38,6 +38,7 @@ urlpatterns = [
     path('export/', views.exporth_view, name='export'),
     path('export/<builddata>/', views.export_view, name='export2'),
     path('exportdata/<data>/', views.down_export, name='down_export'),
+    path('exportbuilding/<data>/', views.down_building, name='down_building'),
     path('help/', views.help_view, name='help'),
     path('adminsite/', views.admin_view, name='adminsite'),
     path('construction/', views.construction_view, name='construction'),

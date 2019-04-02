@@ -219,8 +219,8 @@ h1#head{
 }
 .chart-container {
   margin: 0;
-   width: auto;
-   height: auto;
+  width: auto;
+  height: auto;
 }
 div.greyell{
   margin-top: 0;
@@ -232,26 +232,8 @@ div.greyell{
   margin: 5%;
   margin-top: 0;
 }
-.greencomp{
-    table-layout:fixed;
-    width: 100%;
-    text-align: center;
-    font-size: 25px;
-    color: #003467;
-    padding: 2%;
-}
-.greencomp tr{
-  text-align: center;
-}
-.greencomp td{
-  position: inherit;
-  white-space: normal;
-  word-wrap: break-word;
-  text-align: center;
-}
 #greencomplabel{
     margin-left: 5%;
-    margin-top: 10%;
     color: #003467;
 }
 #switWrap{
@@ -292,6 +274,10 @@ h2#chartNum, #chartLabel{
   font-weight: normal;
   margin-top: 0;
 }
+h6#chartNum, #chartLabel{
+  font-weight: normal;
+  margin-top: 0;
+}
 #Labels{
   position: relative;
   align-items: center;
@@ -305,7 +291,18 @@ h2#chartNum, #chartLabel{
   left: 5px;
   top: 5px;
 }
-
+table .greencomp{
+    table-layout:fixed;
+    width: 100%;
+    text-align: center;
+    font-size: 25px;
+    color: #003467;
+    padding: 2%;
+}
+.grenncomp td{
+  width: 30%;
+  height: auto;
+}
 table .label{
   table-layout:fixed;
   height: auto;
@@ -320,14 +317,6 @@ table .label{
 .label td{
   text-align: center;
   margin:10%;
-}
-.circle{
-  height: 75%;
-  width: 75%;
-  background-color: white;
-  border-radius: 50%;
-  display: inline-block;
-  border: 5px solid #ffcc01;
 }
 .exp-container{
   width: 100%;

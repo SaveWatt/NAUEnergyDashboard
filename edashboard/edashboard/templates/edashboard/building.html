@@ -36,18 +36,30 @@
             <button id="hour" onclick="chgColor('hour')" style="width:50%">Hourly</button>
             <button id="15m" onclick="chgColor('15m')" style="width:50%">15-Min</button>
           </div>
-          <div id="selectsens" class="custom-select" style="width:200px; margin:auto;">
-            <li class="dropdown-toggle" style="display:none;">Sensor</li>
+          {% if user.is_authenticated %}
+            <div id="selectsens" class="custom-select" style="width:200px;">
+              <li class="dropdown-toggle" style="display:none;">Sensor</li>
+              <h2 class="select">Select a Sensor</h2>
+              <select>
+                {% for data in list2 %}
+                  <option>{{ data }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          {% else %}
+          <div id="selectutil"class="custom-select" style="width:200px;">
+            <li class="dropdown-toggle" style="display:none;">Utility</li>
             <h2 class="select">Select a Utility</h2>
             <select>
-              <option>Heating</option>
-              <option>Cooling</option>
-              <option>Electricity</option>
-              <option>Gas</option>
+              <option>Current Demand KW</option>
+              <option>Dom Water Gallons</option>
+              <option>Reclaimed Water Gallons</option>
+              <option>Steam KBTU</option>
             </select>
           </div>
+          {% endif %}
           <div>
-            <button style="margin:0; margin-top: 5%;">Download Data</button>
+            <button onClick="downloadData(event)" style="margin:0; margin-top: 5%;">Download Data</button>
           </div>
         </div>
           <div class="graphcont" style="margin:0; width: 50%; height: inherit;">
@@ -69,6 +81,11 @@
               }
               // Changes the button to be highlighted
               chgLabels(id);
+            }
+            function downloadData(event){
+              event.preventDefault();
+              var durl = "{% url 'down_building' data=0%}".replace(/0/, dataset);
+              window.location.href = "" + durl.toString() + "";
             }
 
             </script>

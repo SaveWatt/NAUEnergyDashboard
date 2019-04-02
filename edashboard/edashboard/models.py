@@ -24,7 +24,7 @@ class Sensor(models.Model):
     s_log = models.CharField(max_length=200)
 
     def __str__(self):
-        return str((self.s_log, self.s_name))
+        return str(self.s_name)
 
 def create_model(db_table):
     class LogMeta(ModelBase):

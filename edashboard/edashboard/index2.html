@@ -23,58 +23,24 @@
             <h1 id="head">Energy Dashboard</h1>
           </div>
         </div>
-        <!--  -->
-        <div class="chart-container">
+        <h2 id="greencomplabel">TODAY'S ENVIRONMENTAL BENEFITS</h2>
+        <div class="greyell" id="greencomp">
           <table class="greencomp">
             <tr>
-              <th>
-                <h6 id="chartTitle">Elec Usage: {{ sum_elec|safe }} {{ unit|safe }}</h6>
-              </th>
-              <th>
-                <h6 id="chartTitle">Heating Usage: {{ sum_heat|safe }} BTU/H</h6>
-              </th>
-              <th>
-                <h6 id="chartTitle">Cooling Water Usage: {{ sum_cool|safe }} BTU/H</h6>
-              </th>
+              <td>COAL FIRED POWER PLANTS</td>
+              <td><span class="circle"><img id="factory" src={% static 'edashboard/images/factory.png' %} style="max-width: -webkit-fill-available;"></span></td>
+              <td>TREES PLANTED</td>
+              <td><span class="circle"><img id="factory" src={% static 'edashboard/images/tree.png' %} style="max-width: -webkit-fill-available;"></span></td>
+              <td>BARRELS OF OIL CONSUMED</td>
+              <td><span class="circle"><img id="factory" src={% static 'edashboard/images/barrel.png' %} style="max-width: -webkit-fill-available;"></span></td>
             </tr>
-            <tr>
-              <td><canvas id="pie-chart-elec" width="250" height="150"></canvas></td>
-              <td><canvas id="pie-chart-heat" width="250" height="150"></canvas></td>
-              <td><canvas id="pie-chart-cool" width="250" height="150"></canvas></td>
+            <tr id="compval">
+              <td colspan="2" id=carOff><b>324349 Lbs.</b></td>
+              <td colspan="2" id=treSav><b>7456.3 Trees</b></td>
+              <td colspan="2" id=barOil><b>315.3 Barrels</b></td>
             </tr>
-            <tr>
-              <th>
-                <h6 id="chartTitle">Dom Water Usage: {{ sum_dom|safe }} G/H</h6>
-              </th>
-              <th>
-                <h6 id="chartTitle">Reclaimed Water Usage: {{ sum_reclaimed|safe }} G/H</h6>
-              </th>
-              <th>
-                <h6 id="chartTitle">Steam Usage: {{ sum_steam|safe }} kBTU</h6>
-              </th>
-            </tr>
-            <tr>
-              <td><canvas id="pie-chart-domwater" width="250" height="150"></canvas></td>
-              <td><canvas id="pie-chart-reclaimed" width="250" height="150"></canvas></td>
-              <td><canvas id="pie-chart-steam" width="250" height="150"></canvas></td>
-            </tr>
-
-
           </table>
-          <!-- <tr class="chart-line">
-            <th class="chart-individual">
-              <h5 id="chartTitle">Current Heating Usage:</h5>
-              <h5 id="chartNum">BTU/HOURS</h5>
-              <canvas id="pie-chart-heat" width="350" height="180"></canvas>
-            </th>
-            <th class="chart-individual">
-              <h5 id="chartTitle">Current Cooling Usage:</h5>
-              <h5 id="chartNum">BTU/HOURS</h5>
-              <canvas id="pie-chart-cool" width="350" height="180"></canvas>
-            </th>
-          </tr> -->
         </div>
-        <!--  -->
       </div>
       <div id="right-cont">
         <div class="chart-container">
@@ -108,14 +74,6 @@
     </div>
   </body>
 <script>
-{% include "edashboard/scripts/wholepie.js" %}
-{% include "edashboard/scripts/elecpie.js" %}
-// {% include "edashboard/scripts/domwaterpie.js" %}
-{% include "edashboard/scripts/reclaimedpie.js" %}
-{% include "edashboard/scripts/coolpie.js" %}
-{% include "edashboard/scripts/heatpie.js" %}
-{% include "edashboard/scripts/steampie.js" %}
-
 // Initializes global const
 const curre = document.getElementById("eval").innerHTML;
 const currc = document.getElementById("cval").innerHTML;
@@ -217,6 +175,25 @@ function chgLabels(id){
 }
 
 //Code for the chart
+new Chart(document.getElementById("pie-chart"), {
+    type: 'pie',
+    data: {
+      labels: ["Electricity","Cooling", "Heating"],
+      datasets: [{
+        label: "BTU/Hour",
+        backgroundColor: ["#e3e3e3","#003467","#ffcc01"],
+        //Need to display 10,30,60 <- All need to add up to 100% not actual data value
+        // Need python function to call and return today's electricity, cooling, heating, and total from DB in array.
+        data: [20,30,50]
+      }]
+    },
+    options: {
+      legend: {
+        display: false,
+            }
+          }
+        });
+
 
 </script>
 </html>
