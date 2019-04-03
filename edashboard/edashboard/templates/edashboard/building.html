@@ -37,6 +37,15 @@
             <!-- <button id="30m" onclick="chgColor('hour')" style="width:50%">30-Min</button> -->
             <button id="15m" onclick="chgColor('15m')" style="width:50%">15-Min</button>
           </div>
+          <div id="selectutil"class="custom-select" style="width:200px;">
+            <li class="dropdown-toggle" style="display:none;">Utility</li>
+            <h2 class="select">Select a Utility</h2>
+            <select>
+              {% for utility in utilities %}
+                <option>{{ utility }}</option>
+              {% endfor %}
+            </select>
+          </div>
           {% if user.is_authenticated %}
             <div id="selectsens" class="custom-select" style="width:200px;">
               <li class="dropdown-toggle" style="display:none;">Sensor</li>
@@ -47,16 +56,6 @@
                 {% endfor %}
               </select>
             </div>
-          {% else %}
-          <div id="selectutil"class="custom-select" style="width:200px;">
-            <li class="dropdown-toggle" style="display:none;">Utility</li>
-            <h2 class="select">Select a Utility</h2>
-            <select>
-              {% for utility in utilities %}
-                <option>{{ utility }}</option>
-              {% endfor %}
-            </select>
-          </div>
           {% endif %}
           <div>
             <!--<button id="graphdata" onClick="getData(event)">Graph Data</button>-->
