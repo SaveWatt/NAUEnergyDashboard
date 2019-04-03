@@ -47,7 +47,7 @@ def building_view(request, buildnum):
     building = Building.objects.get(b_num=buildnum)
     buildname = building.b_name
     build_id = building.id
-    sens = Sensor.objects.get(building_id=build_id, s_type='Current Demand KW')
+    sens = Sensor.objects.get(building_id=57, s_type='Current Demand KW')
     log_dict = sdr.get_log(sens.s_log)
     usage = []
     date = []
@@ -58,12 +58,17 @@ def building_view(request, buildnum):
         date.append(log_dict[key][0])
         usage.append(log_dict[key][1])
         count += 1
+    date.reverse()
+    usage.reverse()
     percent = sum(usage)/10000*100
     percent_str = ("%d%%" % round(percent, 2))
     mean = round(sum(usage)/len(usage), 2)
     median = round(stats.median(usage), 2)
     usage.reverse()
     date.reverse()
+    #print(buildnum)
+    imagePath = '/edashboard/images/buildingPic/' + buildnum + '.jpg'
+    #print(imagePath)
     return render(request, 'edashboard/building.html', {'buildlist': buildings,
                                                         'buildlistname':bname,
                                                         'buildlistnum':bnum,
@@ -74,7 +79,8 @@ def building_view(request, buildnum):
                                                         'percent':percent,
                                                         'percent_str':percent_str,
                                                         'mean': mean,
-                                                        'median': median})
+                                                        'median': median,
+                                                        'imagePath':imagePath})
 
 def compare_view(request):
     buildings = b.getBuildingStrings()
@@ -118,6 +124,8 @@ def export_view(request,builddata=None):
             date.append(log_dict[key][0].strftime("%Y-%m-%d %H:%M:%S"))
             usage.append(log_dict[key][1])
             count += 1
+        date.reverse()
+        usage.reverse()
         #date = reversed(date)
         #usage = reversed(usage)
 
