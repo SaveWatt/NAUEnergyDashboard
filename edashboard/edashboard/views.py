@@ -43,10 +43,13 @@ def building_view(request, b, s=None, i=None):
     b_name = building.b_name
     sensors = Sensor.objects.filter(building_id=building.id)
     sensor_strs = []
+    util_strs = []
     for sens in sensors:
         sensor_strs.append(str(sens))
+        if sens.s_type != 'None':
+            util_strs.append(str(sens.s_type))
     #data = BR.getData(building, "Current Demand KW", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
-    data = BR.getData(building, "Current Demand KW", datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=30)
+    data = BR.getData(building, "Current Demand KW", datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
     usage = data[1]
     date = data[0]
     if usage:
@@ -68,7 +71,8 @@ def building_view(request, b, s=None, i=None):
                                                         'percent_str':percent_str,
                                                         'mean': mean,
                                                         'median': median,
-                                                        'Sensors': sensor_strs}
+                                                        'utilities': util_strs,
+                                                        'sensors': sensor_strs})
 
 def compare_view(request):
     buildings = BR.getBuildingStrings()
