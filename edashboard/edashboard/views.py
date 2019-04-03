@@ -64,11 +64,14 @@ def building_view(request, buildnum):
     percent_str = ("%d%%" % round(percent, 2))
     mean = round(sum(usage)/len(usage), 2)
     median = round(stats.median(usage), 2)
+<<<<<<< HEAD
     usage.reverse()
     date.reverse()
     #print(buildnum)
     imagePath = '/edashboard/images/buildingPic/' + buildnum + '.jpg'
     #print(imagePath)
+=======
+>>>>>>> parent of ccc7b13... Small Update to Views.py
     return render(request, 'edashboard/building.html', {'buildlist': buildings,
                                                         'buildlistname':bname,
                                                         'buildlistnum':bnum,
