@@ -52,8 +52,6 @@ def building_view(request, buildnum):
         date.append(log_dict[key][0])
         usage.append(log_dict[key][1])
         count += 1
-    date.reverse()
-    usage.reverse()
     percent = sum(usage)/10000*100
     percent_str = ("%d%%" % round(percent, 2))
     mean = round(sum(usage)/len(usage), 2)

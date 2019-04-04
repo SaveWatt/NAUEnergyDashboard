@@ -596,6 +596,9 @@ div#donutgraph{
   margin-left: 10%;
   width:30%;
 }
+.amcharts-chart-div > a {
+  display: none !important;
+}
 div#Leftgraph{
   margin:2.5%;
   width:20%;
