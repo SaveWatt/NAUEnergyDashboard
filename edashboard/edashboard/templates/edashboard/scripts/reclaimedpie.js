@@ -3,7 +3,9 @@
 new Chart(document.getElementById("pie-chart-reclaimed"), {
     type: 'pie',
     data: {
-      labels: ["B60","B86"],
+      labels: [{% for data in list_reclaimed %}
+              "{{ data|safe }}",
+            {% endfor %}],
       datasets: [{
         label: "BTU/Hour",
         backgroundColor: ["#e3e3e3","#003467","#ffcc01"],

@@ -50,12 +50,17 @@ div .rightdiv{
   width: fit-content;
 }
 div#div-container{
-  width: inherit;
   height: 50%;
 }
 canvas{
   width: 100%;
   height: 100%;
+}
+.forecast {
+    display: flex;
+}
+.vertical{
+  margin-right:20px;
 }
 .sidebar {
     background-color: #003467;
@@ -82,6 +87,9 @@ canvas{
 h1{
   font-family: 'Anson';
   color: white;
+  text-align: center;
+}
+div.vertical{
   text-align: center;
 }
 .sidebar a{
@@ -592,7 +600,9 @@ div#Leftgraph{
   text-align: center;
 }
 div#weather{
+  display: flex;
   height: fit-content;
+  float: left;
 }
 ul#autocomplete-results, ul#autocomplete-results2{
   padding-left: 0;

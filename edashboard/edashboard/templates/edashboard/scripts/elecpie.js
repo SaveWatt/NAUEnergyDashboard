@@ -3,7 +3,9 @@
 new Chart(document.getElementById("pie-chart-elec"), {
     type: 'pie',
     data: {
-      labels: ["B60"],
+      labels: [{% for data in list_elec %}
+              "{{ data|safe }}",
+            {% endfor %}],
       datasets: [{
         label: "BTU/Hour",
         backgroundColor: ["#e3e3e3","#003467","#ffcc01"],

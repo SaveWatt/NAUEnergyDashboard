@@ -26,42 +26,65 @@ from edashboard.graph_calc import *
 import statistics as stats
 import datetime
 import numpy as np
+from edashboard.weather import *
 
 register = template.Library()
 
 def index(request):
     buildings = BuildingSearch.getBuildingString()
-    usage_dom = dom_pie()
-    sum_dom = sum_usage(usage_dom)
+
+    list_elec = elec_list()
     usage_elec = elec_pie()
     sum_elec = sum_usage(usage_elec)
+
+    list_dom = dom_list()
+    usage_dom = dom_pie()
+    sum_dom = sum_usage(usage_dom)
+
+    list_reclaimed = reclaimed_list()
     usage_reclaimed = reclaimed_pie()
     sum_reclaimed = sum_usage(usage_reclaimed)
-    usage_heat = heat_pie()
-    sum_heat = sum_usage(usage_heat)
-    usage_cool = cool_pie()
-    sum_cool = sum_usage(usage_cool)
+
+    list_steam = steam_list()
     usage_steam = steam_pie()
     sum_steam = sum_usage(usage_steam)
-# 그래프 리스트들 자동적으로 불러올수 있도록
-#
+
+    sum_all = sum_elec + sum_steam + sum_dom + sum_reclaimed
+
+    elecToBTU = kwtobtu(sum_elec)
+    steamToBTU = kbtutobtu(sum_steam)
+    domToBTU = gallonstobtu(sum_dom)
+    reclaimedToBTU = gallonstobtu(sum_reclaimed)
+
     return render(request, 'edashboard/index.html',{'buildlist': buildings,
-                                                    'list':list,
-                                                    'usage_dom':usage_dom,
+                                                    'list_elec':list_elec,
                                                     'usage_elec':usage_elec,
-                                                    'usage_reclaimed':usage_reclaimed,
-                                                    'sum_dom':sum_dom,
                                                     'sum_elec':sum_elec,
-                                                    'sum_reclaimed':sum_reclaimed})
+                                                    'list_dom':list_dom,
+                                                    'usage_dom':usage_dom,
+                                                    'sum_dom':sum_dom,
+                                                    'list_reclaimed':list_reclaimed,
+                                                    'usage_reclaimed':usage_reclaimed,
+                                                    'sum_reclaimed':sum_reclaimed,
+                                                    'list_steam':list_steam,
+                                                    'usage_steam':usage_steam,
+                                                    'sum_steam':sum_steam,
+                                                    'sum_all':sum_all,
+                                                    'elecToBTU':elecToBTU,
+                                                    'steamToBTU':steamToBTU,
+                                                    'domToBTU':domToBTU,
+                                                    'reclaimedToBTU':reclaimedToBTU})
 
 def building_view(request, buildnum):
+    weather_day1 = day1()
+    weather_day2 = day2()
+    weather_day3 = day3()
     sdr = StaticDataRetriever()
     buildings = BuildingSearch.getBuildingString()
     building = Building.objects.get(b_num=buildnum)
     buildname = building.b_name
     build_id = building.id
     sens = Sensor.objects.get(building_id=build_id, s_type='Dom Water Gallons')
-    # ex b46, b60, b62
     log_dict = sdr.get_log(sens.s_log)
     usage = []
     date = []
@@ -97,8 +120,10 @@ def building_view(request, buildnum):
                                                         'quartile1':quartile1,
                                                         'quartile3':quartile3,
                                                         'iqr':iqr,
-                                                        'list2':list2})
-
+                                                        'list2':list2,
+                                                        'weather_day1':weather_day1,
+                                                        'weather_day2':weather_day2,
+                                                        'weather_day3':weather_day3})
 
 def down_building(request,data):
     buildings = Building.objects.all()
@@ -125,7 +150,6 @@ def down_building(request,data):
         ])
         j+=1
     return response
-
 
 def compare_view(request):
     buildings = Building.objects.all()
