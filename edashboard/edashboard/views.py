@@ -23,7 +23,7 @@ import time
 from edashboard.StaticDataRetriever import StaticDataRetriever
 import statistics as stats
 import datetime
-from edashboard.Backend import Backend
+from edashboard.backend import Backend, StaticDataRetriever
 
 register = template.Library()
 b = Backend()
@@ -64,11 +64,7 @@ def building_view(request, buildnum):
     percent_str = ("%d%%" % round(percent, 2))
     mean = round(sum(usage)/len(usage), 2)
     median = round(stats.median(usage), 2)
-    usage.reverse()
-    date.reverse()
-    #print(buildnum)
     imagePath = '/edashboard/images/buildingPic/' + buildnum + '.jpg'
-    #print(imagePath)
     return render(request, 'edashboard/building.html', {'buildlist': buildings,
                                                         'buildlistname':bname,
                                                         'buildlistnum':bnum,
