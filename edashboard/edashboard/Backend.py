@@ -1,4 +1,3 @@
-from pathlib import Path
 from edashboard.models import Building, Sensor
 import pymssql as sql
 
@@ -19,7 +18,10 @@ class BackendRetriever:
     def getData(building, sens_type, init_date, fin_date, incr=1):
         sdr = StaticDataRetriever()
         build_id = building.id
-        sens = Sensor.objects.get(building_id=build_id, s_type=sens_type)
+        try:
+            sens = Sensor.objects.get(building_id=build_id, s_type=sens_type)
+        except:
+            sens = Sensor.objects.get(building_id=57 , s_type='Current Demand KW')
         log_dict = sdr.get_log(sens.s_log)
         usage = []
         date = []
@@ -250,3 +252,6 @@ class StaticDataRetriever:
         cursor.execute('SELECT * FROM ')
         self.__table = cursor.fetchall()
         print(self.__table)
+
+br = BackendRetriever()
+br.getNumStrings()

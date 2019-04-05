@@ -22,12 +22,13 @@ import json
 import time
 import statistics as stats
 import datetime
-from edashboard.backend import BackendRetriever as BR
-from edashboard.backend import StaticDataRetriever as SDR
+from edashboard.Backend import BackendRetriever as BR
+from edashboard.Backend import StaticDataRetriever as SDR
 from django.urls import reverse
 from urllib.parse import urlencode
 
 register = template.Library()
+sdr = SDR()
 
 
 
@@ -35,11 +36,10 @@ def index(request):
     buildings = BR.getBuildingStrings()
     return render(request, 'edashboard/index.html',{'buildlist': buildings})
 
-def building_view(request, b, s=None, i=None):
+def building_view(request, buildnum):
     #TODO: Have the selector pass an increment and sensor type
-    sdr = SDR()
     buildings = BR.getBuildingStrings()
-    building = Building.objects.get(b_num=b)
+    building = Building.objects.get(b_num=buildnum)
     b_name = building.b_name
     sensors = Sensor.objects.filter(building_id=building.id)
     sensor_strs = []
@@ -64,7 +64,7 @@ def building_view(request, b, s=None, i=None):
         mean = 0
         median = 0
     return render(request, 'edashboard/building.html', {'buildlist': buildings,
-                                                        'bnum': b,
+                                                        'bnum': buildnum,
                                                         'bname':b_name,
                                                         'usage':usage,
                                                         'date':date,
@@ -73,6 +73,7 @@ def building_view(request, b, s=None, i=None):
                                                         'mean': mean,
                                                         'median': median,
                                                         'utilities': util_strs,
+                                                        'imagePath': imagePath,
                                                         'sensors': sensor_strs})
 
 def compare_view(request):
