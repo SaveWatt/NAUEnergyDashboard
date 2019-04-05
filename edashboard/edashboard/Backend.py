@@ -19,9 +19,6 @@ class BackendRetriever:
                     temp = b_strings[j+1]
                     b_strings[j+1] = b_strings[j]
                     b_strings[j] = temp
-
-        for i in range(len(b_strings)):
-            b_strings[i] = self.getNumId(b_strings[i]) + " "+ self.getName(b_strings[i])
         return b_strings
 
     def getNum(self,str):

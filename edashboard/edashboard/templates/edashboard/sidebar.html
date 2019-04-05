@@ -14,7 +14,17 @@
   var nums = document.getElementById("numbersub");
   var names = document.getElementById("namesub");
   for (i = 0; i < numlis.length; i++) {
-                nums.innerHTML += '<li class=\'searchsug\'id="list'+i+'" onclick="FillInput1(\'list'+i+'\')">' + numlis[i] + '</li>';
-                names.innerHTML += '<li class=\'searchsug\'id="list'+i+'" onclick="FillInput1(\'list'+i+'\')">' + namelis[i] + '</li>';
+    nums.innerHTML += '<li class=\'searchsug\'id="list'+i+'" onclick="FillInput1(\'list'+i+'\')">' + numlis[i] + '</li>';
+    names.innerHTML += '<li class=\'searchsug\'id="list'+i+'" onclick="FillInput1(\'list'+i+'\')">' + namelis[i] + '</li>';
+  }
+
+  function getBuildNum(str){
+    var num = str.split(' ');
+    return num[0];
+  }
+  function getBuildNameNum(str){
+    var namenum = str.split(' ');
+    namenum[-1];
+    return
   }
 </script>
