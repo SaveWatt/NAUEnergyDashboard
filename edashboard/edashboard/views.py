@@ -22,8 +22,8 @@ import json
 import time
 import statistics as stats
 import datetime
-from edashboard.Backend import BackendRetriever as BR
-from edashboard.Backend import StaticDataRetriever as SDR
+from edashboard.backend import BackendRetriever as BR
+from edashboard.backend import StaticDataRetriever as SDR
 from django.urls import reverse
 from urllib.parse import urlencode
 
