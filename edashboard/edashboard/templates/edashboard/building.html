@@ -22,20 +22,20 @@
             <h1 style="color: #003467;text-align:left;height:fit-content;"> {{ bname|safe }} </h1>
             <img src={% static '/edashboard/images/SAS.jpg' %} style="margin:1%;">
           </div>
-          <div id="weather">
+          <div style="margin-left:25px;text-align:right">
             <h5>Flagstaff Weather</h5>
-            <div class="forecast">
-              <div class="vertical">
+            <div id="forecast" style="display:flex;">
+              <div style="margin-right:20px;text-align:center">
                 <h6>{{ weather_day1.temperature|safe }}F</h6>
                 <img src="http://openweathermap.org/img/w/{{ weather_day1.icon|safe }}.png" alt="Image">
                 <h6>{{ weather_day1.description|safe }}</h6>
               </div>
-              <div class="vertical">
+              <div style="margin-right:20px;text-align:center">
                 <h6>{{ weather_day2.temperature|safe }} F</h6>
                 <img src="http://openweathermap.org/img/w/{{ weather_day2.icon|safe }}.png" alt="Image">
                 <h6>{{ weather_day2.description|safe }}</h6>
               </div>
-              <div class="vertical">
+              <div style="margin-right:20px;text-align:center">
                 <h6>{{ weather_day3.temperature|safe }} F</h6>
                 <img src="http://openweathermap.org/img/w/{{ weather_day3.icon|safe }}.png" alt="Image">
                 <h6>{{ weather_day3.description|safe }}</h6>
