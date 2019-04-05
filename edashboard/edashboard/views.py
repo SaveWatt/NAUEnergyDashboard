@@ -20,7 +20,7 @@ from django.http import JsonResponse
 from edashboard.forms import *
 import json
 import time
-#from edashboard.StaticDataRetriever import StaticDataRetriever
+from edashboard.StaticDataRetriever import StaticDataRetriever
 import statistics as stats
 import datetime
 from edashboard.Backend import Backend
@@ -31,7 +31,7 @@ bnum = b.getNumStrings()
 #sorts by name
 bname = b.getBuildingStrings()
 bname.sort()
-#sdr = StaticDataRetriever()
+sdr = StaticDataRetriever()
 
 
 
