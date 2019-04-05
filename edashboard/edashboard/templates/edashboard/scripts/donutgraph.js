@@ -20,10 +20,10 @@ var gaugeChart = AmCharts.makeChart("chartdiv", {
     }, {
       "color": "#003467",
       "startValue": 0,
-      "endValue": 72,
+      "endValue": {{ prev_total|safe }},
       "radius": "100%",
       "innerRadius": "85%",
-      "balloonText": "72%"
+      "balloonText": "{{ prev_str|safe }}"
 
     }, {
       "color": "#eee",
@@ -34,10 +34,10 @@ var gaugeChart = AmCharts.makeChart("chartdiv", {
     }, {
       "color": "#fdd400",
       "startValue": 0,
-      "endValue": {{ percent|safe }},
+      "endValue": {{ total_usage|safe }},
       "radius": "80%",
       "innerRadius": "65%",
-      "balloonText": "{{ percent_str|safe }}"
+      "balloonText": "{{ total_str|safe }}"
     }]
   }],
   "allLabels": [{

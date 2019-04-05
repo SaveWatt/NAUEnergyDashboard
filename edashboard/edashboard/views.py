@@ -53,8 +53,12 @@ def building_view(request, b, s=None, i=None):
     usage = data[1]
     date = data[0]
     if usage:
-        percent = sum(usage)/10000*100
-        percent_str = ("%d%%" % round(percent, 2))
+        prev_data = BR.getData(building, "Current Demand KW", datetime.datetime(2018, 9, 30, 0, 0), datetime.datetime(2018, 9, 30, 23, 59), incr=60)
+        prev_usage = prev_data[1]
+        prev_total = sum(prev_usage)/25
+        prev_str = ("%d%%" % round(prev_total, 2))
+        total_usage = sum(usage)/25
+        total_str = ("%d%%" % round(total_usage, 2))
         mean = round(sum(usage)/len(usage), 2)
         median = round(stats.median(usage), 2)
     else:
@@ -64,11 +68,13 @@ def building_view(request, b, s=None, i=None):
         median = 0
     return render(request, 'edashboard/building.html', {'buildlist': buildings,
                                                         'bnum': b,
-                                                        'bname':b_name,
-                                                        'usage':usage,
-                                                        'date':date,
-                                                        'percent':percent,
-                                                        'percent_str':percent_str,
+                                                        'bname': b_name,
+                                                        'usage': usage,
+                                                        'date': date,
+                                                        'prev_total': prev_total,
+                                                        'prev_str': prev_str,
+                                                        'total_usage': total_usage,
+                                                        'total_str': total_str,
                                                         'mean': mean,
                                                         'median': median,
                                                         'utilities': util_strs,
@@ -90,8 +96,6 @@ def export_view(request,builddata=None):
     buildnum = data[0]
     starttime = getTimes(data[2])
     endtime = getTimes(data[3])
-    print(starttime)
-    print(endtime)
     if flag == "util":
         util = data[1]
     if flag == "sens":
@@ -101,24 +105,20 @@ def export_view(request,builddata=None):
     usage = []
     date = []
     if buildnum and buildnum != 'B':
-        building = Building.objects.get(b_num=buildnum)
-        buildname = building.b_name
-        build_id = building.id
-        try:
-            sens = Sensor.objects.get(building_id=build_id, s_type=util)
-        except:
-            sens = Sensor.objects.get(building_id=57, s_log='601_2')
-        log_dict = sdr.get_log(sens.s_log)
-        count = 0
-        for key in reversed(sorted(log_dict.keys())):
-            if count > 99:
-                break;
-            date.append(log_dict[key][0].strftime("%Y-%m-%d %H:%M:%S"))
-            usage.append(log_dict[key][1])
-            count += 1
-        #date = reversed(date)
-        #usage = reversed(usage)
-    return render(request, 'edashboard/export.html',{'buildlist': buildings,'builddata':builddata,'usage':usage,'date':date})
+        building = Building.objects.get(b_num=b)
+        b_name = building.b_name
+        sensors = Sensor.objects.filter(building_id=building.id)
+        sensor_strs = []
+        util_strs = []
+        for sens in sensors:
+            sensor_strs.append(str(sens))
+            if sens.s_type != 'None':
+                util_strs.append(str(sens.s_type))
+        #data = BR.getData(building, "Current Demand KW", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
+        data = BR.getData(building, "Current Demand KW", datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
+        usage = data[1]
+        date = data[0]
+    return render(request, 'edashboard/export.html',{'buildlist': buildings,'builddata':builddata,'usage':usage,'date':date,'sensors': sensor_strs})
 
 def down_export(request,data):
     buildings = BR.getBuildingStrings()
