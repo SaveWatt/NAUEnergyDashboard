@@ -3,7 +3,7 @@ import pymssql as sql
 
 class BackendRetriever:
 
-    def getBuildingStrings():
+    def getBuildingStrings(self):
         buildings = Building.objects.all()
         b_strings = []
         for building in buildings:
@@ -15,7 +15,7 @@ class BackendRetriever:
     and final date as inputs.
     The function returns sample values as an array to be passed to a chart builder.
     """
-    def getData(building, sens_type, init_date, fin_date, incr=1):
+    def getData(self,building, sens_type, init_date, fin_date, incr=1):
         sdr = StaticDataRetriever()
         build_id = building.id
         try:

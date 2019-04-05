@@ -22,19 +22,24 @@ import json
 import time
 import statistics as stats
 import datetime
-from edashboard.backend import BackendRetriever as BR
+from edashboard.backend import BackendRetriever
 from edashboard.backend import StaticDataRetriever as SDR
 from django.urls import reverse
 from urllib.parse import urlencode
 
 register = template.Library()
 sdr = SDR()
+BR = BackendRetriever()
+bname = BR.getBuildingStrings()
+bnum = BR.getNumStrings()
+bname.sort()
 
 
 
 def index(request):
     buildings = BR.getBuildingStrings()
-    return render(request, 'edashboard/index.html',{'buildlist': buildings})
+    return render(request, 'edashboard/index.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def building_view(request, buildnum):
     #TODO: Have the selector pass an increment and sensor type
@@ -74,11 +79,14 @@ def building_view(request, buildnum):
                                                         'median': median,
                                                         'utilities': util_strs,
                                                         'imagePath': imagePath,
-                                                        'sensors': sensor_strs})
+                                                        'sensors': sensor_strs,
+                                                        'buildlistname':bname,
+                                                        'buildlistnum':bnum})
 
 def compare_view(request):
     buildings = BR.getBuildingStrings()
-    return render(request, 'edashboard/compare.html',{'buildlist': buildings})
+    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum,})
 
 def export_view(request,builddata=None):
     flag = ""
@@ -122,7 +130,8 @@ def export_view(request,builddata=None):
         usage.reverse()
         #date = reversed(date)
         #usage = reversed(usage)
-    return render(request, 'edashboard/export.html',{'buildlist': buildings,'builddata':builddata,'usage':usage,'date':date})
+    return render(request, 'edashboard/export.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum,'builddata':builddata,'usage':usage,'date':date})
 
 def down_export(request,data):
     buildings = BR.getBuildingStrings()
@@ -149,7 +158,8 @@ def down_export(request,data):
 
 def exporth_view(request):
     buildings = BR.getBuildingStrings()
-    return render(request, 'edashboard/export.html',{'buildlist': buildings})
+    return render(request, 'edashboard/export.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def get_data(request):
     date = "Tues"
@@ -168,7 +178,8 @@ def register(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return render(request, 'edashboard/index.html',{'buildlist': buildings})
+            return render(request, 'edashboard/index.html',{'buildlist': buildings,'buildlistname':bname,
+            'buildlistnum':bnum})
     else:
         form = RegistrationForm()
     return render(request, 'edashboard/register.html',{'form':form})
@@ -192,7 +203,8 @@ def validate_username(request):
 
 def compareh_view(request):
     buildings = BR.getBuildingStrings()
-    return render(request, 'edashboard/compare.html',{'buildlist': buildings})
+    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def compare_view(request,builddata=None):
     buildings = BR.getBuildingStrings()
@@ -240,19 +252,17 @@ def down_compare(request, data):
 
 def help_view(request):
     buildings = BR.getBuildingStrings()
-    return render(request, 'edashboard/help.html',{'buildlist': buildings})
+    return render(request, 'edashboard/help.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def construction_view(request):
     buildings = BR.getBuildingStrings()
-    return render(request, 'edashboard/construction.html',{'buildlist': buildings})
+    return render(request, 'edashboard/construction.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def login_view(request):
     buildings = BR.getBuildingStrings()
     return render(request, 'edashboard/login.html',{'buildlist': buildings})
-
-def demo(request):
-    buildings = BR.getBuildingStrings()
-    return render(request, 'edashboard/forms_demo.html',{'buildlist': buildings})
 
 def admin_view(request):
     buildings = BR.getBuildingStrings()
