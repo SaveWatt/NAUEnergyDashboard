@@ -2,9 +2,9 @@ from pathlib import Path
 from edashboard.models import Building, Sensor
 import pymssql as sql
 
-class Backend:
+class BackendRetriever:
 
-    def getBuildingStrings(self):
+    def getBuildingStrings():
         buildings = Building.objects.all()
         b_strings = []
         for building in buildings:

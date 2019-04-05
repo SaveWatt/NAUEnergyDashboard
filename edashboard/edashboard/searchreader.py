@@ -1,3 +1,6 @@
+'''
+FILE MARKED FOR DELETION
+
 import datetime
 from django.db import models
 from django.utils import timezone
@@ -28,7 +31,7 @@ def getBuildingsNumber():
     f.close()
     return building
 
-    '''
+
     FOR REFERENCE LATER
     #Pass in value and convert to kwH and convert based on string that conversion is.
     #CONVERSION LINK https://www.epa.gov/energy/greenhouse-gases-equivalencies-calculator-calculations-and-references

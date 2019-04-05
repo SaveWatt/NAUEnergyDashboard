@@ -1,3 +1,6 @@
+"""
+FILE MARKED FOR DELETION
+
 import pandas as pd
 from pathlib import Path
 from edashboard.models import Building, Sensor
@@ -210,11 +213,4 @@ class StaticDataRetriever:
         self.__table = cursor.fetchall()
         print(self.__table)
 
-
-
-#print("Hello from SDR")
-sdr = StaticDataRetriever()
-#sdr.update_buildings()
-sdr.make_log_dict()
-#sdr.find_logs()
-#sdr.store_table()'''
+        """

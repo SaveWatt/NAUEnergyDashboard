@@ -34,20 +34,32 @@
           <div id="Leftgraph" style="text-align: center;">
             <h2 style="text-align:center;">Historical Data</h2>
           <div id="switches">
-            <button id="hour" onclick="chgColor('hour')" style="width:50%">Hourly</button>
+            <button id="hour" onclick="chgColor('hour')" style="width:50%">60-Min</button>
+            <!-- <button id="30m" onclick="chgColor('hour')" style="width:50%">30-Min</button> -->
             <button id="15m" onclick="chgColor('15m')" style="width:50%">15-Min</button>
           </div>
-          <div id="selectsens" class="custom-select" style="width:200px; margin:auto;">
-            <li class="dropdown-toggle" style="display:none;">Sensor</li>
+          <div id="selectutil"class="custom-select" style="width:200px;">
+            <li class="dropdown-toggle" style="display:none;">Utility</li>
             <h2 class="select">Select a Utility</h2>
             <select>
-              <option>Heating</option>
-              <option>Cooling</option>
-              <option>Electricity</option>
-              <option>Gas</option>
+              {% for utility in utilities %}
+                <option>{{ utility }}</option>
+              {% endfor %}
             </select>
           </div>
+          {% if user.is_authenticated %}
+            <div id="selectsens" class="custom-select" style="width:200px;">
+              <li class="dropdown-toggle" style="display:none;">Sensor</li>
+              <h2 class="select">Select a Sensor</h2>
+              <select>
+                {% for sensor in sensors %}
+                  <option>{{ sensor }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          {% endif %}
           <div>
+            <!--<button id="graphdata" onClick="getData(event)">Graph Data</button>-->
             <button style="margin:0; margin-top: 5%;">Download Data</button>
           </div>
         </div>
