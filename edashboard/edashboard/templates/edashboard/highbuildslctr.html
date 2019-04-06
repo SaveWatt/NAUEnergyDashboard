@@ -2,8 +2,11 @@
   <i class="fa fa-calendar"></i>&nbsp;
   <span></span> <i class="fa fa-caret-down"></i>
 </div>
-<div id="buildingadder">
+<div id="sensorsearch">
   <input id="sensorsearchexpcompsearch" class="search" type="text" placeholder="Search For A Sensor..." autofocus/>
-  <ul id="autocomplete-results2"></ul>
+  <ul id="autocomplete-results3"></ul>
 </div>
 <button id="graphdata" onClick="getSensorData(event)">Graph Data</button>
+<script>
+  {% include "edashboard/scripts/sensorsearch.js" %}
+</script>

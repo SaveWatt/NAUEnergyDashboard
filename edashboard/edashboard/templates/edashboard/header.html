@@ -131,6 +131,7 @@
       autocomplete_results.style.backgroundColor = 'white';
     }
   }
+  // For building search in header
   function FillInput1(listid){
     listName = document.getElementById(listid).innerHTML;
     document.getElementById("buildingsearch header-search").value = listName;
@@ -141,7 +142,6 @@
 
     return 0;
   }
-
 function getNum(buildstr) {
   var num = buildstr.split(" ");
   var last = (num[num.length-1]).substring(1);
