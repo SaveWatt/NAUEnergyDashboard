@@ -20,14 +20,25 @@
         <div id="error-display">
 			  </div>
         <h1 id="downloadrep">Download Reports</h1>
-        <form id="form-info" >
-        <div class="greyell" id="reportrange" style="cursor: pointer; padding: 5px 10px;">
-          <i class="fa fa-calendar"></i>&nbsp;
-          <span></span> <i class="fa fa-caret-down"></i>
+        {% if user.userprofile.permission is 3 %}
+        <div id="switches" style="margin: 7.5%;">
+          <button id="utilswitch" onclick="chgColor('utilswitch')" style="width:50%">By Utility</button>
+          <!-- <button id="30m" onclick="chgColor('hour')" style="width:50%">30-Min</button> -->
+          <button id="sensswitch" onclick="chgColor('sensswitch')" style="width:50%">By Sensor</button>
         </div>
-          {% include "edashboard/addbuilding.html" %}
-          <button id="graphdata" onClick="getData(event)">Graph Data</button>
-        </form>
+        {% endif %}
+        {% if user.userprofile.permission is 3 %}
+        <form id="form-info" >
+          {% include "edashboard/highbuildslctr.html" %}
+          </form>
+          <form id="form-info2" >
+            {% include "edashboard/lowbuildslctr.html" %}
+          </form>
+          {% else %}
+          <form id="form-info" >
+            {% include "edashboard/lowbuildslctr.html" %}
+          </form>
+          {% endif %}
         </div>
       <div class="graph-cont" style=" display:inline-block;">
         <div class="chart-container" style="text-align: -webkit-center;">
@@ -38,14 +49,15 @@
     </div>
   </body>
 <script>
-  {% include "edashboard/scripts/search.js" %}
+  {% include "edashboard/scripts/expselector.js" %}
   {% include "edashboard/scripts/expgraph.js" %}
   {% include "edashboard/scripts/timeRange.js" %}
   {% include "edashboard/scripts/checkefields.js" %}
-  //Sets id and name to date value
+  // Toggles button color and the labels
   var time = document.getElementById("reportrange").getElementsByTagName('span')[0];
   time.setAttribute("id","stringtime");
   time.setAttribute("name","stringtime");
+  document.getElementById("form-info").style.display = "none";
   function downloadData(event){
     event.preventDefault();
     var dataset = [{{usage|safe}}, "date", {{date|safe}}];
@@ -80,7 +92,20 @@
     var last = (num[num.length-1]).substring(1);
     return last.substring(0, last.length - 1);
   }
-
+  function chgColor(id){
+    // Changes colors of buttons
+    document.getElementById(id).style.backgroundColor = "rgb(255, 204, 1)";
+    if(id == "utilswitch"){
+      document.getElementById("form-info2").style.display = "unset";
+      document.getElementById("sensswitch").style.backgroundColor = "#e3e3e3";
+      document.getElementById("form-info").style.display = "none";
+    }
+    else if(id == "sensswitch"){
+      document.getElementById("form-info").style.display = "unset";
+      document.getElementById("utilswitch").style.backgroundColor = "#e3e3e3";
+      document.getElementById("form-info2").style.display = "none";
+    }
+  }
   /* If the user clicks anywhere outside the select box,
   then close all select boxes: */
   document.addEventListener("click", closeAllSelect);

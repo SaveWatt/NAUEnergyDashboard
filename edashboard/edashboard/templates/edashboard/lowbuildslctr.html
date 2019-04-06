@@ -1,0 +1,22 @@
+<div class="greyell" id="reportrange" style="cursor: pointer; padding: 5px 10px;">
+  <i class="fa fa-calendar"></i>&nbsp;
+  <span></span> <i class="fa fa-caret-down"></i>
+</div>
+<div id="buildingadder">
+  <input id="buildingsearchexpcompsearch" class="search" type="text" placeholder="Search For Building..." autofocus/>
+  <ul id="autocomplete-results2"></ul>
+</div>
+<div id="selectutil"class="custom-select" style="width:200px;">
+  <li class="dropdown-toggle" style="display:none;">Utility</li>
+  <h2 class="select">Select a Utility</h2>
+  <select>
+    <option>Current Demand KW</option>
+    <option>Dom Water Gallons</option>
+    <option>Reclaimed Water Gallons</option>
+    <option>Steam KBTU</option>
+  </select>
+</div>
+<button id="graphdata" onClick="getData(event)">Graph Data</button>
+<script>
+  {% include "edashboard/scripts/search.js" %}
+</script>
