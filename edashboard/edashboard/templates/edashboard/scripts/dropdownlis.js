@@ -31,17 +31,13 @@ for (i = 0; i < x.length; i++) {
   // For each element, create a new DIV
   diva = document.createElement("DIV");
   diva.setAttribute("class", "select-selected");
-  if(i==0){
-    diva.setAttribute("id","select-selected-util");
-  }
-  else{
-    diva.setAttribute("id","select-selected-sens");
-  }
+  diva.setAttribute("id","select-selected-util");
   diva.innerHTML = "Select";
   x[i].appendChild(diva);
   /* For each element, create a new DIV that will contain the option list: */
   divb = document.createElement("DIV");
   divb.setAttribute("class", "select-items select-hide");
+  if(selElmnt != null){
   for (j = 0; j < selElmnt.length; j++) {
     // For each option in the original select element,
     //create a new DIV that will act as an option item:
@@ -69,6 +65,7 @@ for (i = 0; i < x.length; i++) {
     });
     divb.appendChild(divc);
   }
+}
   x[i].appendChild(divb);
   diva.addEventListener("click", function(e) {
     /* When the select box is clicked, close any other select boxes,

@@ -466,10 +466,12 @@ button#add-build{
 .extrabuildings{
   display: inline-flex;
 }
-div#buildingadder{
+div#buildingadder, div#sensorsearch{
   height: fit-content;
+  margin-top: 5%;
+  margin-bottom: 0;
 }
-div#buildingadder input.search{
+div#buildingadder input.search, div#sensorsearch input.search{
   font-size: 20px;
   border: none;
   border-bottom: 3px solid #ffcc01;
@@ -600,6 +602,7 @@ ul#autocomplete-results, ul#autocomplete-results2{
   padding-left: 0;
   padding: 2%;
   z-index: 2;
+  margin: 0;
 }
 
 ul#autocomplete-results li, ul#autocomplete-results2 li{

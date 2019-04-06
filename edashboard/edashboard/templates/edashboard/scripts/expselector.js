@@ -1,4 +1,6 @@
 document.getElementById("utilswitch").style.backgroundColor = "rgb(255, 204, 1)";
+
+// DROP DOWN TOGGLE MENU
 jQuery(document).ready(function (e) {
     function t(t) {
         e(t).bind("click", function (t) {
@@ -23,25 +25,22 @@ jQuery(document).ready(function (e) {
         if (!n.parents().hasClass("button-dropdown")) e(".button-dropdown .dropdown-toggle").removeClass("active");
     })
 });
+
 var x, i, j, selElmnt, diva, divb, c;
-//Gets custom sele elements
+//Gets custom select elements
 x = document.getElementsByClassName("custom-select");
 for (i = 0; i < x.length; i++) {
   selElmnt = x[i].getElementsByTagName("select")[0];
   // For each element, create a new DIV
   diva = document.createElement("DIV");
   diva.setAttribute("class", "select-selected");
-  if(i==0){
-    diva.setAttribute("id","select-selected-util");
-  }
-  else{
-    diva.setAttribute("id","select-selected-sens");
-  }
+  diva.setAttribute("id","select-selected-util");
   diva.innerHTML = "Select";
   x[i].appendChild(diva);
   /* For each element, create a new DIV that will contain the option list: */
   divb = document.createElement("DIV");
   divb.setAttribute("class", "select-items select-hide");
+  if(selElmnt != null){
   for (j = 0; j < selElmnt.length; j++) {
     // For each option in the original select element,
     //create a new DIV that will act as an option item:
@@ -69,10 +68,11 @@ for (i = 0; i < x.length; i++) {
     });
     divb.appendChild(divc);
   }
+}
   x[i].appendChild(divb);
   diva.addEventListener("click", function(e) {
-    /* When the select box is clicked, close any other select boxes,
-    and open/close the current select box: */
+    /* When the box is clicked on, we close other boxes
+    and, open or close current */
     e.stopPropagation();
     closeAllSelect(this);
     this.nextSibling.classList.toggle("select-hide");

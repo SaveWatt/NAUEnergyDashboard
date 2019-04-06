@@ -2,13 +2,8 @@
   <i class="fa fa-calendar"></i>&nbsp;
   <span></span> <i class="fa fa-caret-down"></i>
 </div>
-  <div id="selectsens" class="custom-select" style="width:200px;">
-    <li class="dropdown-toggle" style="display:none;">Sensor</li>
-    <h2 class="select">Select a Sensor</h2>
-    <select>
-      <option>Filler1</option>
-      <option>Filler2</option>
-      <option>Filler3</option>
-    </select>
-  </div>
-<button id="graphdata" onClick="getData(event)">Graph Data</button>
+<div id="buildingadder">
+  <input id="sensorsearchexpcompsearch" class="search" type="text" placeholder="Search For A Sensor..." autofocus/>
+  <ul id="autocomplete-results2"></ul>
+</div>
+<button id="graphdata" onClick="getSensorData(event)">Graph Data</button>

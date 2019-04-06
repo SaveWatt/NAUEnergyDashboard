@@ -65,24 +65,26 @@
     window.location.href = "" + durl.toString() + "";
   }
 
-  function getData(event){
+  function getSensorData(event){
+    event.preventDefault();
+    var times = ($("span#stringtime").text()).replace(" ","");
+    var sensor = $('#sensorsearchexpcompsearch').val();
+    var details = "time=" + times + "sensor=" +sensor;
+    var destinationUrl = "{% url 'export2' builddata=0 %}".replace(/0/, details.toString());
+    window.location.href = "" + destinationUrl.toString() + "";
+    //var util = $('#select-selected-util').clone().children().remove().end().text();
+    //var myEvent = {'building': buildingname,'time': timestr, 'util': util, 'sensor': sensor};
+  }
+  function getUtilityData(event){
     event.preventDefault();
     var times = ($("span#stringtime").text()).replace(" ","");
     var buildingname = $('#buildingsearchexpcompsearch').val();
     buildingname = getNum(buildingname);
-    buildingname = buildingname
-    var sensor = $('#select-selected-sens').clone().children().remove().end().text();
     var util = $('#select-selected-util').clone().children().remove().end().text();
-    if(sensor.toString() == ""){
-      var details = "build=" + buildingname + "time=" + times + "util=" + util;
-      var destinationUrl = "{% url 'export2' builddata=0 %}".replace(/0/, details.toString());
-      window.location.href = "" + destinationUrl.toString() + "";
-    }
-    if(util.toString() == ""){
-      var details = "build=" + buildingname + "time=" + times + "sensor=" +sensor;
-      var destinationUrl = "{% url 'export2' builddata=0 %}".replace(/0/, details.toString());
-      window.location.href = "" + destinationUrl.toString() + "";
-    }
+    console.log(util);
+    var details = "build=" + buildingname + "time=" + times + "util=" +util;
+    var destinationUrl = "{% url 'export2' builddata=0 %}".replace(/0/, details.toString());
+    window.location.href = "" + destinationUrl.toString() + "";
     //var util = $('#select-selected-util').clone().children().remove().end().text();
     //var myEvent = {'building': buildingname,'time': timestr, 'util': util, 'sensor': sensor};
   }
