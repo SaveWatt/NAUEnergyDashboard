@@ -1,0 +1,318 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href={% static '/edashboard/stylesheet.css'%}>
+    <link rel="shortcut icon" href="{% static '/edashboard/images/favicon.ico' %}" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+  </head>
+  <body>
+    {% include "edashboard/header.html" %}
+    <div id="container">
+      <div id="left-cont">
+        <div id="descr">
+          <div id="banner">
+            <div id="innerbanner" style="background-image: url({% static '/edashboard/images/NAU2.jpg' %}); background-size:cover;">
+              <img id="logo" src="{% static 'edashboard/images/Logo2.png' %}" style="max-width: -webkit-fill-available;">
+            </div>
+          </div>
+          <div id="name">
+            <h1 id="head">Energy Dashboard</h1>
+            <h2 id="greencomplabel">Utility Usage</h2>
+            <div class="greyell" id="greencomp"></div>
+          </div>
+        </div>
+        <table style="margin-left:50px;">
+          <tr>
+            <td>Electricity Usage</td><td>{{ sum_elec|safe }} kWh</td>
+            <td></td>
+            <td>Steam Usage</td><td>{{ sum_steam|safe }} KBTU</td>
+          </tr>
+          <tr>
+            <td colspan="2"><canvas id="elec-chart" width="300" height="200"></canvas></td>
+            <td><canvas id="empty-chart" width="150" height="200"></td>
+            <td colspan="2"><canvas id="steam-chart" width="300" height="200"></canvas></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Dom Water Usage</td><td>{{ sum_dom|safe }} Gallons</td>
+            <td></td>
+            <td>Reclaimed Water Usage</td><td>{{ sum_reclaimed|safe }} Gallons</td>
+          </tr>
+          <tr>
+            <td colspan="2"><canvas id="dom-chart" width="300" height="200"></canvas></td>
+            <td><canvas id="empty-chart" width="150" height="200"></td>
+            <td colspan="2"><canvas id="reclaimed-chart" width="300" height="200"></canvas></td>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+      <div id="right-cont">
+        <div class="chart-container">
+          <!--Chart Title-->
+          <h1 id="chartTitle">Current Campus Usage For Monitored Buildings:</h1>
+          <h2 id="chartNum">{{ overall|safe }} BTU/HOURS</h2>
+          <!--Chart-->
+          <canvas id="pie-chart" width="800" height="450"></canvas>
+        </div>
+        <!--Chart Labels-->
+        <div id="Labels">
+          <table class="label" cellpadding="8">
+            <tr><td bgcolor="#ffcc01">Electricity</td><td id="eval">{{ elecBTU|safe }}</td><td class="Labels">BTU/HOURS</td></tr>
+            <tr><td bgcolor="#e3e3e3">Steam</td><td id="sval">{{ steamBTU|safe }}</td><td class="Labels">BTU/HOURS</td></tr>
+            <tr><td bgcolor="#003467" style="color:white">Dom Water</td><td id="dval">{{ domBTU|safe }}</td><td class="Labels">BTU/HOURS</td></tr>
+            <tr><td bgcolor="#007867" style="color:white">Reclaimed Water</td><td id="rval">{{ reclaimedBTU|safe }}</td><td class="Labels">BTU/HOURS</td></tr>
+          </table>
+        </div>
+          <!-- Need python functions to Convert from BTU to kW, Ton, Gas, Dollars and for all combos -->
+        <div id="switWrap">
+          <!--Units buttons-->
+          <h2 style="margin:0;padding:2%;">Compare Usage In Equivalent Units:</h2>
+          <div id="switches">
+            <!--  gallon = $0.75, btu = $0.000001, kw = $0.12-->
+            <button id="btu" onclick="chgColor('btu')">BTU</button>
+            <button id="kw" onclick="chgColor('kw')">kWh</button>
+            <button id="ton" onclick="chgColor('ton')">Tons</button>
+            <button id="gas" onclick="chgColor('gas')">Gas</button>
+            <button id="cost" onclick="chgColor('cost')">Cost</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+<script>
+// Initializes global const
+const curre = document.getElementById("eval").innerHTML;
+const currs = document.getElementById("sval").innerHTML;
+const currd = document.getElementById("dval").innerHTML;
+const currr = document.getElementById("rval").innerHTML;
+document.getElementById("btu").style.backgroundColor = "#ffcc01";
+
+// // Gets the total usage from the header
+// var total = document.getElementById("chartNum").innerHTML + '';
+// total = total.split(" ", 1);
+// total = total[0].replace(/,/g, '');
+// total = parseInt(total);
+// greencomp(total);
+//
+// function greencomp(num){
+//   //Converts to kwh
+//   num=num*.00029307107;
+//   // converts to metric tons
+//   num = Math.ceil(num*.0007);
+//   // Converts to green comparisons
+//   trees = Math.round(num/.06054008285);
+//   oil = Math.round(num/0.43);
+//   gas = (num/8.887*Math.pow(10,-3)).toFixed(4);
+//   document.getElementById("carOff").innerHTML = gas;
+//   document.getElementById("treSav").innerHTML = trees;
+//   document.getElementById("barOil").innerHTML = oil;
+// }
+
+// Toggles button color and the labels
+function chgColor(id) {
+  // Changes colors of buttons
+  //Converts to BTUs
+  if(document.getElementById("btu").style.backgroundColor == "rgb(255, 204, 1)"){
+    document.getElementById("btu").style.backgroundColor = "#e3e3e3";
+  }
+  // Converts to kWh
+  else if(document.getElementById("kw").style.backgroundColor == "rgb(255, 204, 1)"){
+    document.getElementById("kw").style.backgroundColor = "#e3e3e3";
+  }
+  // Converts to Tons
+  else if(document.getElementById("ton").style.backgroundColor == "rgb(255, 204, 1)"){
+    document.getElementById("ton").style.backgroundColor = "#e3e3e3";
+  }
+  // Converts to Gas
+  else if(document.getElementById("gas").style.backgroundColor == "rgb(255, 204, 1)"){
+    document.getElementById("gas").style.backgroundColor = "#e3e3e3";
+  }
+  // Converts to Dollars
+  else{
+    document.getElementById("cost").style.backgroundColor = "#e3e3e3";
+  }
+  // Changes the button to be highlighted
+  document.getElementById(id).style.backgroundColor = "#ffcc01";
+  chgLabels(id);
+}
+
+function chgLabels(id){
+  // Changes displayed Labels
+  var labels = document.getElementsByClassName("Labels");
+  if (id== "kw"){
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "kW/HOUR";
+    }
+    document.getElementById("eval").innerHTML= (curre*.00029307107).toFixed(4);
+    document.getElementById("sval").innerHTML= (currs*.00029307107).toFixed(4);
+    document.getElementById("dval").innerHTML= (currd*.00029307107).toFixed(4);
+    document.getElementById("rval").innerHTML= (currr*.00029307107).toFixed(4);
+  }
+  else if (id=="btu") {
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "BTU/HOUR";
+    }
+    document.getElementById("eval").innerHTML= curre;
+    document.getElementById("sval").innerHTML= currs;
+    document.getElementById("dval").innerHTML= currd;
+    document.getElementById("rval").innerHTML= currr;
+  }
+  else if (id=="ton") {
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "TONS";
+    }
+    document.getElementById("eval").innerHTML= (curre*.0008).toFixed(4);
+    document.getElementById("sval").innerHTML= (currs*.0008).toFixed(4);
+    document.getElementById("dval").innerHTML= (currd*.0008).toFixed(4);
+    document.getElementById("rval").innerHTML= (currr*.0008).toFixed(4);
+  }
+  else if (id=="gas") {
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "GALLONS";
+    }
+    document.getElementById("eval").innerHTML= ((curre*.0007)/(8.887*(Math.pow(10,-3)))).toFixed(4);
+    document.getElementById("sval").innerHTML= ((currs*.0007)/(8.887*(Math.pow(10,-3)))).toFixed(4);
+    document.getElementById("dval").innerHTML= ((currd*.0007)/(8.887*(Math.pow(10,-3)))).toFixed(4);
+    document.getElementById("rval").innerHTML= ((currr*.0007)/(8.887*(Math.pow(10,-3)))).toFixed(4);
+  }
+  else {
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "DOLLARS";
+    }
+    document.getElementById("eval").innerHTML= (curre*.00029307107*.12).toFixed(4);
+    document.getElementById("sval").innerHTML= (currs*.000001).toFixed(4);
+    document.getElementById("dval").innerHTML= ((currd*.0007*.75)/(8.887*(Math.pow(10,-3)))).toFixed(4);
+    document.getElementById("rval").innerHTML= ((currr*.0007*.75)/(8.887*(Math.pow(10,-3)))).toFixed(4);
+  }
+}
+
+//Code for the chart
+new Chart(document.getElementById("pie-chart"), {
+    type: 'pie',
+    data: {
+      labels: ["Electricity","Steam","Dom Water","Reclaimed Water"],
+      datasets: [{
+        label: "BTU/Hour",
+        backgroundColor: ["#ffcc01","#e3e3e3","#003467","#007867"],
+        //Need to display 10,30,60 <- All need to add up to 100% not actual data value
+        // Need python function to call and return today's electricity, cooling, heating, and total from DB in array.
+        data: [{{ elecBTU|safe }},{{ steamBTU|safe }},{{ domBTU|safe }},{{ reclaimedBTU|safe }}]
+      }]
+    },
+    options: {
+      legend: {
+        display: false,
+            }
+          }
+        });
+
+new Chart(document.getElementById("steam-chart"), {
+    "type": "horizontalBar",
+    "data": {
+        "labels": ["B88","B36","B60","B60"],
+        "datasets": [{
+            "label": "Steam Usage",
+            "data": [{% for data in usage_steam %}
+                          {{ data|safe }},
+                          {% endfor %}],
+            "fill": false,
+            "backgroundColor": ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)", "rgba(255, 205, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(153, 102, 255, 0.2)", "rgba(201, 203, 207, 0.2)"],
+            "borderColor": ["rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)", "rgb(75, 192, 192)", "rgb(54, 162, 235)", "rgb(153, 102, 255)", "rgb(201, 203, 207)"],
+            "borderWidth": 1
+        }]
+    },
+    "options": {
+        "scales": {
+            "xAxes": [{
+                "ticks": {
+                    "beginAtZero": true
+                }
+            }]
+        }
+    }
+});
+
+new Chart(document.getElementById("elec-chart"), {
+    "type": "horizontalBar",
+    "data": {
+        "labels": ["B60"],
+        "datasets": [{
+            "label": "Elec Usage",
+            "data": [{% for data in usage_elec %}
+                          {{ data|safe }},
+                          {% endfor %}],
+            "fill": false,
+            "backgroundColor": ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)", "rgba(255, 205, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(153, 102, 255, 0.2)", "rgba(201, 203, 207, 0.2)"],
+            "borderColor": ["rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)", "rgb(75, 192, 192)", "rgb(54, 162, 235)", "rgb(153, 102, 255)", "rgb(201, 203, 207)"],
+            "borderWidth": 1
+        }]
+    },
+    "options": {
+        "scales": {
+            "xAxes": [{
+                "ticks": {
+                    "beginAtZero": true
+                }
+            }]
+        }
+    }
+});
+
+new Chart(document.getElementById("dom-chart"), {
+    "type": "horizontalBar",
+    "data": {
+        "labels": ["B46","B62","B50A","B95","B60","B86","B14","B14"],
+        "datasets": [{
+            "label": "Dom Water Usage",
+            "data": [{% for data in usage_dom %}
+                          {{ data|safe }},
+                          {% endfor %}],
+            "fill": false,
+            "backgroundColor": ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)", "rgba(255, 205, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(153, 102, 255, 0.2)", "rgba(201, 203, 207, 0.2)"],
+            "borderColor": ["rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)", "rgb(75, 192, 192)", "rgb(54, 162, 235)", "rgb(153, 102, 255)", "rgb(201, 203, 207)"],
+            "borderWidth": 1
+        }]
+    },
+    "options": {
+        "scales": {
+            "xAxes": [{
+                "ticks": {
+                    "beginAtZero": true
+                }
+            }]
+        }
+    }
+});
+
+new Chart(document.getElementById("reclaimed-chart"), {
+    "type": "horizontalBar",
+    "data": {
+        "labels": ["B60","B86"],
+        "datasets": [{
+            "label": "Reclaimed Water Usage",
+            "data": [{% for data in usage_reclaimed %}
+                          {{ data|safe }},
+                          {% endfor %}],
+            "fill": false,
+            "backgroundColor": ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)", "rgba(255, 205, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(153, 102, 255, 0.2)", "rgba(201, 203, 207, 0.2)"],
+            "borderColor": ["rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)", "rgb(75, 192, 192)", "rgb(54, 162, 235)", "rgb(153, 102, 255)", "rgb(201, 203, 207)"],
+            "borderWidth": 1
+        }]
+    },
+    "options": {
+        "scales": {
+            "xAxes": [{
+                "ticks": {
+                    "beginAtZero": true
+                }
+            }]
+        }
+    }
+});
+
+</script>
+</html>

@@ -74,3 +74,7 @@ def splitUrls(builddata,flag):
     #Adds end time
     cleandata.append(end)
     return cleandata
+
+def percentile(data1, data2):
+    percent = round(data1/(data1 + data2) * 100,2)
+    return percent

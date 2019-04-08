@@ -1,0 +1,18 @@
+span.helptext{
+  display: none;
+}
+span{
+  margin: 2.5%;
+}
+div#formcontainer{
+  background-color: rgba(255,255,255, .7);
+}
+form#login ul li{
+  font-size: small;
+  text-align: center;
+}
+form#login p label {
+  display: inline-block;
+  width: 140px;
+  text-align: inherit;
+}​

@@ -8,36 +8,36 @@ var gaugeChart = AmCharts.makeChart("chartdiv", {
     "tickAlpha": 0,
     "labelsEnabled": false,
     "startValue": 0,
-    "endValue": 100,
+    "endValue": {{ elec_total|safe }} + {{ elec_total_yesterday|safe }},
     "startAngle": 0,
     "endAngle": 270,
     "bands": [{
       "color": "#eee",
       "startValue": 0,
-      "endValue": 100,
+      "endValue": {{ elec_total|safe }} + {{ elec_total_yesterday|safe }},
       "radius": "100%",
       "innerRadius": "85%"
     }, {
       "color": "#003467",
       "startValue": 0,
-      "endValue": 72,
+      "endValue": {{ elec_total|safe }},
       "radius": "100%",
       "innerRadius": "85%",
-      "balloonText": "72%"
+      "balloonText": "{{ elec_total|safe }} kW"
 
     }, {
       "color": "#eee",
       "startValue": 0,
-      "endValue": 100,
+      "endValue": {{ elec_total|safe }} + {{ elec_total_yesterday|safe }},
       "radius": "80%",
       "innerRadius": "65%"
     }, {
       "color": "#fdd400",
       "startValue": 0,
-      "endValue": {{ percent|safe }},
+      "endValue": {{ elec_total_yesterday|safe }},
       "radius": "80%",
       "innerRadius": "65%",
-      "balloonText": "{{ percent_str|safe }}"
+      "balloonText": "{{ elec_total_yesterday|safe }} kW"
     }]
   }],
   "allLabels": [{
