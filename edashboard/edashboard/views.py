@@ -100,36 +100,18 @@ def export_view(request,builddata=None):
     buildnum = data[0]
     starttime = getTimes(data[2])
     endtime = getTimes(data[3])
-    print(starttime)
-    print(endtime)
     if flag == "util":
         util = data[1]
     if flag == "sens":
         sensor = data[1]
-    # buildings = Building.objects.all()
+    building = Building.objects.get(b_num=buildnum)
     buildings = BR.getBuildingStrings()
-    usage = []
-    date = []
-    if buildnum and buildnum != 'B':
-        building = Building.objects.get(b_num=buildnum)
-        buildname = building.b_name
-        build_id = building.id
-        try:
-            sens = Sensor.objects.get(building_id=build_id, s_type=util)
-        except:
-            sens = Sensor.objects.get(building_id=57, s_log='601_2')
-        log_dict = sdr.get_log(sens.s_log)
-        count = 0
-        for key in reversed(sorted(log_dict.keys())):
-            if count > 99:
-                break;
-            date.append(log_dict[key][0].strftime("%Y-%m-%d %H:%M:%S"))
-            usage.append(log_dict[key][1])
-            count += 1
-        date.reverse()
-        usage.reverse()
-        #date = reversed(date)
-        #usage = reversed(usage)
+    data = BR.getExportData(building, util, starttime, endtime)
+    usage = data[1]
+    date = data[0]
+    for i in range(0,len(date)):
+        t = date[i]
+        date[i] = t.strftime('%m:%d:%Y %H:%M')
     return render(request, 'edashboard/export.html',{'buildlist': buildings,'buildlistname':bname,
     'buildlistnum':bnum,'builddata':builddata,'usage':usage,'date':date})
 

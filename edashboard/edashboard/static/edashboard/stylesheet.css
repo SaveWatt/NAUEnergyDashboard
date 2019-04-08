@@ -440,7 +440,7 @@ h1#downloadrep{
 button.cancelBtn.btn.btn-sm.btn-default, button.applyBtn.btn.btn-sm.btn-primary{
   margin-top: 0;
 }
-div#selector input#reportrange{
+div#selector input#reportrange, div#selector input#reportrange2{
   border: none;
   font-size: 25px;
   background-color: #e3e3e3;
@@ -450,7 +450,7 @@ div#selector input#reportrange{
   text-align: center;
   margin: 5% 0;
 }
-div#reportrange.greyell{
+div#reportrange.greyell, div#reportrange2.greyell{
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 div.select-selected{

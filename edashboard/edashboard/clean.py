@@ -1,4 +1,4 @@
-
+import datetime
 #Converts the given time to SQL Datetime
 def getTimes(times):
     #Convert to month number
@@ -7,6 +7,8 @@ def getTimes(times):
     splittime = times.split(" ")
     month = splittime[0]
     day = ((splittime[1]).split(",", 1))[0]
+    hour=0
+    mins=0
     #Adds leading 0
     if(int(day)<10):
       day = "0"+day
@@ -19,10 +21,9 @@ def getTimes(times):
       mins = time.split(":")[1]
       hour = (int(time.split(":",1)[0]))
       hour +=12
-      colon = ":"
-      mins = colon + mins
       time = str(hour) + mins + ":00"
-    return year + "-" + months[month] + "-" + day + " " + time
+      #datetime.datetime(2018, 10, 1, 0, 0)
+    return datetime.datetime(int(year), int(months[month]), int(day), int(hour), int(mins))
 
 def getBuildInfo(str):
     starr = str.split(" ")
