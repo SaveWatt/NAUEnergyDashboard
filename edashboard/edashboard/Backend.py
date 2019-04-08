@@ -45,6 +45,8 @@ class BackendRetriever:
         print(build_id)
         try:
             sens = Sensor.objects.get(building_id=build_id, s_type=sens_type)
+            building = sens.building
+            utilname = sens.s_name
             print(sens)
         except:
             sens = Sensor.objects.get(building_id=57 , s_type='Current Demand KW')
@@ -55,7 +57,7 @@ class BackendRetriever:
             if log_dict[key][0] >= init_date and log_dict[key][0] <= fin_date:
                 date.append(log_dict[key][0])
                 usage.append(log_dict[key][1])
-        return (date, usage)
+        return (date, usage, building, utilname)
 
     """
     RETRIEVER FOR EXPORT SENSOR
@@ -63,10 +65,14 @@ class BackendRetriever:
     and final date as inputs.
     The function returns sample values as an array to be passed to a chart builder.
     """
-    def getSensorData(self,sens_name, init_date, fin_date):
+    def getSensorData(self,sens_log, init_date, fin_date):
         sdr = StaticDataRetriever()
+        building = ""
+        sensname = ""
         try:
-            sens = Sensor.objects.get(s_log=sens_name)
+            sens = Sensor.objects.get(s_log=sens_log)
+            building = sens.building
+            sensname = sens.s_name
         except:
             sens = Sensor.objects.get(s_log='601_5')
         log_dict = sdr.get_log(sens.s_log)
@@ -76,7 +82,7 @@ class BackendRetriever:
             if log_dict[key][0] >= init_date and log_dict[key][0] <= fin_date:
                 date.append(log_dict[key][0])
                 usage.append(log_dict[key][1])
-        return (date, usage)
+        return (date, usage, building, sensname)
 
     """
     Gets the buildings to be sorted by number

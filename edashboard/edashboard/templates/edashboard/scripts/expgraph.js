@@ -10,7 +10,11 @@
           data: [{% for data in usage %}
                         {{ data|safe }},
                         {% endfor %}],
-          label: "Week 1",
+          label: {% if sensor|length > 0 %}
+                  "SENSOR: " + "{{sensor|safe}}"
+                  {% else %}
+                  "{{ utilname|safe }}"
+                  {% endif %},
           borderColor: "#1f61a8",
           fill: origin,
           backgroundColor: "rgba(31,97,168,.3)",
@@ -21,7 +25,7 @@
       responsive: false,
       title: {
         display: true,
-        text: "{{ bname|safe }} Building usage",
+        text: "Usage for " + "{{ build_name|safe }}",
       },
       scales: {
       xAxes: [{
@@ -33,7 +37,7 @@
       yAxes: [{
         scaleLabel: {
           display: true,
-          labelString: 'Electricity (kWh)'
+          labelString: "{{ utilname|safe }}"
         }
       }]
     }

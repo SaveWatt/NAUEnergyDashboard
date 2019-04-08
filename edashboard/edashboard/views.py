@@ -116,11 +116,13 @@ def export_view(request,builddata=None):
         data = BR.getSensorData(sensor, starttime, endtime)
     usage = data[1]
     date = data[0]
+    build_name = data[2]
+    utilname = data[3]
     for i in range(0,len(date)):
         t = date[i]
         date[i] = t.strftime('%m:%d:%Y %H:%M')
-    return render(request, 'edashboard/export.html',{'buildlist': buildings,'buildlistname':bname,
-    'buildlistnum':bnum,'builddata':builddata,'usage':usage,'date':date})
+    return render(request, 'edashboard/export.html',{'buildlist': buildings,'buildlistname':bname,'sensor':sensor,
+    'buildlistnum':bnum,'builddata':builddata,'usage':usage,'date':date, 'utilname':utilname,'build_name':build_name,'flag':flag})
 
 def down_export(request,data):
     buildings = BR.getBuildingStrings()
