@@ -70,7 +70,6 @@ def splitUtilUrls(builddata):
     timeutil = build[1].split("util=")
     times = timeutil[0]
     util = timeutil[1]
-    print(times)
     splitimes = times.split(" - ")
     start = splitimes[0]
     end = splitimes[1]
@@ -89,4 +88,5 @@ def splitUtilUrls(builddata):
     cleandata.append(start)
     #Adds end time
     cleandata.append(end)
+    print(cleandata)
     return cleandata

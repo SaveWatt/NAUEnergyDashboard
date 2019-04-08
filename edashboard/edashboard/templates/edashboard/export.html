@@ -80,7 +80,7 @@
   }
   function getUtilityData(event){
     event.preventDefault();
-    var times = ($("span#stringtime2").text()).replace(" ","");
+    var times = ($("span#stringtime").text()).replace(" ","");
     var buildingname = $('#buildingsearchexpcompsearch').val();
     buildingname = getNum(buildingname);
     var util = $('#select-selected-util').clone().children().remove().end().text();

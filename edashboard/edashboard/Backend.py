@@ -42,8 +42,10 @@ class BackendRetriever:
     def getUtilityData(self,building, sens_type, init_date, fin_date):
         sdr = StaticDataRetriever()
         build_id = building.id
+        print(build_id)
         try:
             sens = Sensor.objects.get(building_id=build_id, s_type=sens_type)
+            print(sens)
         except:
             sens = Sensor.objects.get(building_id=57 , s_type='Current Demand KW')
         log_dict = sdr.get_log(sens.s_log)
