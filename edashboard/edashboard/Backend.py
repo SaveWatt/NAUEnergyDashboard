@@ -39,13 +39,34 @@ class BackendRetriever:
     and final date as inputs.
     The function returns sample values as an array to be passed to a chart builder.
     """
-    def getExportData(self,building, sens_type, init_date, fin_date):
+    def getUtilityData(self,building, sens_type, init_date, fin_date):
         sdr = StaticDataRetriever()
         build_id = building.id
         try:
             sens = Sensor.objects.get(building_id=build_id, s_type=sens_type)
         except:
             sens = Sensor.objects.get(building_id=57 , s_type='Current Demand KW')
+        log_dict = sdr.get_log(sens.s_log)
+        usage = []
+        date = []
+        for key in sorted(log_dict.keys()):
+            if log_dict[key][0] >= init_date and log_dict[key][0] <= fin_date:
+                date.append(log_dict[key][0])
+                usage.append(log_dict[key][1])
+        return (date, usage)
+
+    """
+    RETRIEVER FOR EXPORT SENSOR
+    A function that takes a building number, sensor type, inital date,
+    and final date as inputs.
+    The function returns sample values as an array to be passed to a chart builder.
+    """
+    def getSensorData(self,sens_name, init_date, fin_date):
+        sdr = StaticDataRetriever()
+        try:
+            sens = Sensor.objects.get(s_name=sens_name)
+        except:
+            sens = Sensor.objects.get(s_name='601_5')
         log_dict = sdr.get_log(sens.s_log)
         usage = []
         date = []

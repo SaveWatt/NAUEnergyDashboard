@@ -92,21 +92,28 @@ def export_view(request,builddata=None):
     flag = ""
     sensor = ""
     util = ""
+    data = ""
+    starttime = ""
+    endtime = ""
     if "util=" in str(builddata):
         flag = "util"
     if "sensor=" in str(builddata):
         flag = "sens"
-    data = splitUrls(builddata, flag)
-    buildnum = data[0]
-    starttime = getTimes(data[2])
-    endtime = getTimes(data[3])
     if flag == "util":
+        data = splitUtilUrls(builddata)
+        starttime = getTimes(data[2])
+        endtime = getTimes(data[3])
+        buildnum = data[0]
+        building = Building.objects.get(b_num=buildnum)
+        buildings = BR.getBuildingStrings()
         util = data[1]
+        data = BR.getUtilityData(building, util, starttime, endtime)
     if flag == "sens":
+        data = splitSensUrls(builddata)
+        starttime = getTimes(data[1])
+        endtime = getTimes(data[2])
         sensor = data[1]
-    building = Building.objects.get(b_num=buildnum)
-    buildings = BR.getBuildingStrings()
-    data = BR.getExportData(building, util, starttime, endtime)
+        data = BR.getSensorData(sensor, starttime, endtime)
     usage = data[1]
     date = data[0]
     for i in range(0,len(date)):
