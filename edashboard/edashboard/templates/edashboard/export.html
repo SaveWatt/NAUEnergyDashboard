@@ -57,6 +57,9 @@
   var time = document.getElementById("reportrange").getElementsByTagName('span')[0];
   time.setAttribute("id","stringtime");
   time.setAttribute("name","stringtime");
+  var time2 = document.getElementById("reportrange2").getElementsByTagName('span')[0];
+  time2.setAttribute("id","stringtime2");
+  time2.setAttribute("name","stringtime2");
   document.getElementById("form-info").style.display = "none";
   function downloadData(event){
     event.preventDefault();
@@ -67,7 +70,7 @@
 
   function getSensorData(event){
     event.preventDefault();
-    var times = ($("span#stringtime").text()).replace(" ","");
+    var times = ($("span#stringtime2").text()).replace(" ","");
     var sensor = $('#sensorsearchexpcompsearch').val();
     var details = "time=" + times + "sensor=" +sensor;
     var destinationUrl = "{% url 'export2' builddata=0 %}".replace(/0/, details.toString());
@@ -77,7 +80,7 @@
   }
   function getUtilityData(event){
     event.preventDefault();
-    var times = ($("span#stringtime").text()).replace(" ","");
+    var times = ($("span#stringtime2").text()).replace(" ","");
     var buildingname = $('#buildingsearchexpcompsearch').val();
     buildingname = getNum(buildingname);
     var util = $('#select-selected-util').clone().children().remove().end().text();

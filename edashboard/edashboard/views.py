@@ -89,6 +89,7 @@ def compare_view(request):
     'buildlistnum':bnum,})
 
 def export_view(request,builddata=None):
+    buildings = BR.getBuildingStrings()
     flag = ""
     sensor = ""
     util = ""
@@ -105,7 +106,6 @@ def export_view(request,builddata=None):
         endtime = getTimes(data[3])
         buildnum = data[0]
         building = Building.objects.get(b_num=buildnum)
-        buildings = BR.getBuildingStrings()
         util = data[1]
         data = BR.getUtilityData(building, util, starttime, endtime)
     if flag == "sens":

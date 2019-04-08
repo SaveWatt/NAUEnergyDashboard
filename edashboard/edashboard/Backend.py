@@ -64,9 +64,9 @@ class BackendRetriever:
     def getSensorData(self,sens_name, init_date, fin_date):
         sdr = StaticDataRetriever()
         try:
-            sens = Sensor.objects.get(s_name=sens_name)
+            sens = Sensor.objects.get(s_log=sens_name)
         except:
-            sens = Sensor.objects.get(s_name='601_5')
+            sens = Sensor.objects.get(s_log='601_5')
         log_dict = sdr.get_log(sens.s_log)
         usage = []
         date = []
