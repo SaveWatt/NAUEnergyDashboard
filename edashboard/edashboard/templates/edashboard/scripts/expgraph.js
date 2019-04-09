@@ -25,7 +25,11 @@
       responsive: false,
       title: {
         display: true,
-        text: "Usage for " + "{{ build_name|safe }}",
+        text: {% if date %}
+              "Usage for " + "{{ build_name|safe }}"
+              {% else %}
+              ""
+              {% endif %},
       },
       scales: {
       xAxes: [{
