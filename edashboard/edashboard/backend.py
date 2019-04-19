@@ -217,8 +217,8 @@ class StaticDataRetriever:
                 s.save()
 
     def make_log_dict(self):
-        types = ['Current Demand KW', 'Dom Water Gallons',
-                 'Reclaimed Water Gallons', 'Steam KBTU']
+        types = ['Meter Current Demand KW', 'Meter Dom Water Gallons',
+                 'Meter Reclaimed Water Gallons', 'Meter Steam KBTU']
 
         cursor = self.__connection.cursor(as_dict=True)
         # Get list of trendlogs
