@@ -53,8 +53,8 @@ def building_view(request, buildnum):
         sensor_strs.append(str(sens))
         if sens.s_type != 'None':
             util_strs.append(str(sens.s_type))
-    #data = BR.getData(building, "Current Demand KW", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
-    data = BR.getData(building, "Current Demand KW", datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
+    #data = BR.getData(building, "Meter Current Demand kwh", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
+    data = BR.getData(building, "Meter Current Demand kwh", datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
     usage = data[1]
     date = data[0]
     imagePath = '/edashboard/images/buildingPic/' + buildnum + '.jpg'
