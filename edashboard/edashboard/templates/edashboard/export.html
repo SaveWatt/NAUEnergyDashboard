@@ -57,13 +57,15 @@
   var time = document.getElementById("reportrange").getElementsByTagName('span')[0];
   time.setAttribute("id","stringtime");
   time.setAttribute("name","stringtime");
+  {% if user.userprofile.permission is 3 %}
   var time2 = document.getElementById("reportrange2").getElementsByTagName('span')[0];
   time2.setAttribute("id","stringtime2");
   time2.setAttribute("name","stringtime2");
   document.getElementById("form-info").style.display = "none";
+  {% endif %}
   function downloadData(event){
     event.preventDefault();
-    var dataset = [{{usage|safe}}, "date", {{date|safe}}];
+    var dataset = [{{usage|safe}}, "date", {{date|safe}},];
     var durl = "{% url 'down_export' data=0%}".replace(/0/, dataset);
     window.location.href = "" + durl.toString() + "";
   }

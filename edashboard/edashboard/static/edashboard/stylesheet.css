@@ -740,3 +740,6 @@ div#Topnav.topnav li:hover a {
 form#login a{
   color: #003467;
 }
+.amcharts-chart-div > a {
+ display: none !important;
+}

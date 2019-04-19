@@ -1,5 +1,6 @@
+{% if user.userprofile.permission is 3 %}
 document.getElementById("utilswitch").style.backgroundColor = "rgb(255, 204, 1)";
-
+{% endif %}
 // DROP DOWN TOGGLE MENU
 jQuery(document).ready(function (e) {
     function t(t) {
