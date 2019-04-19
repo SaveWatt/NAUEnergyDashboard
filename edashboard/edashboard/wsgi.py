@@ -8,13 +8,16 @@ https://docs.djangoproject.com/en/2.1/howto/deployment/wsgi/
 """
 
 import os, sys
-
+from django.conf import settings
+from django.contrib.staticfiles.handlers import StaticFilesHandler
 from django.core.wsgi import get_wsgi_application
 
 path = '/edashboard/'
 if path not in sys.path:
     sys.path.append(path)
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'edashboard.settings')
-
-application = get_wsgi_application()
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
+if settings.DEBUG:
+    application = StaticFilesHandler(get_wsgi_application())
+else:
+    application = get_wsgi_application()
