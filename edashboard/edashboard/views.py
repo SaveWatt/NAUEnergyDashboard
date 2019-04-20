@@ -54,7 +54,7 @@ def building_view(request, buildnum):
         if sens.s_type != 'None':
             util_strs.append(str(sens.s_type))
     #data = BR.getData(building, "Meter Current Demand kwh", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
-    data = BR.getData(building, "Meter Current Demand kwh", datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
+    data = BR.getData(building, "Meter Current Demand KW", datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
     usage = data[1]
     date = data[0]
     imagePath = '/edashboard/images/buildingPic/' + buildnum + '.jpg'
@@ -109,11 +109,18 @@ def export_view(request,builddata=None):
         building = Building.objects.get(b_num=buildnum)
         data = BR.getUtilityData(building, util, starttime, endtime)
     if flag == "sens":
-        data = splitSensUrls(builddata)
-        starttime = getTimes(data[1])
-        endtime = getTimes(data[2])
-        sensor = data[0]
-        data = BR.getSensorData(sensor, starttime, endtime)
+        if user.userprofile.permission is 3:
+            data = splitSensUrls(builddata)
+            starttime = getTimes(data[1])
+            endtime = getTimes(data[2])
+            sensor = data[0]
+            data = BR.getSensorData(sensor, starttime, endtime)
+        else:
+            data = splitSensUrls(builddata)
+            starttime = getTimes(data[1])
+            endtime = getTimes(data[2])
+            sensor = "None"
+            data = ("0","0","0","0")
     usage = data[1]
     date = data[0]
     build_name = data[2]

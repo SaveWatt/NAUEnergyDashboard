@@ -21,7 +21,7 @@ class BackendRetriever:
         try:
             sens = Sensor.objects.get(building_id=build_id, s_type=sens_type)
         except:
-            sens = Sensor.objects.get(building_id=57 , s_type='Meter Current Demand kwh')
+            sens = Sensor.objects.get(building_id=57 , s_type='Meter Current Demand KW')
         log_dict = sdr.get_log(sens.s_log)
         usage = []
         date = []
@@ -49,7 +49,7 @@ class BackendRetriever:
             utilname = sens.s_name
             print(sens)
         except:
-            sens = Sensor.objects.get(building_id=57 , s_type='Current Demand KW')
+            sens = Sensor.objects.get(building_id=57 , s_type='Meter Current Demand KW')
         log_dict = sdr.get_log(sens.s_log)
         usage = []
         date = []
