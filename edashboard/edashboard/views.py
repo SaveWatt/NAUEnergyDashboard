@@ -18,222 +18,185 @@ from edashboard.models import *
 from django.views import View
 from django.http import JsonResponse
 from edashboard.forms import *
-from edashboard.conversion import *
 import json
 import time
-from edashboard.StaticDataRetriever import StaticDataRetriever
-from edashboard.graph_calc import *
 import statistics as stats
 import datetime
-import numpy as np
+from edashboard.Backend import BackendRetriever
+from edashboard.Backend import StaticDataRetriever as SDR
+from django.urls import reverse
+from urllib.parse import urlencode
 from edashboard.weather import *
+from edashboard.drawgraph import *
+from edashboard.unitconversion import *
+
 
 register = template.Library()
+sdr = SDR()
+BR = BackendRetriever()
+bname = BR.getBuildingStrings()
+bnum = BR.getNumStrings()
+bname.sort()
 
 def index(request):
-    buildings = BuildingSearch.getBuildingString()
-
+    buildings = BR.getBuildingStrings()
     list_elec = elec_list()
-    usage_elec = elec_pie()
-    sum_elec = sum_usage(usage_elec)
-
-    list_dom = dom_list()
-    usage_dom = dom_pie()
-    sum_dom = sum_usage(usage_dom)
-
-    list_reclaimed = reclaimed_list()
-    usage_reclaimed = reclaimed_pie()
-    sum_reclaimed = sum_usage(usage_reclaimed)
-
+    usage_elec = usage(list_elec)
     list_steam = steam_list()
-    usage_steam = steam_pie()
-    sum_steam = sum_usage(usage_steam)
-
-    sum_all = sum_elec + sum_steam + sum_dom + sum_reclaimed
-
-    elecToBTU = kwtobtu(sum_elec)
-    steamToBTU = kbtutobtu(sum_steam)
-    domToBTU = gallonstobtu(sum_dom)
-    reclaimedToBTU = gallonstobtu(sum_reclaimed)
-
+    usage_steam = usage(list_steam)
+    list_dom = dom_list()
+    print(list_dom)
+    usage_dom = usage(list_dom)
+    list_reclaimed = reclaimed_list()
+    usage_reclaimed = usage(list_reclaimed)
+    list_chilled = chilled_list()
+    usage_chilled = usage(list_chilled)
+    print(usage_chilled)
+    avg_elec = avg(usage_elec)
+    avg_steam = avg(usage_steam)
+    avg_dom = avg(usage_dom)
+    avg_reclaimed = avg(usage_reclaimed)
+    avg_chilled = avg(usage_chilled)
+    elecDollar = kwtodollar(avg_elec)
+    steamDollar = btutodollar(avg_steam)
+    domDollar = gallontodollar(avg_dom)
+    reclaimedDollar = gallontodollar(avg_reclaimed)
+    chilledDollar = gallontodollar(avg_chilled)
+    overall = elecDollar + steamDollar + domDollar + reclaimedDollar + chilledDollar
     return render(request, 'edashboard/index.html',{'buildlist': buildings,
-                                                    'list_elec':list_elec,
+                                                    'buildlistname':bname,
+                                                    'buildlistnum':bnum,
                                                     'usage_elec':usage_elec,
-                                                    'sum_elec':sum_elec,
-                                                    'list_dom':list_dom,
-                                                    'usage_dom':usage_dom,
-                                                    'sum_dom':sum_dom,
-                                                    'list_reclaimed':list_reclaimed,
-                                                    'usage_reclaimed':usage_reclaimed,
-                                                    'sum_reclaimed':sum_reclaimed,
-                                                    'list_steam':list_steam,
                                                     'usage_steam':usage_steam,
-                                                    'sum_steam':sum_steam,
-                                                    'sum_all':sum_all,
-                                                    'elecToBTU':elecToBTU,
-                                                    'steamToBTU':steamToBTU,
-                                                    'domToBTU':domToBTU,
-                                                    'reclaimedToBTU':reclaimedToBTU})
+                                                    'usage_chilled':usage_chilled,
+                                                    'usage_reclaimed':usage_reclaimed,
+                                                    'avg_elec':avg_elec,
+                                                    'avg_steam':avg_steam,
+                                                    'avg_chilled':avg_chilled,
+                                                    'avg_reclaimed':avg_reclaimed,
+                                                    'elecDollar':elecDollar,
+                                                    'steamDollar':steamDollar,
+                                                    'domDollar':domDollar,
+                                                    'reclaimedDollar':reclaimedDollar,
+                                                    'chilledDollar':chilledDollar,
+                                                    'overall':overall})
 
 def building_view(request, buildnum):
     weather_day1 = day1()
     weather_day2 = day2()
     weather_day3 = day3()
-    sdr = StaticDataRetriever()
-    buildings = BuildingSearch.getBuildingString()
+    #TODO: Have the selector pass an increment and sensor type
+    buildings = BR.getBuildingStrings()
     building = Building.objects.get(b_num=buildnum)
-    buildname = building.b_name
-    build_id = building.id
-    sens = Sensor.objects.get(building_id=build_id, s_type='Dom Water Gallons')
-    log_dict = sdr.get_log(sens.s_log)
-    usage = []
-    date = []
-    count = 0
-    for key in reversed(sorted(log_dict.keys())):
-        if count > 99:
-            break;
-        date.append(log_dict[key][0])
-        usage.append(log_dict[key][1])
-        count += 1
-    list = []
-    list = Sensor.objects.filter(building_id=build_id)
-    # .values_list('s_log', flat=True)
-    list2 = []
-    for item in list:
-        list2.append(str(item))
-    percent = sum(usage)/10000*100
-    percent_str = ("%d%%" % round(percent, 2))
-    mean = round(sum(usage)/len(usage), 2)
-    median = round(stats.median(usage), 2)
-    quartile1 = round(np.percentile(usage,25), 2)
-    quartile3 = round(np.percentile(usage,75), 2)
-    iqr = round(quartile3 - quartile1, 2)
+    b_name = building.b_name
+    sensors = Sensor.objects.filter(building_id=building.id)
+    sensor_strs = []
+    util_strs = []
+    for sens in sensors:
+        sensor_strs.append(str(sens))
+        if sens.s_type != 'None':
+            util_strs.append(str(sens.s_type))
+    #data = BR.getData(building, "Current Demand KW", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
+    data = BR.getData(building, "Current Demand KW", datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
+    usage = data[1]
+    date = data[0]
+    elec_total = sum(usage)
+    data_yesterday = BR.getData(building, "Current Demand KW", datetime.datetime(2018, 9, 30, 0, 0), datetime.datetime(2018, 9, 30, 23, 59), incr=60)
+    usage_yesterday = data_yesterday[1]
+    elec_total_yesterday = sum(usage_yesterday)
+    imagePath = '/edashboard/images/buildingPic/' + buildnum + '.jpg'
+    percent_elec = percentile(elec_total, elec_total_yesterday)
+    percent_elec_yesterday = percentile(elec_total_yesterday, elec_total)
+    if usage:
+        percent = sum(usage)/10000*100
+        percent_str = ("%d%%" % round(percent, 2))
+        mean = round(sum(usage)/len(usage), 2)
+        median = round(stats.median(usage), 2)
+        minimum = min(usage)
+        maximum = max(usage)
+    else:
+        percent = 0
+        percent_str = 0
+        mean = 0
+        median = 0
+        minimum = 0
+        maximum = 0
     return render(request, 'edashboard/building.html', {'buildlist': buildings,
                                                         'bnum': buildnum,
-                                                        'bname':buildname,
+                                                        'bname':b_name,
                                                         'usage':usage,
                                                         'date':date,
                                                         'percent':percent,
                                                         'percent_str':percent_str,
                                                         'mean': mean,
                                                         'median': median,
-                                                        'quartile1':quartile1,
-                                                        'quartile3':quartile3,
-                                                        'iqr':iqr,
-                                                        'list2':list2,
+                                                        'utilities': util_strs,
+                                                        'imagePath': imagePath,
+                                                        'sensors': sensor_strs,
+                                                        'buildlistname':bname,
+                                                        'buildlistnum':bnum,
                                                         'weather_day1':weather_day1,
                                                         'weather_day2':weather_day2,
-                                                        'weather_day3':weather_day3})
-
-def down_building(request,data):
-    buildings = Building.objects.all()
-    b_strings = []
-    for building in buildings:
-        b_string = building.b_name + ' (' + building.b_num + ')'
-        b_strings.append(b_string)
-    i=0
-    finalstr="USAGE,DATE\n"
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename=data_usage.csv'
-    writer = csv.writer(response, csv)
-    response.write(u'\ufeff'.encode('utf8'))
-    writer.writerow([
-        smart_str(u"DATE"),
-        smart_str(u"USAGE"),
-    ])
-    cleandata = data.split(",")
-    j=cleandata.index("date")+1
-    for i in range(0,cleandata.index("date")):
-        writer.writerow([
-            smart_str(cleandata[j]),
-            smart_str(cleandata[i]),
-        ])
-        j+=1
-    return response
+                                                        'weather_day3':weather_day3,
+                                                        'elec_total':elec_total,
+                                                        'elec_total_yesterday':elec_total_yesterday,
+                                                        'percent_elec':percent_elec,
+                                                        'percent_elec_yesterday':percent_elec_yesterday,
+                                                        'minimum':minimum,
+                                                        'maximum':maximum})
 
 def compare_view(request):
-    buildings = Building.objects.all()
-    b_strings = []
-    for building in buildings:
-        b_string = building.b_name + ' (' + building.b_num + ')'
-        b_strings.append(b_string)
-
-    return render(request, 'edashboard/compare.html', {'buildlist': b_strings})
+    buildings = BR.getBuildingStrings()
+    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum,})
 
 def export_view(request,builddata=None):
-    sdr = StaticDataRetriever()
     flag = ""
     sensor = ""
     util = ""
     if "util=" in str(builddata):
         flag = "util"
-    elif "sensor=" in str(builddata):
+    if "sensor=" in str(builddata):
         flag = "sens"
     data = splitUrls(builddata, flag)
     buildnum = data[0]
     starttime = getTimes(data[2])
     endtime = getTimes(data[3])
+    print(starttime)
+    print(endtime)
     if flag == "util":
         util = data[1]
     if flag == "sens":
         sensor = data[1]
-    buildings = Building.objects.all()
-    b_strings = []
-    for building in buildings:
-        b_string = building.b_name + ' (' + building.b_num + ')'
-        b_strings.append(b_string)
+    # buildings = Building.objects.all()
+    buildings = BR.getBuildingStrings()
     usage = []
     date = []
-    list = []
-    # list = Sensor.objects.filter(building_id=build_id)
-    # # .values_list('s_log', flat=True)
-    slist = []
-    ulist = ["Current Demand KW", "Dom Water Gallons", "Reclaimed Water Gallons", "Steam KBTU"]
-    # for item in list:
-    #     list2.append(str(item))
-    print(buildnum)
     if buildnum and buildnum != 'B':
         building = Building.objects.get(b_num=buildnum)
         buildname = building.b_name
         build_id = building.id
         try:
-            if(util):
-                sens = Sensor.objects.get(building_id=build_id, s_type=util)
-            if(sensor):
-                sens = Sensor.objects.get(building_id=build_id, s_type=sensor)
-            log_dict = sdr.get_log(sens.s_log)
-            count = 0
-            for key in reversed(sorted(log_dict.keys())):
-                if count > 99:
-                    break;
-                date.append(log_dict[key][0].strftime("%Y-%m-%d %H:%M:%S"))
-                usage.append(log_dict[key][1])
-                count += 1
-            for d in date:
-                print(d)
+            sens = Sensor.objects.get(building_id=build_id, s_type=sensor)
         except:
-            # sens = Sensor.objects.get(building_id=57, s_log='601_0')
-            list = Sensor.objects.filter(building_id=build_id)
-            for item in list:
-                slist.append(str(item))
-
-
-    return render(request, 'edashboard/export.html',{'buildlist': b_strings,
-                                                     'builddata':builddata,
-                                                     'usage':usage,
-                                                     'date':date,
-                                                     'bname':buildname,
-                                                     'type':util,
-                                                     'sensor':sensor,
-                                                     'slist':slist,
-                                                     'ulist':ulist})
+            sens = Sensor.objects.get(building_id=57, s_log='601_2')
+        log_dict = sdr.get_log(sens.s_log)
+        count = 0
+        for key in reversed(sorted(log_dict.keys())):
+            if count > 99:
+                break;
+            date.append(log_dict[key][0].strftime("%Y-%m-%d %H:%M:%S"))
+            usage.append(log_dict[key][1])
+            count += 1
+        date.reverse()
+        usage.reverse()
+        #date = reversed(date)
+        #usage = reversed(usage)
+    return render(request, 'edashboard/export.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum,'builddata':builddata,'usage':usage,'date':date})
 
 def down_export(request,data):
-    buildings = Building.objects.all()
-    b_strings = []
-    for building in buildings:
-        b_string = building.b_name + ' (' + building.b_num + ')'
-        b_strings.append(b_string)
+    buildings = BR.getBuildingStrings()
     i=0
     finalstr="USAGE,DATE\n"
     response = HttpResponse(content_type='text/csv')
@@ -256,17 +219,15 @@ def down_export(request,data):
 
 
 def exporth_view(request):
-    buildings = Building.objects.all()
-    b_strings = []
-    for building in buildings:
-        b_string = building.b_name + ' (' + building.b_num + ')'
-        b_strings.append(b_string)
-    return render(request, 'edashboard/export.html',{'buildlist': b_strings})
+    buildings = BR.getBuildingStrings()
+    return render(request, 'edashboard/export.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def get_data(request):
     date = "Tues"
     usage = 10
-    return JsonResponse({'data': usage,'date':date})
+    return JsonResponse({'data': usage,'date':date,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def login(request):
    return render(request, 'edashboard/login.html',{
@@ -275,11 +236,12 @@ def login(request):
 
 def register(request):
     if request.method =="POST":
-        buildings = BuildingSearch.getBuildingString()
+        buildings = BR.getBuildingStrings()
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return render(request, 'edashboard/index.html',{'buildlist': buildings})
+            return render(request, 'edashboard/index.html',{'buildlist': buildings,'buildlistname':bname,
+            'buildlistnum':bnum})
     else:
         form = RegistrationForm()
     return render(request, 'edashboard/register.html',{'form':form})
@@ -302,11 +264,12 @@ def validate_username(request):
     return JsonResponse(data)
 
 def compareh_view(request):
-    buildings = BuildingSearch.getBuildingString()
-    return render(request, 'edashboard/compare.html',{'buildlist': buildings})
+    buildings = BR.getBuildingStrings()
+    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def compare_view(request,builddata=None):
-    buildings = BuildingSearch.getBuildingString()
+    buildings = BR.getBuildingStrings()
     flag = ""
     sensor = ""
     util = ""
@@ -324,10 +287,11 @@ def compare_view(request,builddata=None):
         sensor = data[1]
     usage=[1,5,8,3,5]
     date=[1,2,3,4,5]
-    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'builddata':builddata,'usage':usage,'date':date})
+    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'builddata':builddata,'usage':usage,'date':date,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def down_compare(request, data):
-        buildings = BuildingSearch.getBuildingString()
+        buildings = BR.getBuildingStrings()
         i=0
         finalstr="USAGE,DATE\n"
         response = HttpResponse(content_type='text/csv')
@@ -349,23 +313,21 @@ def down_compare(request, data):
         return response
 
 def help_view(request):
-    buildings = BuildingSearch.getBuildingString()
-    return render(request, 'edashboard/help.html',{'buildlist': buildings})
+    buildings = BR.getBuildingStrings()
+    return render(request, 'edashboard/help.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def construction_view(request):
-    buildings = BuildingSearch.getBuildingString()
-    return render(request, 'edashboard/construction.html',{'buildlist': buildings})
+    buildings = BR.getBuildingStrings()
+    return render(request, 'edashboard/construction.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum})
 
 def login_view(request):
-    buildings = BuildingSearch.getBuildingString()
+    buildings = BR.getBuildingStrings()
     return render(request, 'edashboard/login.html',{'buildlist': buildings})
 
-def demo(request):
-    buildings = BuildingSearch.getBuildingString()
-    return render(request, 'edashboard/forms_demo.html',{'buildlist': buildings})
-
 def admin_view(request):
-    buildings = BuildingSearch.getBuildingString()
+    buildings = BR.getBuildingStrings()
     return render(request, 'edashboard/admin.html',{'buildlist': buildings})
 '''
 def data(request):

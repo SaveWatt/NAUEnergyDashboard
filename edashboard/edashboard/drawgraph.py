@@ -7,7 +7,7 @@ def elec_list():
     eleclist = []
     listslog = []
 
-    for data in Sensor.objects.filter(s_type="Current Demand KW"):
+    for data in Sensor.objects.filter(s_type="Meter Current Demand KW"):
         listslog.append(data.s_log)
 
     for data in listslog:
@@ -19,7 +19,7 @@ def steam_list():
     steamlist = []
     listslog = []
 
-    for data in Sensor.objects.filter(s_type="Steam KBTU"):
+    for data in Sensor.objects.filter(s_type="Meter Steam KBTU"):
         listslog.append(data.s_log)
 
     for data in listslog:
@@ -27,11 +27,23 @@ def steam_list():
 
     return steamlist
 
+def chilled_list():
+    chilledlist = []
+    listslog = []
+
+    for data in Sensor.objects.filter(s_type="Meter Chilled Water"):
+        listslog.append(data.s_log)
+
+    for data in listslog:
+        chilledlist.append(Sensor.objects.get(s_log=data))
+
+    return chilledlist
+
 def dom_list():
     domlist = []
     listslog = []
 
-    for data in Sensor.objects.filter(s_type="Dom Water Gallons"):
+    for data in Sensor.objects.filter(s_type="Meter Dom Water Gallons"):
         listslog.append(data.s_log)
 
     for data in listslog:
@@ -43,7 +55,7 @@ def reclaimed_list():
     reclaimedlist = []
     listslog = []
 
-    for data in Sensor.objects.filter(s_type="Reclaimed Water Gallons"):
+    for data in Sensor.objects.filter(s_type="Meter Reclaimed Water Gallons"):
         listslog.append(data.s_log)
 
     for data in listslog:
@@ -52,6 +64,7 @@ def reclaimed_list():
     return reclaimedlist
 
 def usage(list):
+    temp = []
     usage = []
     log_dict = []
 
@@ -60,12 +73,31 @@ def usage(list):
 
     for i in range (0,len(log_dict)):
         count = 0;
-        for key in reversed(sorted(log_dict[i].keys())):
-            if count == 1:
-                count = 0
-                break;
-            usage.append(log_dict[i][key][1])
-            count += 1
-        i += 1
+        try:
+            for key in reversed(sorted(log_dict[i].keys())):
+                if count == 2:
+                    count = 0
+                    break;
+                temp.append(log_dict[i][key][1])
+                count += 1
+            i += 1
+        except:
+            usage = 0
+
+    for i in range (0,len(log_dict)):
+        calc = temp[(i*2)] - temp[(i*2)+1]
+        usage.append(calc)
 
     return usage
+
+def avg(data):
+    sum = 0
+    for i in range (0,len(data)):
+        sum += data[i]
+
+    try:
+        average = round(sum / len(data), 4)
+    except:
+        average = 0
+
+    return average

@@ -20,25 +20,28 @@
         <div id="topcont" style="margin-left:2%;margin-top: 0;">
           <div id="buildimg">
             <h1 style="color: #003467;text-align:left;height:fit-content;"> {{ bname|safe }} </h1>
-            <img src={% static '/edashboard/images/SAS.jpg' %} style="margin:1%;">
+            <img src="{% static imagePath %}" style="margin:1%;">
           </div>
-          <div style="margin-left:25px;text-align:right">
-            <h5>Flagstaff Weather</h5>
+          <div style="margin-left:25px;text-align:left">
+            <h4>Weather in Flagstaff</h4>
             <div id="forecast" style="display:flex;">
-              <div style="margin-right:20px;text-align:center">
-                <h6>{{ weather_day1.temperature|safe }}F</h6>
-                <img src="http://openweathermap.org/img/w/{{ weather_day1.icon|safe }}.png" alt="Image">
-                <h6>{{ weather_day1.description|safe }}</h6>
+              <div style="margin-right:20px;align:center">
+                <h4>Today</h4>
+                <h4>{{ weather_day1.temperature|safe }}°F</h4>
+                <img align="center" src="http://openweathermap.org/img/w/{{ weather_day1.icon|safe }}.png" alt="Image">
+                <h4>{{ weather_day1.description|safe }}</h4>
               </div>
-              <div style="margin-right:20px;text-align:center">
-                <h6>{{ weather_day2.temperature|safe }} F</h6>
-                <img src="http://openweathermap.org/img/w/{{ weather_day2.icon|safe }}.png" alt="Image">
-                <h6>{{ weather_day2.description|safe }}</h6>
+              <div style="margin-right:20px;align:center">
+                <h4>Tomorrow</h4>
+                <h4>{{ weather_day2.temperature|safe }}°F</h4>
+                <img align="center" src="http://openweathermap.org/img/w/{{ weather_day2.icon|safe }}.png" alt="Image">
+                <h4>{{ weather_day2.description|safe }}</h4>
               </div>
-              <div style="margin-right:20px;text-align:center">
-                <h6>{{ weather_day3.temperature|safe }} F</h6>
-                <img src="http://openweathermap.org/img/w/{{ weather_day3.icon|safe }}.png" alt="Image">
-                <h6>{{ weather_day3.description|safe }}</h6>
+              <div style="margin-right:20px;align:center">
+                <h4>Day after tomorrow</h4>
+                <h4>{{ weather_day3.temperature|safe }}°F</h4>
+                <img align="center" src="http://openweathermap.org/img/w/{{ weather_day3.icon|safe }}.png" alt="Image">
+                <h4>{{ weather_day3.description|safe }}</h4>
               </div>
             </div>
           </div>
@@ -50,33 +53,33 @@
           <div id="Leftgraph" style="text-align: center;">
             <h2 style="text-align:center;">Historical Data</h2>
           <div id="switches">
-            <button id="hour" onclick="chgColor('hour')" style="width:50%">Hourly</button>
+            <button id="hour" onclick="chgColor('hour')" style="width:50%">60-Min</button>
+            <!-- <button id="30m" onclick="chgColor('hour')" style="width:50%">30-Min</button> -->
             <button id="15m" onclick="chgColor('15m')" style="width:50%">15-Min</button>
+          </div>
+          <div id="selectutil"class="custom-select" style="width:200px;">
+            <li class="dropdown-toggle" style="display:none;">Utility</li>
+            <h2 class="select">Select a Utility</h2>
+            <select>
+              {% for utility in utilities %}
+                <option>{{ utility }}</option>
+              {% endfor %}
+            </select>
           </div>
           {% if user.is_authenticated %}
             <div id="selectsens" class="custom-select" style="width:200px;">
               <li class="dropdown-toggle" style="display:none;">Sensor</li>
               <h2 class="select">Select a Sensor</h2>
               <select>
-                {% for data in list2 %}
-                  <option>{{ data }}</option>
+                {% for sensor in sensors %}
+                  <option>{{ sensor }}</option>
                 {% endfor %}
               </select>
             </div>
-          {% else %}
-          <div id="selectutil"class="custom-select" style="width:200px;">
-            <li class="dropdown-toggle" style="display:none;">Utility</li>
-            <h2 class="select">Select a Utility</h2>
-            <select>
-              <option>Current Demand KW</option>
-              <option>Dom Water Gallons</option>
-              <option>Reclaimed Water Gallons</option>
-              <option>Steam KBTU</option>
-            </select>
-          </div>
           {% endif %}
           <div>
-            <button onClick="downloadData(event)" style="margin:0; margin-top: 5%;">Download Data</button>
+            <!--<button id="graphdata" onClick="getData(event)">Graph Data</button>-->
+            <button style="margin:0; margin-top: 5%;">Download Data</button>
           </div>
         </div>
           <div class="graphcont" style="margin:0; width: 50%; height: inherit;">
@@ -99,11 +102,6 @@
               // Changes the button to be highlighted
               chgLabels(id);
             }
-            function downloadData(event){
-              event.preventDefault();
-              var durl = "{% url 'down_building' data=0%}".replace(/0/, dataset);
-              window.location.href = "" + durl.toString() + "";
-            }
 
             </script>
           </div>
@@ -111,14 +109,11 @@
             <div id="innerstats" class="greyell">
               <h1 style= "color:#003467" >Statistics</h1>
               <div id="statdata">
-              <h4><b>Mean:</b> {{mean|safe}}</h4>
-              <h4><b>Median:</b> {{median|safe}}</h4>
-              <!-- -->
-              <h4><b>1st Quartile</b> {{quartile1|safe}}</h4>
-              <h4><b>3rd Quartile</b> {{quartile3|safe}}</h4>
-              <h4><b>IQR</b> {{iqr|safe}}</h4>
-              <!--  -->
-            </div>
+                <h4><b>Min:</b> {{minimum|safe}}</h4>
+                <h4><b>Mean:</b> {{mean|safe}}</h4>
+                <h4><b>Median:</b> {{median|safe}}</h4>
+                <h4><b>Max:</b> {{maximum|safe}}</h4>
+              </div>
             </div>
           </div>
         </div>
