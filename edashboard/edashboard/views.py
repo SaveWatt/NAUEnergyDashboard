@@ -1,57 +1,40 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from http.server import BaseHTTPRequestHandler, HTTPServer
-from django.template import RequestContext
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
-from django.views import generic
 import csv
-from django.contrib import auth
 from django.utils.encoding import smart_str
-from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import TemplateView
-from django.template import Template, Context
-from django import template
 from edashboard.clean import *
 from edashboard.models import *
-from django.views import View
+from edashboard.drawgraph import *
+from edashboard.conversion import *
+from edashboard.weather import *
 from django.http import JsonResponse
 from edashboard.forms import *
-import json
-import time
 import statistics as stats
 import datetime
-from edashboard.Backend import BackendRetriever
-from edashboard.Backend import StaticDataRetriever as SDR
-from django.urls import reverse
-from urllib.parse import urlencode
-from edashboard.weather import *
-from edashboard.drawgraph import *
-from edashboard.unitconversion import *
+from edashboard.backend import BackendRetriever
+from edashboard.backend import StaticDataRetriever as SDR
 
-
-register = template.Library()
 sdr = SDR()
 BR = BackendRetriever()
 bname = BR.getBuildingStrings()
 bnum = BR.getNumStrings()
 bname.sort()
 
+
+
 def index(request):
     buildings = BR.getBuildingStrings()
     list_elec = elec_list()
-    usage_elec = usage(list_elec)
     list_steam = steam_list()
-    usage_steam = usage(list_steam)
     list_dom = dom_list()
     print(list_dom)
-    usage_dom = usage(list_dom)
     list_reclaimed = reclaimed_list()
-    usage_reclaimed = usage(list_reclaimed)
     list_chilled = chilled_list()
+    usage_elec = usage(list_elec)
+    usage_steam = usage(list_steam)
+    usage_dom = usage(list_dom)
+    usage_reclaimed = usage(list_reclaimed)
     usage_chilled = usage(list_chilled)
-    print(usage_chilled)
     avg_elec = avg(usage_elec)
     avg_steam = avg(usage_steam)
     avg_dom = avg(usage_dom)
@@ -63,23 +46,11 @@ def index(request):
     reclaimedDollar = gallontodollar(avg_reclaimed)
     chilledDollar = gallontodollar(avg_chilled)
     overall = elecDollar + steamDollar + domDollar + reclaimedDollar + chilledDollar
-    return render(request, 'edashboard/index.html',{'buildlist': buildings,
-                                                    'buildlistname':bname,
-                                                    'buildlistnum':bnum,
-                                                    'usage_elec':usage_elec,
-                                                    'usage_steam':usage_steam,
-                                                    'usage_chilled':usage_chilled,
-                                                    'usage_reclaimed':usage_reclaimed,
-                                                    'avg_elec':avg_elec,
-                                                    'avg_steam':avg_steam,
-                                                    'avg_chilled':avg_chilled,
-                                                    'avg_reclaimed':avg_reclaimed,
-                                                    'elecDollar':elecDollar,
-                                                    'steamDollar':steamDollar,
-                                                    'domDollar':domDollar,
-                                                    'reclaimedDollar':reclaimedDollar,
-                                                    'chilledDollar':chilledDollar,
-                                                    'overall':overall})
+    return render(request, 'edashboard/index.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum,'usage_elec':usage_elec,'usage_steam':usage_steam,'usage_chilled':usage_chilled,
+    'usage_reclaimed':usage_reclaimed,'avg_elec':avg_elec,'avg_steam':avg_steam,'avg_chilled':avg_chilled,
+    'avg_reclaimed':avg_reclaimed,'elecDollar':elecDollar,'steamDollar':steamDollar,'domDollar':domDollar,
+    'reclaimedDollar':reclaimedDollar,'chilledDollar':chilledDollar,'overall':overall})
 
 def building_view(request, buildnum):
     weather_day1 = day1()
@@ -96,31 +67,21 @@ def building_view(request, buildnum):
         sensor_strs.append(str(sens))
         if sens.s_type != 'None':
             util_strs.append(str(sens.s_type))
-    #data = BR.getData(building, "Current Demand KW", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
-    data = BR.getData(building, "Current Demand KW", datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
+    #data = BR.getData(building, "Meter Current Demand kwh", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
+    data = BR.getData(building, "Meter Current Demand KW", datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
     usage = data[1]
     date = data[0]
-    elec_total = sum(usage)
-    data_yesterday = BR.getData(building, "Current Demand KW", datetime.datetime(2018, 9, 30, 0, 0), datetime.datetime(2018, 9, 30, 23, 59), incr=60)
-    usage_yesterday = data_yesterday[1]
-    elec_total_yesterday = sum(usage_yesterday)
     imagePath = '/edashboard/images/buildingPic/' + buildnum + '.jpg'
-    percent_elec = percentile(elec_total, elec_total_yesterday)
-    percent_elec_yesterday = percentile(elec_total_yesterday, elec_total)
     if usage:
         percent = sum(usage)/10000*100
         percent_str = ("%d%%" % round(percent, 2))
         mean = round(sum(usage)/len(usage), 2)
         median = round(stats.median(usage), 2)
-        minimum = min(usage)
-        maximum = max(usage)
     else:
         percent = 0
         percent_str = 0
         mean = 0
         median = 0
-        minimum = 0
-        maximum = 0
     return render(request, 'edashboard/building.html', {'buildlist': buildings,
                                                         'bnum': buildnum,
                                                         'bname':b_name,
@@ -137,13 +98,7 @@ def building_view(request, buildnum):
                                                         'buildlistnum':bnum,
                                                         'weather_day1':weather_day1,
                                                         'weather_day2':weather_day2,
-                                                        'weather_day3':weather_day3,
-                                                        'elec_total':elec_total,
-                                                        'elec_total_yesterday':elec_total_yesterday,
-                                                        'percent_elec':percent_elec,
-                                                        'percent_elec_yesterday':percent_elec_yesterday,
-                                                        'minimum':minimum,
-                                                        'maximum':maximum})
+                                                        'weather_day3':weather_day3})
 
 def compare_view(request):
     buildings = BR.getBuildingStrings()
@@ -151,49 +106,41 @@ def compare_view(request):
     'buildlistnum':bnum,})
 
 def export_view(request,builddata=None):
+    buildings = BR.getBuildingStrings()
     flag = ""
     sensor = ""
     util = ""
+    data = ""
+    starttime = ""
+    endtime = ""
     if "util=" in str(builddata):
         flag = "util"
     if "sensor=" in str(builddata):
         flag = "sens"
-    data = splitUrls(builddata, flag)
-    buildnum = data[0]
-    starttime = getTimes(data[2])
-    endtime = getTimes(data[3])
-    print(starttime)
-    print(endtime)
     if flag == "util":
+        data = splitUtilUrls(builddata)
+        buildnum = data[0]
         util = data[1]
-    if flag == "sens":
-        sensor = data[1]
-    # buildings = Building.objects.all()
-    buildings = BR.getBuildingStrings()
-    usage = []
-    date = []
-    if buildnum and buildnum != 'B':
+        starttime = getTimes(data[2])
+        endtime = getTimes(data[3])
         building = Building.objects.get(b_num=buildnum)
-        buildname = building.b_name
-        build_id = building.id
-        try:
-            sens = Sensor.objects.get(building_id=build_id, s_type=sensor)
-        except:
-            sens = Sensor.objects.get(building_id=57, s_log='601_2')
-        log_dict = sdr.get_log(sens.s_log)
-        count = 0
-        for key in reversed(sorted(log_dict.keys())):
-            if count > 99:
-                break;
-            date.append(log_dict[key][0].strftime("%Y-%m-%d %H:%M:%S"))
-            usage.append(log_dict[key][1])
-            count += 1
-        date.reverse()
-        usage.reverse()
-        #date = reversed(date)
-        #usage = reversed(usage)
-    return render(request, 'edashboard/export.html',{'buildlist': buildings,'buildlistname':bname,
-    'buildlistnum':bnum,'builddata':builddata,'usage':usage,'date':date})
+        data = BR.getUtilityData(building, util, starttime, endtime)
+    if flag == "sens":
+        data = splitSensUrls(builddata)
+        starttime = getTimes(data[1])
+        endtime = getTimes(data[2])
+        sensor = data[0]
+        data = BR.getSensorData(sensor, starttime, endtime)
+
+    usage = data[1]
+    date = data[0]
+    build_name = data[2]
+    utilname = data[3]
+    for i in range(0,len(date)):
+        t = date[i]
+        date[i] = t.strftime('%m:%d:%Y %H:%M')
+    return render(request, 'edashboard/export.html',{'buildlist': buildings,'buildlistname':bname,'sensor':sensor,
+    'buildlistnum':bnum,'builddata':builddata,'usage':usage,'date':date, 'utilname':utilname,'build_name':build_name,'flag':flag})
 
 def down_export(request,data):
     buildings = BR.getBuildingStrings()
@@ -329,69 +276,3 @@ def login_view(request):
 def admin_view(request):
     buildings = BR.getBuildingStrings()
     return render(request, 'edashboard/admin.html',{'buildlist': buildings})
-'''
-def data(request):
-    db_data = Demo.objects.all().values_list('value', flat=True)
-    db_date = Demo.objects.all().values_list('date', flat=True)
-    return TemplateResponse(request, 'edashboard/export.html', {"db_data" : db_data})
-
-def data_com(request):
-    db_data = Demo.objects.all().values_list('value', flat=True)
-    db_date = Demo.objects.all().values_list('date', flat=True)
-    return TemplateResponse(request, 'edashboard/compare.html', {"db_data" : db_data})
-
-@register.building_name
-def getBuildingsName():
-    building = []
-    filename="buildings.csv"
-    with open(filename,'r') as f:
-        lines= f.readlines()
-        for line in lines:
-            if "number,name" not in line:
-                building.insert(len(building),line.rsplit(',', 1)[1])
-    f.close()
-    return building
-
-@register.building_num
-def getBuildingsNumber():
-    building = []
-    filename="buildings.csv"
-    with open(filename,'r') as f:
-        lines= f.readlines()
-        for line in lines:
-            if "number,name" not in line:
-                building.insert(len(building),line.rsplit(',', 1)[0])
-    f.close()
-    return building
-
-    FOR REFERENCE LATER
-    #Pass in value and convert to kwH and convert based on string that conversion is.
-    #CONVERSION LINK https://www.epa.gov/energy/greenhouse-gases-equivalencies-calculator-calculations-and-references
-    def greenComp(value,conversion):
-
-        kwh = value
-        mtons = value*.0007
-        kilog=value*0.707
-        lbs=value*1.6
-        #BARRELS OF OIL 5.80 mmbtu/barrel × 20.31 kg C/mmbtu × 44 kg CO2/12 kg C × 1 metric ton/1,000 kg
-        if conversion=="oil":
-            return mtons/.43
-        #TREE'S GROWN FOR 10 YEARS
-        elif conversion=="tree":
-            return mtons/.06
-        #CARBON OFFSET
-        elif conversion=="carbon" :
-            return value
-        #Converts to Tons
-        elif conversion=="tons" :
-            return value*.0008
-        # Converts to Gas
-        elif conversion=="gas" :
-            return mtons/(8.887*(10 ** (-3)))
-        # CONVERTS BTU TO kWh
-        elif conversion=="btu" :
-            return kwh * 3412.14
-        # Converts to DOLLARS
-        else:
-            return kwh * 11.1
-    '''
