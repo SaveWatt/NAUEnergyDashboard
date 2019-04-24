@@ -1,6 +1,7 @@
 {% load staticfiles %}
 var fieldId=0;
 var building=[null,null,null];
+var sensor=[null,null,null];
 
 function addBuilding(){
     var insert_at=0;
@@ -21,7 +22,7 @@ function addBuilding(){
     if(flag==0){
       var innerdiv = document.createElement('div');
       innerdiv.setAttribute("class", "extrabuildings");
-      innerdiv.setAttribute("id", "extradiv"+insert_at);
+      innerdiv.setAttribute("id", "extrabdiv"+insert_at);
       innerdiv.setAttribute("style","display:inline-flex;width: -webkit-fill-available;");
       var innerinput = document.createElement('input');
       innerinput.setAttribute("class", "search");
@@ -40,13 +41,59 @@ function addBuilding(){
       building[insert_at] = 1;
     }
     else{
-      alert("You can only add up to 4 buildings!");
+      alert("You can only graph up to 4 buildings!");
+    }
+}
+function addSensor(){
+    var insert_at=0;
+    var flag =0;
+    var i;
+    // Look for available spots
+    for(i=0;i<3;i++){
+      // if we have an open spot
+      if(sensor[i]==null){
+        insert_at=i;
+        break;
+      }
+      //if we get to the end and dont have room
+      else if(i==2){
+        flag=1;
+      }
+    }
+    if(flag==0){
+      var innerdiv = document.createElement('div');
+      innerdiv.setAttribute("class", "extrasensors");
+      innerdiv.setAttribute("id", "extrasdiv"+insert_at);
+      innerdiv.setAttribute("style","display:inline-flex;width: -webkit-fill-available;");
+      var innerinput = document.createElement('input');
+      innerinput.setAttribute("class", "search");
+      innerinput.setAttribute("id", "extrasens");
+      innerinput.setAttribute("placeholder", "Search For Sensor...");
+      innerinput.setAttribute("style","height: fit-content;");
+      var removebutt = document.createElement('img');
+      removebutt.setAttribute("src", "{% static 'edashboard/images/delete.png' %}");
+      removebutt.setAttribute("id", "removebutton");
+      removebutt.setAttribute("onClick", "removeSensor("+insert_at+")");
+      removebutt.setAttribute("style", "height: 30px;margin: 5% 0;padding-left: 3%;");
+      innerdiv.appendChild(innerinput);
+      innerdiv.appendChild(removebutt);
+      (document.getElementById("sensoradder")).appendChild(innerdiv);
+      fieldId++; // increment fileId to get a unique ID for the new element
+      sensor[insert_at] = 1;
+    }
+    else{
+      alert("You can only graph up to 4 Sensors!");
     }
 }
 function removeBuilding(num){
-  innerdiv=document.getElementById("extradiv"+num);
+  innerdiv=document.getElementById("extrabdiv"+num);
   innerdiv.parentNode.removeChild(innerdiv);
   building[num]=null;
+}
+function removeSensor(num){
+  innerdiv=document.getElementById("extrasdiv"+num);
+  innerdiv.parentNode.removeChild(innerdiv);
+  sensor[num]=null;
 }
 //TIME RANGE CODE
 $(function() {

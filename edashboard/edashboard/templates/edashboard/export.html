@@ -86,7 +86,6 @@
     var buildingname = $('#buildingsearchexpcompsearch').val();
     buildingname = getNum(buildingname);
     var util = $('#select-selected-util').clone().children().remove().end().text();
-    console.log(util);
     var details = "build=" + buildingname + "time=" + times + "util=" +util;
     var destinationUrl = "{% url 'export2' builddata=0 %}".replace(/0/, details.toString());
     window.location.href = "" + destinationUrl.toString() + "";

@@ -222,14 +222,19 @@ div.greyell{
 }
 
 #greencomp{
-  margin: 5%;
   margin-top: 0;
+  height: fit-content;
+  width: -webkit-fill-available;
+  max-width: 50%;
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 2%;
 }
 .greencomp{
     table-layout:fixed;
     width: 100%;
     text-align: center;
-    font-size: 25px;
+    font-size: 20px;
     color: #003467;
     padding: 2%;
 }
@@ -322,6 +327,10 @@ table .label{
   display: inline-block;
   border: 5px solid #ffcc01;
 }
+.circle img{
+  width: 75%;
+  height: auto;
+}
 .exp-container{
   width: 100%;
   height: auto;
@@ -371,6 +380,7 @@ li.button-dropdown{
   position: relative;
   font-family: Arial;
   text-align: -webkit-center;
+  margin: auto;
 }
 
 .custom-select select {
@@ -459,7 +469,7 @@ div.select-selected{
 button#graphdata{
   margin: 7.5% 0 0 0;
 }
-button#add-build{
+button#add-build, button#add-sens{
   margin-top: 0;
   margin-left: 0;
 }
@@ -471,7 +481,7 @@ div#buildingadder, div#sensorsearch{
   margin-top: 5%;
   margin-bottom: 0;
 }
-div#buildingadder input.search, div#sensorsearch input.search{
+div#buildingadder input.search, div#sensoradder input.search, div#sensorsearch input.search{
   font-size: 20px;
   border: none;
   border-bottom: 3px solid #ffcc01;
@@ -576,6 +586,7 @@ div#selectpermiss div.select-items{
   padding: 2%;
  margin-top: 0;
  width: -webkit-fill-available;
+ position: relative;
 }
 div#buildimg{
   width:25%;
@@ -742,4 +753,7 @@ form#login a{
 }
 .amcharts-chart-div > a {
  display: none !important;
+}
+button#add-sens{
+      display: -webkit-box;
 }

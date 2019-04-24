@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from django.template import Template, Context
 from django import template
+from django.conf import settings
 from edashboard.clean import *
 from edashboard.models import *
 from django.views import View
@@ -83,14 +84,70 @@ def building_view(request, buildnum):
                                                         'buildlistname':bname,
                                                         'buildlistnum':bnum})
 
-def compare_view(request):
+def compare_view(request,builddata=None):
     buildings = BR.getBuildingStrings()
-    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'buildlistname':bname,
-    'buildlistnum':bnum,})
+    flag = ""
+    permisflag = ""
+    sensor = ""
+    util = ""
+    data = ""
+    starttime = ""
+    endtime = ""
+    builds = {}
+    #Checks for the number of buildings we have passed
+    if "build1=" in str(builddata):
+        builds['build1'] = ""
+    if "build2=" in str(builddata):
+        builds['build1'] = ""
+    if "build3=" in str(builddata):
+        builds['build1'] = ""
+    if "build4=" in str(builddata):
+        builds['build1'] = ""
+    #Sets the utility
+    if "util=" in str(builddata):
+        flag = "util"
+    if "sensor=" in str(builddata):
+        flag = "sens"
+    #Does operations according to utility
+    if flag == "util":
+        data = splitUtilUrls(builddata)
+        buildnum = data[0]
+        util = data[1]
+        starttime = getTimes(data[2])
+        endtime = getTimes(data[3])
+        building = Building.objects.get(b_num=buildnum)
+        data = BR.getUtilityData(building, util, starttime, endtime)
+    if flag == "sens":
+        if request.session.get('user.userprofile.permission') is '3':
+            data = splitSensUrls(builddata)
+            starttime = getTimes(data[1])
+            endtime = getTimes(data[2])
+            sensor = data[0]
+            data = BR.getSensorData(sensor, starttime, endtime)
+        else:
+            data = splitSensUrls(builddata)
+            starttime = getTimes(data[1])
+            endtime = getTimes(data[2])
+            sensor = "None"
+            data = ("0","0","0","0")
+            permisflag = "error"
+    #Loads the final data
+    print(request.session.get('user.userprofile.permission'))
+    usage = data[1]
+    date = data[0]
+    build_name = data[2]
+    utilname = data[3]
+    if(permisflag != "error"):
+        for i in range(0,len(date)):
+            t = date[i]
+            date[i] = t.strftime('%m:%d:%Y %H:%M')
+    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'buildlistname':bname,'sensor':sensor,
+    'buildlistnum':bnum,'builddata':builddata,'usage':usage,'date':date, 'utilname':utilname,'build_name':build_name,'flag':flag})
 
 def export_view(request,builddata=None):
     buildings = BR.getBuildingStrings()
     flag = ""
+    permisflag = ""
     sensor = ""
     util = ""
     data = ""
@@ -109,7 +166,7 @@ def export_view(request,builddata=None):
         building = Building.objects.get(b_num=buildnum)
         data = BR.getUtilityData(building, util, starttime, endtime)
     if flag == "sens":
-        if user.userprofile.permission is 3:
+        if request.session.get('user.userprofile.permission') is 3:
             data = splitSensUrls(builddata)
             starttime = getTimes(data[1])
             endtime = getTimes(data[2])
@@ -121,13 +178,15 @@ def export_view(request,builddata=None):
             endtime = getTimes(data[2])
             sensor = "None"
             data = ("0","0","0","0")
+            permisflag = "error"
     usage = data[1]
     date = data[0]
     build_name = data[2]
     utilname = data[3]
-    for i in range(0,len(date)):
-        t = date[i]
-        date[i] = t.strftime('%m:%d:%Y %H:%M')
+    if(permisflag != "error"):
+        for i in range(0,len(date)):
+            t = date[i]
+            date[i] = t.strftime('%m:%d:%Y %H:%M')
     return render(request, 'edashboard/export.html',{'buildlist': buildings,'buildlistname':bname,'sensor':sensor,
     'buildlistnum':bnum,'builddata':builddata,'usage':usage,'date':date, 'utilname':utilname,'build_name':build_name,'flag':flag})
 

@@ -1,16 +1,38 @@
+{% if user.userprofile.permission is 3 %}
+<div id="switches" style="margin: 7.5%;">
+  <button id="utilswitch" onclick="chgColor('utilswitch')" style="width:50%">By Utility</button>
+  <!-- <button id="30m" onclick="chgColor('hour')" style="width:50%">30-Min</button> -->
+  <button id="sensswitch" onclick="chgColor('sensswitch')" style="width:50%">By Sensor</button>
+</div>
+{% endif %}
+
+{% if user.userprofile.permission is 3 %}
+<form id="form-info">
+<div id="sensoradder"><input id="#senssearchcompsearch" class="search" type="text" placeholder="Search For Sensor..." autofocus/></div>
+<button id="add-sens" onClick="addSensor()" type=button>Add Sensor +</button>
+<button id="graphdata" onClick="getSensorData(event)">Graph Data</button>
+</form>
+<form id="form-info2">
+  <div id="searchutil">
+  <div id="buildingadder"><input id="#buildingsearchcompsearch" class="search" type="text" placeholder="Search For Building..." autofocus/></div>
+  <button id="add-build" onClick="addBuilding()" type=button >Add Building +</button>
+    <div id="selectutil"class="custom-select" style="width:200px;">
+      <li class="dropdown-toggle" style="display:none;">Utility</li>
+      <h2 class="select">Select a Utility</h2>
+      <select>
+        <option>Heating</option>
+        <option>Cooling</option>
+        <option>Electricity</option>
+      </select>
+    </div>
+    </div>
+    <button id="graphdata" onClick="getBuildingData(event)">Graph Data</button>
+</form>
+{% else %}
+<form id="form-info2">
+<div id="searchutil">
 <div id="buildingadder"><input id="#buildingsearchcompsearch" class="search" type="text" placeholder="Search For Building..." autofocus/></div>
 <button id="add-build" onClick="addBuilding()">Add Building +</button>
-{% if user.is_authenticated %}
-  <div id="selectsens" class="custom-select" style="width:200px;">
-    <li class="dropdown-toggle" style="display:none;">Sensor</li>
-    <h2 class="select">Select a Sensor</h2>
-    <select>
-      <option>Filler1</option>
-      <option>Filler2</option>
-      <option>Filler3</option>
-    </select>
-  </div>
-{% else %}
   <div id="selectutil"class="custom-select" style="width:200px;">
     <li class="dropdown-toggle" style="display:none;">Utility</li>
     <h2 class="select">Select a Utility</h2>
@@ -20,8 +42,15 @@
       <option>Electricity</option>
     </select>
   </div>
+  </div>
+  <button id="graphdata" onClick="getBuildingData(event)">Graph Data</button>
+  </form>
 {% endif %}
 <script>
+  {% if user.userprofile.permission is 3 %}
+  document.getElementById("form-info").style.display = "none";
+  {% endif %}
+
 jQuery(document).ready(function (e) {
     function t(t) {
         e(t).bind("click", function (t) {
