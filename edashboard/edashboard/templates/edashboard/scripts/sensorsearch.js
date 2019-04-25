@@ -44,7 +44,6 @@ input2.onkeyup = function(e){
     autocomplete_results = document.getElementById("autocomplete-results3");
     autocomplete_results.innerHTML = '';
     build_to_show = autocompletee(input_val);
-    console.log(build_to_show);
     if(build_to_show.length != 0){
       for (i = 0; i < build_to_show.length; i++) {
         autocomplete_results.innerHTML += '<li class=\'searchsug\'id="list9'+i+'" onclick="FillInput2(\'list9'+i+'\')">' + build_to_show[i] + '</li>';
@@ -66,7 +65,6 @@ input2.onkeyup = function(e){
   }
 }
 function FillInput2(listid){
-  console.log(listid);
   listName = document.getElementById(listid).innerHTML;
   document.getElementById("sensorsearchexpcompsearch").value = listName;
   document.getElementById("autocomplete-results3").innerHTML = ''
@@ -91,7 +89,6 @@ input3.onkeyup = function(e){
     autocomplete_results = document.getElementById("autocomplete-results3");
     autocomplete_results.innerHTML = '';
     build_to_show = autocompletee(input_val);
-    console.log(build_to_show);
     if(build_to_show.length != 0){
       for (i = 0; i < build_to_show.length; i++) {
         autocomplete_results.innerHTML += '<li class=\'searchsug\'id="list9'+i+'" onclick="FillInput3(\'list9'+i+'\')">' + build_to_show[i] + '</li>';
@@ -113,7 +110,6 @@ input3.onkeyup = function(e){
   }
 }
 function FillInput3(listid){
-  console.log(listid);
   listName = document.getElementById(listid).innerHTML;
   document.getElementById("sensorsearchexpcompsearch").value = listName;
   document.getElementById("autocomplete-results3").innerHTML = ''
@@ -138,7 +134,6 @@ input4.onkeyup = function(e){
     autocomplete_results = document.getElementById("autocomplete-results3");
     autocomplete_results.innerHTML = '';
     build_to_show = autocompletee(input_val);
-    console.log(build_to_show);
     if(build_to_show.length != 0){
       for (i = 0; i < build_to_show.length; i++) {
         autocomplete_results.innerHTML += '<li class=\'searchsug\'id="list9'+i+'" onclick="FillInput4(\'list9'+i+'\')">' + build_to_show[i] + '</li>';
@@ -160,7 +155,6 @@ input4.onkeyup = function(e){
   }
 }
 function FillInput4(listid){
-  console.log(listid);
   listName = document.getElementById(listid).innerHTML;
   document.getElementById("sensorsearchexpcompsearch").value = listName;
   document.getElementById("autocomplete-results3").innerHTML = ''
@@ -185,7 +179,6 @@ input5.onkeyup = function(e){
     autocomplete_results = document.getElementById("autocomplete-results3");
     autocomplete_results.innerHTML = '';
     build_to_show = autocompletee(input_val);
-    console.log(build_to_show);
     if(build_to_show.length != 0){
       for (i = 0; i < build_to_show.length; i++) {
         autocomplete_results.innerHTML += '<li class=\'searchsug\'id="list9'+i+'" onclick="FillInput5(\'list9'+i+'\')">' + build_to_show[i] + '</li>';
@@ -207,7 +200,6 @@ input5.onkeyup = function(e){
   }
 }
 function FillInput5(listid){
-  console.log(listid);
   listName = document.getElementById(listid).innerHTML;
   document.getElementById("sensorsearchexpcompsearch").value = listName;
   document.getElementById("autocomplete-results3").innerHTML = ''
