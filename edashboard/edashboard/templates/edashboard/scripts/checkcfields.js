@@ -23,7 +23,10 @@ function addBuilding(){
       var innerdiv = document.createElement('div');
       innerdiv.setAttribute("class", "extrabuildings");
       innerdiv.setAttribute("id", "extrabdiv"+insert_at);
-      innerdiv.setAttribute("style","display:inline-flex;width: -webkit-fill-available;");
+      innerdiv.setAttribute("style","display:block;width: -webkit-fill-available;");
+      var stackdiv = document.createElement('div');
+      stackdiv.setAttribute("class", "searchremovestack");
+      stackdiv.setAttribute("style","display:inline-flex;width: -webkit-fill-available;");
       var innerinput = document.createElement('input');
       innerinput.setAttribute("class", "search");
       innerinput.setAttribute("id", "extrabuild");
@@ -39,8 +42,9 @@ function addBuilding(){
       removebutt.setAttribute("id", "removebutton");
       removebutt.setAttribute("onClick", "removeBuilding("+insert_at+")");
       removebutt.setAttribute("style", "height: 30px;margin: 5% 0;padding-left: 3%;");
-      innerdiv.appendChild(innerinput);
-      innerdiv.appendChild(removebutt);
+      stackdiv.appendChild(innerinput);
+      stackdiv.appendChild(removebutt);
+      innerdiv.appendChild(stackdiv);
       innerdiv.appendChild(searchresults);
       (document.getElementById("buildingadder")).appendChild(innerdiv);
       fieldId++; // increment fileId to get a unique ID for the new element

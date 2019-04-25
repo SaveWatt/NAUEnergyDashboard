@@ -10,22 +10,27 @@ var results;
 function checkBuildingValues(){
   if(document.getElementById('extrabdiv0') != null){
     input3 = document.getElementById('extrabdiv0').getElementsByTagName('input')[0];
+    input3.setAttribute("onkeyup", "input3KeyUp(event)");
   }
   else{
     input3 = "None"
   }
   if(document.getElementById('extrabdiv1') != null){
     input4 = document.getElementById('extrabdiv1').getElementsByTagName('input')[0];
+    input4.setAttribute("onkeyup", "input4KeyUp(event)");
   }
   else{
     input4 = "None"
   }
   if(document.getElementById('extrabdiv2') != null){
     input5 = document.getElementById('extrabdiv2').getElementsByTagName('input')[0];
+    input5.setAttribute("onkeyup", "input5KeyUp(event)");
   }
   else{
     input5 = "None"
   }
+  console.log(input4);
+  console.log(input5);
 }
 // functions
 function autocompletee(val) {
@@ -38,6 +43,7 @@ function autocompletee(val) {
 }
 // events
 input2.onkeyup = function(e){
+
   input_val = this.value; // updates the variable on each ocurrence
   if (input_val.length > 0) {
     var build_to_show = [];
@@ -47,7 +53,7 @@ input2.onkeyup = function(e){
     if(build_to_show.length != 0){
 
       for (i = 0; i < build_to_show.length; i++) {
-        autocomplete_results.innerHTML += '<li class=\'searchsug\'id="list'+i+'" onclick="FillInput(\'list'+i+'\')">' + build_to_show[i] + '</li>';
+        autocomplete_results.innerHTML += '<li class=\'searchsug\'id="list2'+i+'" onclick="FillInput(\'list2'+i+'\')">' + build_to_show[i] + '</li>';
       }
       autocomplete_results.style.display = 'block';
       autocomplete_results.style.backgroundColor = '#e3e3e3';
@@ -66,8 +72,9 @@ input2.onkeyup = function(e){
   }
 }
 function FillInput(listid){
-  listName = document.getElementById(listid).innerHTML;
-  document.getElementById("buildingsearchexpcompsearch").value = listName;
+  console.log(listid);
+  var listName = document.getElementById(listid).innerHTML;
+  document.getElementById('buildingadder').getElementsByTagName('input')[0].value = listName;
   document.getElementById("autocomplete-results10").innerHTML = ''
   document.getElementById("autocomplete-results10").style.backgroundColor = 'white';
   return 0;
@@ -75,17 +82,22 @@ function FillInput(listid){
 
 // functions
 // events
-input3.onkeyup = function(e){
-  input_val = this.value; // updates the variable on each ocurrence
+$('#buildyourform').on('keyup', '#field_2', function(){
+    $('#target2').html($(this).val());
+});
+function input3KeyUp(e){
+  input_val = input3.value; // updates the variable on each ocurrence
   if (input_val.length > 0) {
     var build_to_show = [];
     autocomplete_results = document.getElementById("autocomplete-results0");
     autocomplete_results.innerHTML = '';
     build_to_show = autocompletee(input_val);
+    console.log(input_val);
+    console.log(build_to_show);
     if(build_to_show.length != 0){
 
       for (i = 0; i < build_to_show.length; i++) {
-        autocomplete_results.innerHTML += '<li class=\'searchsug\'id="list'+i+'" onclick="FillInput0(\'list'+i+'\')">' + build_to_show[i] + '</li>';
+        autocomplete_results.innerHTML += '<li class=\'searchsug\'id="list3'+i+'" onclick="FillInput0(\'list3'+i+'\')">' + build_to_show[i] + '</li>';
       }
       autocomplete_results.style.display = 'block';
       autocomplete_results.style.backgroundColor = '#e3e3e3';
@@ -105,7 +117,7 @@ input3.onkeyup = function(e){
 }
 function FillInput0(listid){
   listName = document.getElementById(listid).innerHTML;
-  document.getElementById("buildingsearchexpcompsearch").value = listName;
+  document.getElementById('extrabdiv0').getElementsByTagName('input')[0].value = listName;
   document.getElementById("autocomplete-results0").innerHTML = ''
   document.getElementById("autocomplete-results0").style.backgroundColor = 'white';
   return 0;
@@ -113,8 +125,9 @@ function FillInput0(listid){
 
 // functions
 // events
-input4.onkeyup = function(e){
-  input_val = this.value; // updates the variable on each ocurrence
+function input4KeyUp(e){
+    console.log("Test");
+  input_val = input4.value; // updates the variable on each ocurrence
   if (input_val.length > 0) {
     var build_to_show = [];
     autocomplete_results = document.getElementById("autocomplete-results1");
@@ -123,7 +136,7 @@ input4.onkeyup = function(e){
     if(build_to_show.length != 0){
 
       for (i = 0; i < build_to_show.length; i++) {
-        autocomplete_results.innerHTML += '<li class=\'searchsug\'id="list'+i+'" onclick="FillInput7(\'list'+i+'\')">' + build_to_show[i] + '</li>';
+        autocomplete_results.innerHTML += '<li class=\'searchsug\'id="list4'+i+'" onclick="FillInput7(\'list4'+i+'\')">' + build_to_show[i] + '</li>';
       }
       autocomplete_results.style.display = 'block';
       autocomplete_results.style.backgroundColor = '#e3e3e3';
@@ -143,7 +156,7 @@ input4.onkeyup = function(e){
 }
 function FillInput7(listid){
   listName = document.getElementById(listid).innerHTML;
-  document.getElementById("buildingsearchexpcompsearch").value = listName;
+  document.getElementById('extrabdiv1').getElementsByTagName('input')[0].value = listName;
   document.getElementById("autocomplete-results1").innerHTML = ''
   document.getElementById("autocomplete-results1").style.backgroundColor = 'white';
   return 0;
@@ -151,8 +164,8 @@ function FillInput7(listid){
 
 // functions
 // events
-input5.onkeyup = function(e){
-  input_val = this.value; // updates the variable on each ocurrence
+function input5KeyUp(e){
+  input_val = input5.value; // updates the variable on each ocurrence
   if (input_val.length > 0) {
     var build_to_show = [];
     autocomplete_results = document.getElementById("autocomplete-results2");
@@ -161,7 +174,7 @@ input5.onkeyup = function(e){
     if(build_to_show.length != 0){
 
       for (i = 0; i < build_to_show.length; i++) {
-        autocomplete_results.innerHTML += '<li class=\'searchsug\'id="list'+i+'" onclick="FillInput8(\'list'+i+'\')">' + build_to_show[i] + '</li>';
+        autocomplete_results.innerHTML += '<li class=\'searchsug\'id="list5'+i+'" onclick="FillInput8(\'list5'+i+'\')">' + build_to_show[i] + '</li>';
       }
       autocomplete_results.style.display = 'block';
       autocomplete_results.style.backgroundColor = '#e3e3e3';
@@ -179,9 +192,9 @@ input5.onkeyup = function(e){
     autocomplete_results.style.backgroundColor = 'white';
   }
 }
-function FillInput(listid){
+function FillInput8(listid){
   listName = document.getElementById(listid).innerHTML;
-  document.getElementById("buildingsearchexpcompsearch").value = listName;
+  document.getElementById('extrabdiv2').getElementsByTagName('input')[0].value = listName;
   document.getElementById("autocomplete-results2").innerHTML = ''
   document.getElementById("autocomplete-results2").style.backgroundColor = 'white';
   return 0;

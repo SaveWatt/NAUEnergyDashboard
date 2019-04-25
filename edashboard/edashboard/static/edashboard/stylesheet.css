@@ -609,14 +609,14 @@ div#Leftgraph{
 div#weather{
   height: fit-content;
 }
-ul#autocomplete-results, ul#autocomplete-results2, ul#autocomplete-results3{
+ul#autocomplete-results, ul#autocomplete-results10, ul#autocomplete-results0, ul#autocomplete-results1, ul#autocomplete-results2{
   padding-left: 0;
   padding: 2%;
   z-index: 2;
   margin: 0;
 }
 
-ul#autocomplete-results li, ul#autocomplete-results2 li,ul#autocomplete-results3 li{
+ul#autocomplete-results li, ul#autocomplete-results10 li,ul#autocomplete-results0 li,ul#autocomplete-results1 li,ul#autocomplete-results2 li{
   font-size: 20px;
 }
 .searchsug:hover{
