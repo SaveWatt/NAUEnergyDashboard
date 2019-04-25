@@ -5,9 +5,7 @@
     <img id="logo" src={% static '/edashboard/images/logo.png' %}  style="margin-top: 4%; max-height:inherit; width:auto;">
   </div>
   <div id="links" style="float: left; font-size: 25px;" >
-    <a href="{% url 'construction' %}" style="padding: 17px 17px;">Construction</a>
     <a href="{% url 'home' %}" style="padding: 17px 17px;">Home</a>
-    <a href="{% url 'export' %}" style="padding: 17px 17px;">Export</a>
     <div id="dd" class="dropdown-content">
       <a href="#" style="padding: 17px 33px;">Building</a>
       <ul class="dropdown" style="max-height: 600px;overflow: scroll; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
@@ -16,7 +14,7 @@
         {% include "edashboard/dropdownlis.html" %}
       </ul>
     </div>
-    <a href="{% url 'compare' %}" style="padding: 17px 17px;">Comparison</a>
+    <a href="{% url 'compare' %}" style="padding: 17px 17px;">Reports</a>
   </div>
   <div id="settings">
     <a href="{% url 'help' %}">Help</a>
