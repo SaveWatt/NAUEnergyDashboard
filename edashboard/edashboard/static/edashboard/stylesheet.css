@@ -1,10 +1,3 @@
-@font-face {
-    font-family: "Anson";
-    src: url('Fonts/Anson/anson-regular-webfont.woff2') format('woff2'), url('anson-regular-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
 html,
 body {
   margin: 0;
@@ -29,7 +22,7 @@ button{
   color: white;
   width: 10em;
   height: 3em;
-  font-family: 'Anson';
+  font-family: Arial;
   font-size: 12px;
   margin-left: 45%;
   margin-top: 25%;
@@ -50,17 +43,12 @@ div .rightdiv{
   width: fit-content;
 }
 div#div-container{
+  width: inherit;
   height: 50%;
 }
 canvas{
   width: 100%;
   height: 100%;
-}
-.forecast {
-    display: flex;
-}
-.vertical{
-  margin-right:20px;
 }
 .sidebar {
     background-color: #003467;
@@ -85,16 +73,13 @@ canvas{
   text-align: center;
 }
 h1{
-  font-family: 'Anson';
+  font-family: Arial;
   color: white;
-  text-align: center;
-}
-div.vertical{
   text-align: center;
 }
 .sidebar a{
   display: block;
-  font-family: 'Anson';
+  font-family: Arial;
   text-decoration: none;
   width: fit-content;
   color: white;
@@ -118,7 +103,7 @@ div.vertical{
     display: inline-block;
     color: white;
     text-align: center;
-    font-family: 'Anson';
+    font-family: Arial;
     text-decoration: none;
     width: fit-content;
 }
@@ -227,22 +212,34 @@ h1#head{
 }
 .chart-container {
   margin: 0;
-  width: auto;
-  height: auto;
+   width: auto;
+   height: auto;
 }
 div.greyell{
   margin-top: 0;
   background-color: #e3e3e3;
   border-bottom: 3px solid #ffcc01;
 }
-
-#greencomp{
-  margin: 5%;
-  margin-top: 0;
+.greencomp{
+    table-layout:fixed;
+    width: 100%;
+    text-align: center;
+    font-size: 25px;
+    color: #003467;
+    padding: 2%;
 }
-#utilusage{
+.greencomp tr{
+  text-align: center;
+}
+.greencomp td{
+  position: inherit;
+  white-space: normal;
+  word-wrap: break-word;
+  text-align: center;
+}
+#greencomplabel{
     margin-left: 5%;
-    margin-top: 2%;
+    margin-top: 10%;
     color: #003467;
 }
 #switWrap{
@@ -283,10 +280,6 @@ h2#chartNum, #chartLabel{
   font-weight: normal;
   margin-top: 0;
 }
-h6#chartNum, #chartLabel{
-  font-weight: normal;
-  margin-top: 0;
-}
 #Labels{
   position: relative;
   align-items: center;
@@ -300,18 +293,7 @@ h6#chartNum, #chartLabel{
   left: 5px;
   top: 5px;
 }
-table .greencomp{
-    table-layout:fixed;
-    width: 100%;
-    text-align: center;
-    font-size: 25px;
-    color: #003467;
-    padding: 2%;
-}
-.grenncomp td{
-  width: 30%;
-  height: auto;
-}
+
 table .label{
   table-layout:fixed;
   height: auto;
@@ -326,6 +308,14 @@ table .label{
 .label td{
   text-align: center;
   margin:10%;
+}
+.circle{
+  height: 75%;
+  width: 75%;
+  background-color: white;
+  border-radius: 50%;
+  display: inline-block;
+  border: 5px solid #ffcc01;
 }
 .exp-container{
   width: 100%;
@@ -445,7 +435,7 @@ h1#downloadrep{
 button.cancelBtn.btn.btn-sm.btn-default, button.applyBtn.btn.btn-sm.btn-primary{
   margin-top: 0;
 }
-div#selector input#reportrange{
+div#selector input#reportrange, div#selector input#reportrange2{
   border: none;
   font-size: 25px;
   background-color: #e3e3e3;
@@ -455,7 +445,7 @@ div#selector input#reportrange{
   text-align: center;
   margin: 5% 0;
 }
-div#reportrange.greyell{
+div#reportrange.greyell, div#reportrange2.greyell{
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 div.select-selected{
@@ -471,10 +461,12 @@ button#add-build{
 .extrabuildings{
   display: inline-flex;
 }
-div#buildingadder{
+div#buildingadder, div#sensorsearch{
   height: fit-content;
+  margin-top: 5%;
+  margin-bottom: 0;
 }
-div#buildingadder input.search{
+div#buildingadder input.search, div#sensorsearch input.search{
   font-size: 20px;
   border: none;
   border-bottom: 3px solid #ffcc01;
@@ -503,8 +495,6 @@ div#formcontainer form{
   text-align: center;
   height: initial;
   display: inline-grid;
-  background-color: rgba(255,255,255, .7);
-  padding: 2.5%;
 }
 button#login{
   margin: 2.5%;
@@ -601,17 +591,16 @@ div#Leftgraph{
   text-align: center;
 }
 div#weather{
-  display: flex;
   height: fit-content;
-  float: left;
 }
-ul#autocomplete-results, ul#autocomplete-results2{
+ul#autocomplete-results, ul#autocomplete-results2, ul#autocomplete-results3{
   padding-left: 0;
   padding: 2%;
   z-index: 2;
+  margin: 0;
 }
 
-ul#autocomplete-results li, ul#autocomplete-results2 li{
+ul#autocomplete-results li, ul#autocomplete-results2 li,ul#autocomplete-results3 li{
   font-size: 20px;
 }
 .searchsug:hover{
@@ -742,4 +731,10 @@ div#Topnav.topnav li:hover a {
 }
 #innerstats{
   padding: 5%;
+}
+form#login a{
+  color: #003467;
+}
+.amcharts-chart-div > a {
+ display: none !important;
 }

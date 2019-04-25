@@ -78,7 +78,7 @@ $(function() {
 	function checkFields(){
     var buildingname = document.getElementById('search').value.length;
     var valarr = document.getElementsByClassName('select-selected').innerHTML;
-    var buildingsensor = document.getElementById('select-selected-sens').innerHTML;
+    //var buildingsensor = document.getElementById('select-selected-sens').innerHTML;
     var buildingutil = document.getElementById('select-selected-util').innerHTML;
     //If Name not entered
 		if(buildingname == 0){

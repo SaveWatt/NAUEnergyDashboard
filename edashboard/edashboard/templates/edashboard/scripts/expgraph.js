@@ -3,14 +3,18 @@
     type: 'line',
     data: {
       labels: [{% for data in date %}
-                    "{{ data|safe }}",
+                    "{{ data|safe}}",
                   {% endfor %}],
       fillOpacity: .3,
       datasets: [{
           data: [{% for data in usage %}
                         {{ data|safe }},
                         {% endfor %}],
-          label: "{{ type|safe }}",
+          label: {% if sensor|length > 0 %}
+                  "SENSOR: " + "{{sensor|safe}}"
+                  {% else %}
+                  "{{ utilname|safe }}"
+                  {% endif %},
           borderColor: "#1f61a8",
           fill: origin,
           backgroundColor: "rgba(31,97,168,.3)",
@@ -21,7 +25,11 @@
       responsive: false,
       title: {
         display: true,
-        text: "{{ bname|safe }} Building usage",
+        text: {% if date %}
+              "Usage for " + "{{ build_name|safe }}"
+              {% else %}
+              ""
+              {% endif %},
       },
       scales: {
       xAxes: [{
@@ -33,7 +41,7 @@
       yAxes: [{
         scaleLabel: {
           display: true,
-          labelString: '{{ type|safe }}'
+          labelString: "{{ utilname|safe }}"
         }
       }]
     }

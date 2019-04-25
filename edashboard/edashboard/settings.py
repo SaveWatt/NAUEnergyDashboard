@@ -128,4 +128,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR,EDASH_PATH,MEDIA_URL)
 
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 STATIC_URL = '/static/'
-STATIC_ROOT = '/edashboard/edashboard/static/'
+STATIC_ROOT = os.path.join(BASE_DIR,EDASH_PATH,STATIC_URL)

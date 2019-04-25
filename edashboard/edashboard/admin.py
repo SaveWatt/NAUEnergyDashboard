@@ -6,6 +6,7 @@ from .models import *
 
 admin.site.register(Building)
 admin.site.register(Sensor)
+admin.site.register(SensorType)
 
 
 class MyModelAdmin(admin.ModelAdmin):

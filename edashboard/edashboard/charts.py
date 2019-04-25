@@ -1,5 +1,5 @@
 from edashboard.models import *
-from edashboard.Backend import StaticDataRetriever
+from edashboard.backend import StaticDataRetriever
 
 sdr = StaticDataRetriever()
 
@@ -90,14 +90,15 @@ def usage(list):
 
     return usage
 
-def avg(data):
+def sum(data):
     sum = 0
     for i in range (0,len(data)):
         sum += data[i]
 
-    try:
-        average = round(sum / len(data), 4)
-    except:
-        average = 0
+    return round(sum,4)
+
+def avg(data):
+    avg = sum(data)
+    average = round(avg / len(data), 4)
 
     return average

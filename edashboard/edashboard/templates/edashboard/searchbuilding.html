@@ -54,12 +54,7 @@ for (i = 0; i < x.length; i++) {
   // For each element, create a new DIV
   diva = document.createElement("DIV");
   diva.setAttribute("class", "select-selected");
-  if(i==0){
-    diva.setAttribute("id","select-selected-util");
-  }
-  else{
-    diva.setAttribute("id","select-selected-sens");
-  }
+  diva.setAttribute("id","select-selected-util");
   diva.innerHTML = "Select";
   x[i].appendChild(diva);
   /* For each element, create a new DIV that will contain the option list: */

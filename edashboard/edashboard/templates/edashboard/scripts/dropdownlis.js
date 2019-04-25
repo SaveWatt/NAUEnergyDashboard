@@ -1,30 +1,4 @@
-<div id="buildingadder">
-  <input id="buildingsearchexpcompsearch" class="search" type="text" placeholder="Search For Building..." value="{{ bname|safe }}" autofocus />
-  <ul id="autocomplete-results2"></ul>
-</div>
-  {% if user.is_authenticated %}
-    <div id="selectsens" class="custom-select" style="width:200px;">
-      <li class="dropdown-toggle" style="display:none;">Sensor</li>
-      <h2 class="select">Select a Sensor</h2>
-      <select>
-        {% for data in slist %}
-          <option>{{ data|safe }}</option>
-        {% endfor %}
-      </select>
-    </div>
-  {% else %}
-  <div id="selectutil"class="custom-select" style="width:200px;">
-    <li class="dropdown-toggle" style="display:none;">Utility</li>
-    <h2 class="select">Select a Utility</h2>
-    <select>
-      {% for data in ulist %}
-        <option>{{ data|safe }}</option>
-      {% endfor %}
-    </select>
-  </div>
-  {% endif %}
-
-<script>
+{% load staticfiles %}
 jQuery(document).ready(function (e) {
     function t(t) {
         e(t).bind("click", function (t) {
@@ -57,17 +31,13 @@ for (i = 0; i < x.length; i++) {
   // For each element, create a new DIV
   diva = document.createElement("DIV");
   diva.setAttribute("class", "select-selected");
-  if(i==0){
-    diva.setAttribute("id","select-selected-util");
-  }
-  else{
-    diva.setAttribute("id","select-selected-sens");
-  }
+  diva.setAttribute("id","select-selected-util");
   diva.innerHTML = "Select";
   x[i].appendChild(diva);
   /* For each element, create a new DIV that will contain the option list: */
   divb = document.createElement("DIV");
   divb.setAttribute("class", "select-items select-hide");
+  if(selElmnt != null){
   for (j = 0; j < selElmnt.length; j++) {
     // For each option in the original select element,
     //create a new DIV that will act as an option item:
@@ -95,6 +65,7 @@ for (i = 0; i < x.length; i++) {
     });
     divb.appendChild(divc);
   }
+}
   x[i].appendChild(divb);
   diva.addEventListener("click", function(e) {
     /* When the select box is clicked, close any other select boxes,
@@ -124,4 +95,3 @@ function closeAllSelect(elmnt) {
     }
   }
 }
-</script>

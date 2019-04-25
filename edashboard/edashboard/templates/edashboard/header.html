@@ -13,15 +13,17 @@
       <ul class="dropdown" style="max-height: 600px;overflow: scroll; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
         <li class="links"><input type="text" id="buildingsearch header-search" class="search" placeholder="Search for Building..." style="color:black; font-size:20px;border: none;padding: 10px;">
         <ul id="autocomplete-results" class="sidemenu"></ul></li>
-        {% include "edashboard/sidebar.html" %}
+        {% include "edashboard/dropdownlis.html" %}
       </ul>
     </div>
     <a href="{% url 'compare' %}" style="padding: 17px 17px;">Comparison</a>
   </div>
   <div id="settings">
     <a href="{% url 'help' %}">Help</a>
-    {% if user.is_authenticated %}
+    {% if user.userprofile.permission is 3 %}
     <a href="{% url 'admin:index' %}">Admin</a>
+    <a href="{% url 'logout' %}">Logout</a>
+    {% elif user.userprofile.permission is 1 %}
     <a href="{% url 'logout' %}">Logout</a>
     {% else %}
     <a href="{% url 'register' %}">SignUp!</a>
@@ -129,17 +131,17 @@
       autocomplete_results.style.backgroundColor = 'white';
     }
   }
+  // For building search in header
   function FillInput1(listid){
     listName = document.getElementById(listid).innerHTML;
     document.getElementById("buildingsearch header-search").value = listName;
     document.getElementById("autocomplete-results").innerHTML = '';
     document.getElementById("autocomplete-results").style.backgroundColor = 'white';
     var num = getNum(listName);
-    window.location.href = "{% url 'building' %}B" + num + "/";
+    window.location.href = "{% url 'building' %}" + num + "/";
 
     return 0;
   }
-
 function getNum(buildstr) {
   var num = buildstr.split(" ");
   var last = (num[num.length-1]).substring(1);

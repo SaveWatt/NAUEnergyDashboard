@@ -4,7 +4,7 @@ import csv
 from django.utils.encoding import smart_str
 from edashboard.clean import *
 from edashboard.models import *
-from edashboard.drawgraph import *
+from edashboard.charts import *
 from edashboard.conversion import *
 from edashboard.weather import *
 from django.http import JsonResponse
@@ -33,6 +33,7 @@ def index(request):
     usage_elec = usage(list_elec)
     usage_steam = usage(list_steam)
     usage_dom = usage(list_dom)
+    print(usage_dom)
     usage_reclaimed = usage(list_reclaimed)
     usage_chilled = usage(list_chilled)
     avg_elec = avg(usage_elec)
@@ -48,9 +49,10 @@ def index(request):
     overall = elecDollar + steamDollar + domDollar + reclaimedDollar + chilledDollar
     return render(request, 'edashboard/index.html',{'buildlist': buildings,'buildlistname':bname,
     'buildlistnum':bnum,'usage_elec':usage_elec,'usage_steam':usage_steam,'usage_chilled':usage_chilled,
-    'usage_reclaimed':usage_reclaimed,'avg_elec':avg_elec,'avg_steam':avg_steam,'avg_chilled':avg_chilled,
-    'avg_reclaimed':avg_reclaimed,'elecDollar':elecDollar,'steamDollar':steamDollar,'domDollar':domDollar,
-    'reclaimedDollar':reclaimedDollar,'chilledDollar':chilledDollar,'overall':overall})
+    'usage_dom':usage_dom,'usage_reclaimed':usage_reclaimed,'avg_elec':avg_elec,'avg_steam':avg_steam,
+    'avg_chilled':avg_chilled,'avg_dom':avg_dom,'avg_reclaimed':avg_reclaimed,'elecDollar':elecDollar,
+    'steamDollar':steamDollar,'domDollar':domDollar,'reclaimedDollar':reclaimedDollar,'chilledDollar':chilledDollar,
+    'overall':overall})
 
 def building_view(request, buildnum):
     weather_day1 = day1()

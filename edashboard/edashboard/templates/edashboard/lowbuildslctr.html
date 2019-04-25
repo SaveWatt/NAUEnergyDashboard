@@ -1,0 +1,46 @@
+<div class="greyell" id="reportrange" style="cursor: pointer; padding: 5px 10px;">
+  <i class="fa fa-calendar"></i>&nbsp;
+  <span></span> <i class="fa fa-caret-down"></i>
+</div>
+<div id="buildingadder">
+  <input id="buildingsearchexpcompsearch" class="search" type="text" placeholder="Search For Building..." autofocus/>
+  <ul id="autocomplete-results2"></ul>
+</div>
+<div id="selectutil"class="custom-select" style="width:200px;">
+  <li class="dropdown-toggle" style="display:none;">Utility</li>
+  <h2 class="select">Select a Utility</h2>
+  <select>
+    <option>Meter Current Demand KW</option>
+    <option>Meter Dom Water Gallons</option>
+    <option>Meter Reclaimed Water Gallons</option>
+    <option>Meter Steam KBTU</option>
+  </select>
+</div>
+<button id="graphdata" onClick="getUtilityData(event)">Graph Data</button>
+<script>
+  {% include "edashboard/scripts/buildingsearch.js" %}
+  {% load staticfiles %}
+  //TIME RANGE CODE
+  $(function() {
+      var start = moment().subtract(29, 'days');
+      var end = moment();
+      function cb(start, end) {
+          $('#reportrange span').html(start.format('MMMM D, YYYY h:mm a') + ' - ' + end.format('MMMM D, YYYY h:mm a'));
+      }
+      $('#reportrange').daterangepicker({
+          startDate: start,
+          endDate: end,
+          timePicker: true,
+          ranges: {
+             'Today': [moment(), moment()],
+             'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+             'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+             'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+             'This Month': [moment().startOf('month'), moment().endOf('month')],
+             'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+          }
+      }, cb);
+      cb(start, end);
+  });
+
+</script>

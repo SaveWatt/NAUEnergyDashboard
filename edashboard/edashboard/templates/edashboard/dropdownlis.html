@@ -1,0 +1,30 @@
+    <li class="links">
+      <a href="#" class="numbuild">Buildings by number</a>
+      <ul id="numbersub">
+      </ul>
+    </li>
+    <li class="links">
+      <a href="#">Buildings by Name</a>
+      <ul id="namesub">
+      </ul>
+    </li>
+<script>
+  var numlis = {{ buildlistnum|safe }};
+  var namelis = {{ buildlistname|safe }};
+  var nums = document.getElementById("numbersub");
+  var names = document.getElementById("namesub");
+  for (i = 0; i < numlis.length; i++) {
+    nums.innerHTML += '<li class=\'searchsug\'id="list0'+i+'" onclick="FillInput1(\'list0'+i+'\')">' + numlis[i] + '</li>';
+    names.innerHTML += '<li class=\'searchsug\'id="list0'+i+'" onclick="FillInput1(\'list0'+i+'\')">' + namelis[i] + '</li>';
+  }
+
+  function getBuildNum(str){
+    var num = str.split(' ');
+    return num[0];
+  }
+  function getBuildNameNum(str){
+    var namenum = str.split(' ');
+    namenum[-1];
+    return
+  }
+</script>

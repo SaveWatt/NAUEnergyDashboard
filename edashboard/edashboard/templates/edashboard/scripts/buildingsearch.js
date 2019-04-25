@@ -12,7 +12,6 @@ function autocompletee(val) {
     }}
   return build_return;
 }
-
 // events
 input2.onkeyup = function(e){
   input_val = this.value; // updates the variable on each ocurrence
@@ -22,6 +21,7 @@ input2.onkeyup = function(e){
     autocomplete_results.innerHTML = '';
     build_to_show = autocompletee(input_val);
     if(build_to_show.length != 0){
+      
       for (i = 0; i < build_to_show.length; i++) {
         autocomplete_results.innerHTML += '<li class=\'searchsug\'id="list'+i+'" onclick="FillInput(\'list'+i+'\')">' + build_to_show[i] + '</li>';
       }

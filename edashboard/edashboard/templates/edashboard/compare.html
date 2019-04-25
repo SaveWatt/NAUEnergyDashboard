@@ -36,6 +36,7 @@
 <script>
   {% include "edashboard/scripts/compgraph.js" %}
   {% include "edashboard/scripts/checkcfields.js" %}
+  {% include "edashboard/scripts/timeRange.js" %}
 /* If the user clicks anywhere outside the select box,
 then close all select boxes: */
 var time = document.getElementById("reportrange").getElementsByTagName('span')[0];
@@ -57,7 +58,7 @@ function getData(event){
   var bname4 = null;
   //Checks if Divs exist
   bname1 = getNum(bname1);
-  var sensor = $('#select-selected-sens').clone().children().remove().end().text();
+  var sensor = $('#sensorsearchexpcompsearch').val();
   var util = $('#select-selected-util').clone().children().remove().end().text();
   if(sensor.toString() == ""){
     var details = "b1=" + bname1 + "time=" + times + "util=" + util;
