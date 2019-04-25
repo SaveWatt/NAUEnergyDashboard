@@ -51,11 +51,18 @@ def building_view(request, buildnum):
         percent_str = ("%d%%" % round(percent, 2))
         mean = round(sum(usage)/len(usage), 2)
         median = round(stats.median(usage), 2)
+        trees = round(sum(usage)*24*.0007/.06,2)
+        carbon = round(sum(usage)*24,2)
+        oil = round(sum(usage)*24*.0007//.43,2)
     else:
         percent = 0
         percent_str = 0
         mean = 0
         median = 0
+        total = 0
+        trees = 0
+        carbon = 0
+        oil = 0
     return render(request, 'edashboard/building.html', {'buildlist': buildings,
                                                         'bnum': buildnum,
                                                         'bname':b_name,
@@ -65,6 +72,9 @@ def building_view(request, buildnum):
                                                         'percent_str':percent_str,
                                                         'mean': mean,
                                                         'median': median,
+                                                        'trees': trees,
+                                                        'oil': oil,
+                                                        'carbon': carbon,
                                                         'utilities': util_strs,
                                                         'imagePath': imagePath,
                                                         'sensors': sensor_strs,

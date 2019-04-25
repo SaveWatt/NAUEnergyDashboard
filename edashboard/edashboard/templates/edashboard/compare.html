@@ -44,11 +44,6 @@ document.getElementById("utilswitch").style.backgroundColor = "rgb(255, 204, 1)"
 var time = document.getElementById("reportrange").getElementsByTagName('span')[0];
 time.setAttribute("id","stringtime");
 time.setAttribute("name","stringtime");
-{% if user.userprofile.permission is 3 %}
-var time2 = document.getElementById("reportrange2").getElementsByTagName('span')[0];
-time2.setAttribute("id","stringtime2");
-time2.setAttribute("name","stringtime2");
-{% endif %}
 
 function downloadData(event){
   event.preventDefault();
@@ -57,27 +52,76 @@ function downloadData(event){
   window.location.href = "" + durl.toString() + "";
 }
 function getSensorData(event){
-  event.preventDefault();
-  var times = ($("span#stringtime2").text()).replace(" ","");
-  var sensor = $('#sensorsearchexpcompsearch').val();
-  var details = "time=" + times + "sensor=" +sensor;
+  var times = ($("span#stringtime").text()).replace(" ","");
+  var sens1 = "None";
+  var sens2 = "None";
+  var sens3 = "None";
+  var sens4 = "None";
+  var sensors = []
+  if(document.getElementById('sensoradder').getElementsByTagName('input')[0].value.length != 0){
+    sens1 = document.getElementById('sensoradder').getElementsByTagName('input')[0].value;
+    sensors.push(sens1.toString())
+  }
+  if(document.getElementById('extrasdiv0') != null && document.getElementById('extrasdiv0').getElementsByTagName('input')[0].value.length != 0){
+    sens2 = document.getElementById('extrasdiv0').getElementsByTagName('input')[0].value;
+    sensors.push(sens2.toString())
+  }
+  if(document.getElementById('extrasdiv1') != null && document.getElementById('extrasdiv1').getElementsByTagName('input')[0].value.length != 0){
+    sens3 = document.getElementById('extrasdiv1').getElementsByTagName('input')[0].value;
+    sensors.push(sens3.toString())
+  }
+  if(document.getElementById('extrasdiv2') != null && document.getElementById('extrasdiv2').getElementsByTagName('input')[0].value.length != 0){
+    sens4 = document.getElementById('extrasdiv2').getElementsByTagName('input')[0].value;
+    sensors.push(sens4.toString())
+  }
+  console.log(sensors);
+  var sensincr;
+  var details = ""
+  sens1 = getNum(sens1);
+  for (sensincr = 0; sensincr < sensors.length; sensincr++) {
+    details += "sens" + sensincr +"="+ sensors[sensincr] + " ";
+  }
+  details += "time=" + times;
+  console.log(details);
   var destinationUrl = "{% url 'export2' builddata=0 %}".replace(/0/, details.toString());
   window.location.href = "" + destinationUrl.toString() + "";
-  //var util = $('#select-selected-util').clone().children().remove().end().text();
-  //var myEvent = {'building': buildingname,'time': timestr, 'util': util, 'sensor': sensor};
 }
-function getUtilityData(event){
+function getBuildingData(event){
   event.preventDefault();
   var times = ($("span#stringtime").text()).replace(" ","");
-  var buildingname = $('#buildingsearchexpcompsearch').val();
-  buildingname = getNum(buildingname);
+  var build1 = "None";
+  var build2 = "None";
+  var build3 = "None";
+  var build4 = "None";
+  var builds = []
+  if(document.getElementById('buildingadder').getElementsByTagName('input')[0].value.length != 0){
+    build1 = document.getElementById('buildingadder').getElementsByTagName('input')[0].value;
+    builds.push(build1.toString())
+  }
+  if(document.getElementById('extrabdiv0') != null && document.getElementById('extrabdiv0').getElementsByTagName('input')[0].value.length != 0){
+    build2 = document.getElementById('extrabdiv0').getElementsByTagName('input')[0].value;
+    builds.push(build2.toString())
+  }
+  if(document.getElementById('extrabdiv1') != null && document.getElementById('extrabdiv1').getElementsByTagName('input')[0].value.length != 0){
+    build3 = document.getElementById('extrabdiv1').getElementsByTagName('input')[0].value;
+    builds.push(build3.toString())
+  }
+  if(document.getElementById('extrabdiv2') != null && document.getElementById('extrabdiv2').getElementsByTagName('input')[0].value.length != 0){
+    build4 = document.getElementById('extrabdiv2').getElementsByTagName('input')[0].value;
+    builds.push(build4.toString())
+  }
+  console.log(builds);
+  var buildincr;
+  var details = ""
+  for (buildincr = 0; buildincr < builds.length; buildincr++) {
+    details += "build" + buildincr +"="+ builds[buildincr] + " ";
+  }
+  build1 = getNum(build1);
   var util = $('#select-selected-util').clone().children().remove().end().text();
-  console.log(util);
-  var details = "build=" + buildingname + "time=" + times + "util=" +util;
+  details += "time=" + times + "util=" +util;
+  console.log(details);
   var destinationUrl = "{% url 'export2' builddata=0 %}".replace(/0/, details.toString());
   window.location.href = "" + destinationUrl.toString() + "";
-  //var util = $('#select-selected-util').clone().children().remove().end().text();
-  //var myEvent = {'building': buildingname,'time': timestr, 'util': util, 'sensor': sensor};
 }
 function getData(event){
   event.preventDefault();
