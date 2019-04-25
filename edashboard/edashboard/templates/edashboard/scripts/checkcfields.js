@@ -29,6 +29,11 @@ function addBuilding(){
       innerinput.setAttribute("id", "extrabuild");
       innerinput.setAttribute("placeholder", "Search For Building...");
       innerinput.setAttribute("style","height: fit-content;");
+      innerinput.setAttribute("id", "extrabuild");
+      var searchresults = document.createElement('ul');
+      var idval = "autocomplete-results" + insert_at;
+      searchresults.setAttribute("id","autocomplete-results" + insert_at);
+      searchresults.setAttribute("class","sidemenu");
       var removebutt = document.createElement('img');
       removebutt.setAttribute("src", "{% static 'edashboard/images/delete.png' %}");
       removebutt.setAttribute("id", "removebutton");
@@ -36,6 +41,7 @@ function addBuilding(){
       removebutt.setAttribute("style", "height: 30px;margin: 5% 0;padding-left: 3%;");
       innerdiv.appendChild(innerinput);
       innerdiv.appendChild(removebutt);
+      innerdiv.appendChild(searchresults);
       (document.getElementById("buildingadder")).appendChild(innerdiv);
       fieldId++; // increment fileId to get a unique ID for the new element
       building[insert_at] = 1;
@@ -43,6 +49,7 @@ function addBuilding(){
     else{
       alert("You can only graph up to 4 buildings!");
     }
+    checkBuildingValues()
 }
 function addSensor(){
     var insert_at=0;
@@ -84,16 +91,19 @@ function addSensor(){
     else{
       alert("You can only graph up to 4 Sensors!");
     }
+    checkSensorValues()
 }
 function removeBuilding(num){
   innerdiv=document.getElementById("extrabdiv"+num);
   innerdiv.parentNode.removeChild(innerdiv);
   building[num]=null;
+  checkBuildingValues()
 }
 function removeSensor(num){
   innerdiv=document.getElementById("extrasdiv"+num);
   innerdiv.parentNode.removeChild(innerdiv);
   sensor[num]=null;
+  checkSensorValues()
 }
 //TIME RANGE CODE
 $(function() {
