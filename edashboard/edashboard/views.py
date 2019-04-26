@@ -90,16 +90,7 @@ def compare_view(request,builddata=None):
     data = ""
     starttime = ""
     endtime = ""
-    builds = {}
-    #Checks for the number of buildings we have passed
-    if "build1=" in str(builddata):
-        builds['build1'] = ""
-    if "build2=" in str(builddata):
-        builds['build1'] = ""
-    if "build3=" in str(builddata):
-        builds['build1'] = ""
-    if "build4=" in str(builddata):
-        builds['build1'] = ""
+    builds = []
     #Sets the utility
     if "util=" in str(builddata):
         flag = "util"
@@ -107,7 +98,28 @@ def compare_view(request,builddata=None):
         flag = "sens"
     #Does operations according to utility
     if flag == "util":
-        data = splitUtilUrls(builddata)
+        counter = 0;
+        #Checks for the number of buildings we have passed
+        if "build0=" in str(builddata):
+            builds.append("build0=")
+        else:
+            builds.append("None")
+
+        if "build1=" in str(builddata):
+            builds.append("build1=")
+        else:
+            builds.append("None")
+
+        if "build2=" in str(builddata):
+            builds.append("build2=")
+        else:
+            builds.append("None")
+
+        if "build3=" in str(builddata):
+            builds.append("build3=")
+        else:
+            builds.append("None")
+        data = splitUtilUrls(builddata,builds)
         buildnum = data[0]
         util = data[1]
         starttime = getTimes(data[2])
@@ -258,28 +270,6 @@ def validate_username(request):
 def compareh_view(request):
     buildings = BR.getBuildingStrings()
     return render(request, 'edashboard/compare.html',{'buildlist': buildings,'buildlistname':bname,
-    'buildlistnum':bnum})
-
-def compare_view(request,builddata=None):
-    buildings = BR.getBuildingStrings()
-    flag = ""
-    sensor = ""
-    util = ""
-    if "util=" in str(builddata):
-        flag = "util"
-    if "sensor=" in str(builddata):
-        flag = "sens"
-    data = splitUrls(builddata, flag)
-    buildnum = data[0]
-    starttime = getTimes(data[2])
-    endtime = getTimes(data[3])
-    if flag == "util":
-        util = data[1]
-    if flag == "sens":
-        sensor = data[1]
-    usage=[1,5,8,3,5]
-    date=[1,2,3,4,5]
-    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'builddata':builddata,'usage':usage,'date':date,'buildlistname':bname,
     'buildlistnum':bnum})
 
 def down_compare(request, data):

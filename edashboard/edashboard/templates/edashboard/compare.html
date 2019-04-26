@@ -114,14 +114,20 @@ function getBuildingData(event){
   var buildincr;
   var details = ""
   for (buildincr = 0; buildincr < builds.length; buildincr++) {
-    details += "build" + buildincr +"="+ getNum(builds[buildincr]);
+    console.log(builds[buildincr]);
+    if(builds[buildincr] != "None"){
+      details += "build" + buildincr +"="+ getNum(builds[buildincr]);
+    }
+    else{
+      details += "build" + buildincr +"="+ "None";
+    }
   }
   build1 = getNum(build1);
   var util = $('#select-selected-util').clone().children().remove().end().text();
   details += "time=" + times + "util=" +util;
   console.log(details);
-  var destinationUrl = "{% url 'export2' builddata=0 %}".replace(/0/, details.toString());
-  //window.location.href = "" + destinationUrl.toString() + "";
+  var destinationUrl = "{% url 'compare2' builddata=0 %}".replace(/0/, details.toString());
+  window.location.href = "" + destinationUrl.toString() + "";
 }
 function getData(event){
   event.preventDefault();
@@ -150,8 +156,8 @@ function getData(event){
       bname4 = "b4=" + $("#extradiv2").find("input").val();}
     }
     console.log(details);
-    //var destinationUrl = "{% url 'compare2' builddata=0 %}".replace(/0/, details.toString());
-    //window.location.href = "" + destinationUrl.toString() + "";
+    var destinationUrl = "{% url 'compare2' builddata=0 %}".replace(/0/, details.toString());
+    window.location.href = "" + destinationUrl.toString() + "";
   }
   if(util.toString() == ""){
     var details = "b1=" + bname1 + "time=" + times + "sensor=" +sensor;
