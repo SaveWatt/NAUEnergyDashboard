@@ -27,13 +27,11 @@ def index(request):
     list_elec = elec_list()
     list_steam = steam_list()
     list_dom = dom_list()
-    print(list_dom)
     list_reclaimed = reclaimed_list()
     list_chilled = chilled_list()
     usage_elec = usage(list_elec)
     usage_steam = usage(list_steam)
     usage_dom = usage(list_dom)
-    print(usage_dom)
     usage_reclaimed = usage(list_reclaimed)
     usage_chilled = usage(list_chilled)
     avg_elec = avg(usage_elec)
@@ -79,11 +77,15 @@ def building_view(request, buildnum):
         percent_str = ("%d%%" % round(percent, 2))
         mean = round(sum(usage)/len(usage), 2)
         median = round(stats.median(usage), 2)
+        minimum = min(usage)
+        maximum = max(usage)
     else:
         percent = 0
         percent_str = 0
         mean = 0
         median = 0
+        minimum = 0
+        maximum = 0
     return render(request, 'edashboard/building.html', {'buildlist': buildings,
                                                         'bnum': buildnum,
                                                         'bname':b_name,
@@ -93,6 +95,8 @@ def building_view(request, buildnum):
                                                         'percent_str':percent_str,
                                                         'mean': mean,
                                                         'median': median,
+                                                        'minimum':minimum,
+                                                        'maximum':maximum,
                                                         'utilities': util_strs,
                                                         'imagePath': imagePath,
                                                         'sensors': sensor_strs,
