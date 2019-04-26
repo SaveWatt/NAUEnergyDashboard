@@ -8,5 +8,5 @@ class Command(BaseCommand):
    def handle(self, **options):
        sdr = StaticDataRetriever()
        #sdr.update_buildings()
-       #sdr.update_sensors()
-       BackendRetriever.getData("B60", "Current Demand KW", datetime.datetime(2018, 8, 1, 0, 0), datetime.datetime(2018, 8, 31, 23, 59))
+       sdr.update_sensors()
+       #BackendRetriever.getData("B60", "Current Demand KW", datetime.datetime(2018, 8, 1, 0, 0), datetime.datetime(2018, 8, 31, 23, 59))

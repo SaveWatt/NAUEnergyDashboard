@@ -209,16 +209,19 @@ class StaticDataRetriever:
     def update_sensors(self):
         if not self.__log_dict:
             self.make_log_dict()
+            count = len(self.__log_dict.keys())
         for key in sorted(self.__log_dict.keys()):
-            num_results = Sensor.objects.filter(s_log = key).count()
-            if num_results < 1:
-                b = Building.objects.get(b_num=self.__log_dict[key][0])
-                s = b.sensor_set.create(s_name=self.__log_dict[key][1], s_type=self.__log_dict[key][4], s_log=key)
-                s.save()
+            print("Updating Sensor #%d" % count)
+            count -= 1
+            b = Building.objects.get(b_num=self.__log_dict[key][0])
+            s = b.sensor_set.create(s_name=self.__log_dict[key][1], s_type=self.__log_dict[key][4], s_log=key)
+            s.save()
 
     def make_log_dict(self):
-        types = ['Meter Current Demand KW', 'Meter Dom Water Gallons',
-                 'Meter Reclaimed Water Gallons', 'Meter Steam KBTU']
+        types = ['Current Demand KW', 'Dom Water Gallons', 'Domestic Water',
+                 'Reclaimed Water Gallons', 'Steam KBTU', 'Electrical Usage',
+                 'Elect Demand', 'Electrical Demand', 'Electric Demand',
+                 'Reclaimed Water', 'Chilled Water']
 
         cursor = self.__connection.cursor(as_dict=True)
         # Get list of trendlogs
