@@ -7,8 +7,9 @@ def elec_list():
     eleclist = []
     listslog = []
 
-    for data in Sensor.objects.filter(s_type="Meter Current Demand KW"):
+    for data in Sensor.objects.filter(s_type="Electrical Usage"):
         listslog.append(data.s_log)
+    print(listslog)
 
     for data in listslog:
         eleclist.append(Sensor.objects.get(s_log=data))
@@ -19,7 +20,7 @@ def steam_list():
     steamlist = []
     listslog = []
 
-    for data in Sensor.objects.filter(s_type="Meter Steam KBTU"):
+    for data in Sensor.objects.filter(s_type="Steam KBTU"):
         listslog.append(data.s_log)
 
     for data in listslog:
@@ -31,7 +32,7 @@ def chilled_list():
     chilledlist = []
     listslog = []
 
-    for data in Sensor.objects.filter(s_type="Meter Chilled Water"):
+    for data in Sensor.objects.filter(s_type="Chilled Water"):
         listslog.append(data.s_log)
 
     for data in listslog:
@@ -43,7 +44,9 @@ def dom_list():
     domlist = []
     listslog = []
 
-    for data in Sensor.objects.filter(s_type="Meter Dom Water Gallons"):
+    for data in Sensor.objects.filter(s_type="Dom Water Gallons"):
+        listslog.append(data.s_log)
+    for data in Sensor.objects.filter(s_type="Domestic Water"):
         listslog.append(data.s_log)
 
     for data in listslog:
@@ -55,7 +58,7 @@ def reclaimed_list():
     reclaimedlist = []
     listslog = []
 
-    for data in Sensor.objects.filter(s_type="Meter Reclaimed Water Gallons"):
+    for data in Sensor.objects.filter(s_type="Reclaimed Water"):
         listslog.append(data.s_log)
 
     for data in listslog:
@@ -99,6 +102,7 @@ def sum(data):
 
 def avg(data):
     avg = sum(data)
-    average = round(avg / len(data), 4)
-
-    return average
+    if len(data) > 1:
+        average = round(avg / len(data), 4)
+        return average
+    return 0
