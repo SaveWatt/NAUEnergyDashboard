@@ -92,10 +92,13 @@ def compare_view(request,builddata=None):
     starttime = ""
     endtime = ""
     builds = []
+    senses = []
+    datas = []
+    sensornums =[]
     #Sets the utility
     if "util=" in str(builddata):
         flag = "util"
-    if "sensor=" in str(builddata):
+    else:
         flag = "sens"
     #Does operations according to utility
     if flag == "util":
@@ -125,37 +128,51 @@ def compare_view(request,builddata=None):
         util = data[1]
         starttime = getTimes(data[2])
         endtime = getTimes(data[3])
-        datas = []
         for i in range(0, len(buildnums)):
             building = Building.objects.get(b_num=buildnums[i])
             datas.append(BR.getUtilityData(building, "Steam Total", starttime, endtime))
 
     if flag == "sens":
-        if request.session.get('user.userprofile.permission') is '3':
-            data = splitSensUrls(builddata)
-            starttime = getTimes(data[1])
-            endtime = getTimes(data[2])
-            sensor = data[0]
-            data = BR.getSensorData(sensor, starttime, endtime)
+        #Checks for the number of buildings we have passed
+        if "sens0=" in str(builddata):
+            senses.append("sens0=")
         else:
-            data = splitSensUrls(builddata)
-            starttime = getTimes(data[1])
-            endtime = getTimes(data[2])
-            sensor = "None"
-            data = ("0","0","0","0")
-            permisflag = "error"
+            senses.append("None")
+
+        if "sens1=" in str(builddata):
+            senses.append("sens1=")
+        else:
+            senses.append("None")
+
+        if "sens2=" in str(builddata):
+            senses.append("sens2=")
+        else:
+            senses.append("None")
+
+        if "sens3=" in str(builddata):
+            senses.append("sens3=")
+        else:
+            senses.append("None")
+        data = splitSensUrls(builddata,senses)
+        sensornums = data[0]
+        starttime = getTimes(data[1])
+        endtime = getTimes(data[2])
+        for i in range(0, len(sensornums)):
+            datas.append(BR.getSensorData(sensornums[i], starttime, endtime))
     #Loads the final data
     usages = []
     dates=[]
-    bgcolors = []
-    bordercols = []
     content = []
     bgcolor = ["#ffcc01","#1f61a8","#8c8b86","#10603a"]
     bordercol = ["rgba(255,204,1,.3)","rgba(31,97,168,.3)","rgb(140, 139, 134,.3)","rgb(16, 96, 58,.3)"]
     for i in datas:
+        print(i[3])
         dates.append(i[0])
         usages.append(i[1])
-        buildnames.append(i[2])
+        if flag == "util":
+            buildnames.append(i[2])
+        else:
+            buildnames.append(i[3])
     for i in range(0,len(usages)):
         content.append([usages[i],buildnames[i],bgcolor[i],bordercol[i]])
     #usage = data[1]
@@ -166,9 +183,7 @@ def compare_view(request,builddata=None):
     #    for i in range(0,len(dates)):
     #        t = date[i]
     #        dates[i] = t.strftime('%m:%d:%Y %H:%M')
-    print(content[0])
-    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'buildlistname':bname,'sensor':sensor,
-    'buildlistnum':bnum,'builddata':builddata,'date':dates[0], 'utilname':util,'build_names':buildnames,'flag':flag,'content': content})
+    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'buildlistname':bname,'sensor':sensor,'buildlistnum':bnum,'builddata':builddata,'date':dates[0], 'utilname':util,'build_names':buildnames,'flag':flag,'content': content})
 
 def export_view(request,builddata=None):
     buildings = BR.getBuildingStrings()

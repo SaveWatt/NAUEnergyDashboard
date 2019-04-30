@@ -53,6 +53,7 @@ function downloadData(event){
   window.location.href = "" + durl.toString() + "";
 }
 function getSensorData(event){
+  event.preventDefault();
   var times = ($("span#stringtime").text()).replace(" ","");
   var sens1 = "None";
   var sens2 = "None";
@@ -84,7 +85,7 @@ function getSensorData(event){
   }
   details += "time=" + times;
   console.log(details);
-  var destinationUrl = "{% url 'export2' builddata=0 %}".replace(/0/, details.toString());
+  var destinationUrl = "{% url 'compare2' builddata=0 %}".replace(/0/, details.toString());
   window.location.href = "" + destinationUrl.toString() + "";
 }
 function getBuildingData(event){

@@ -8,6 +8,8 @@
               {% endfor %}],
   fillOpacity: .3,
   datasets: [
+    {% if flag is "util" %}
+    //Utility
     {% for data in content%}
     {% if forloop.last %}
     {
@@ -27,6 +29,29 @@
     },
     {% endif %}
     {% endfor %}
+
+    {% else %}
+    //Sensor
+    {% for data in content%}
+    {% if forloop.last %}
+    {
+      data: {{data.0|safe}},
+      label: "{{data.1|safe}}",
+      borderColor: "{{ data.2|safe}}",
+      fill: origin,
+      backgroundColor: "{{ data.3|safe}}",
+    }
+    {% else %}
+    {
+      data: {{data.0|safe}},
+      label: "{{data.1|safe}}",
+      borderColor: "{{ data.2|safe}}",
+      fill: origin,
+      backgroundColor: "{{ data.3|safe}}",
+    },
+    {% endif %}
+    {% endfor %}
+    {% endif %}
   ]
   },
   options: {

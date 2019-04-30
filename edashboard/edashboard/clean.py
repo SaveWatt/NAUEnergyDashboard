@@ -35,26 +35,30 @@ def getBuildInfo(str):
         bname += starr[i]
     return [bname,bnum]
 
-def splitSensUrls(builddata):
+def splitSensUrls(builddata,senses):
     cleandata = []
     months = ["January","February","March","April","May",
     "June","July","August","September","October","November", "December"]
-    build = builddata.split("time=")
-    times=""
-    timesens = build[1].split("sensor=")
-    times = timesens[0]
-    sensor = timesens[1]
+    sens = builddata.split("time=")
+    times = sens[1]
     splitimes = times.split(" - ")
     start = splitimes[0]
     end = splitimes[1]
+    fsense=[]
     i=0
     for i in range(0,len(months)-1):
         if(months[i] in start):
             monDay = start.split(",")
             num = monDay[0].split(months[i])
             start = "" + str(months[i]) + " " + str(num[1]) +","+ monDay[1]
+    for i in range(0,len(senses)):
+        if(senses[i]=="None"):
+            continue
+        else:
+            fsense.append(sens[0].split(senses[len(sens)-1-i])[1].strip())
+            sens[0] = sens[0].split(senses[len(sens)-1-i])[0]
     #Adds sensor
-    cleandata.append(sensor)
+    cleandata.append(fsense)
     #Adds start time
     cleandata.append(start)
     #Adds end time
