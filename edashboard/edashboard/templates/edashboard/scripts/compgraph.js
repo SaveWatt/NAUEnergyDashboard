@@ -3,32 +3,37 @@
   new Chart(document.getElementById("line-chart"), {
   type: 'line',
   data: {
-  labels: [{% for data in db_id %}
-                {{ data }},
+  labels: [{% for datas in date%}
+                "{{ datas|safe}}",
               {% endfor %}],
   fillOpacity: .3,
-  datasets: [{
-      data: [{% for data in db_data %}
-                    {{ data }},
-                  {% endfor %}],
-      label: "B13 ELEC",
-      borderColor: "#1f61a8",
-      fill: origin,
-      backgroundColor: "rgba(31,97,168,.3)",
-    },
+  datasets: [
+    {% for data in content%}
+    {% if forloop.last %}
     {
-      data: [27,3,28,9,38,1,6],
-      label: "B13A GAS",
-      borderColor: "#ffcc01",
+      data: {{data.0|safe}},
+      label: "{{data.1|safe}}",
+      borderColor: "{{ data.2|safe}}",
       fill: origin,
-      backgroundColor: "rgba(255,204,1,.3)",
-    }]
+      backgroundColor: "{{ data.3|safe}}",
+    }
+    {% else %}
+    {
+      data: {{data.0|safe}},
+      label: "{{data.1|safe}}",
+      borderColor: "{{ data.2|safe}}",
+      fill: origin,
+      backgroundColor: "{{ data.3|safe}}",
+    },
+    {% endif %}
+    {% endfor %}
+  ]
   },
   options: {
   responsive: false,
   title: {
     display: true,
-    text: "SAS Building Electricity usage",
+    text: "Comparison of {% for data in content%}{% if forloop.last %}{{data.1|safe}}{% else %}{{data.1|safe}}, {% endif %}{% endfor %} {{utilname|safe}}",
   },
   scales: {
   xAxes: [{
@@ -40,6 +45,6 @@
   yAxes: [{
     scaleLabel: {
       display: true,
-      labelString: 'Electricity (kWh)'
+      labelString: '{{utilname|safe}}'
     }}]}
   }});

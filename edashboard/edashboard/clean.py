@@ -75,55 +75,21 @@ def splitUtilUrls(builddata, buildss):
     start = splitimes[0]
     end = splitimes[1]
     i=0
-    fbuilds=[]
+    fbuilds = []
     fbuilds2=[]
-    print(buildss)
     for i in range(0,len(months)-1):
         if(months[i] in start):
             monDay = start.split(",")
             num = monDay[0].split(months[i])
             start = "" + str(months[i]) + " " + str(num[1]) +","+ monDay[1]
-    print(builds[0])
     for i in range(0,len(buildss)):
         if(buildss[i]=="None"):
             continue
         else:
-            print("Splitting")
-            print(builds[0])
-            print("Splitting on")
-            print(buildss[len(builds)-1-i])
-            print("split 0")
-            print(builds[0].split(buildss[len(builds)-1-i])[0])
-            print("split 1")
-            print(builds[0].split(buildss[len(builds)-1-i])[1])
-            builds[0] = builds[0].split(buildss[len(builds)-1-i])[0]
             fbuilds.append(builds[0].split(buildss[len(builds)-1-i])[1])
-    print(fbuilds)
-    print(builddata)
-    print("----")
-    print(buildss)
-    for i in range(0,len(fbuilds)):
-        if(buildss[len(buildss)-1-i] == "None"):
-            continue
-        else:
-            print("1")
-            print(builds[0])
-            print("2")
-            print(buildss[len(buildss)-i])
-            builds[0] = builds[0].split(buildss[len(buildss)-1-i])
-            print("3")
-            print(builds[0])
-            key = builds[0].split("build"+i+"=")
-            fbuilds2.append(key)
-            keyy = "build%d"%i
-            fbuilds2.append(finalbuilds[i])
-    print(fbuilds2)
-    #print(fbuilds)
-    #Adds building number
-    #cleandata.append(build1)
-    #cleandata.append(build2)
-    #cleandata.append(build3)
-    #cleandata.append(build4)
+            builds[0] = builds[0].split(buildss[len(builds)-1-i])[0]
+    #Adds building numbers
+    cleandata.append(fbuilds)
     #Adds Utility
     cleandata.append(util)
     #Adds start time

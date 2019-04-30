@@ -85,6 +85,7 @@ def compare_view(request,builddata=None):
     buildings = BR.getBuildingStrings()
     flag = ""
     permisflag = ""
+    buildnames=[]
     sensor = ""
     util = ""
     data = ""
@@ -120,12 +121,15 @@ def compare_view(request,builddata=None):
         else:
             builds.append("None")
         data = splitUtilUrls(builddata,builds)
-        buildnum = data[0]
+        buildnums = data[0]
         util = data[1]
         starttime = getTimes(data[2])
         endtime = getTimes(data[3])
-        building = Building.objects.get(b_num=buildnum)
-        data = BR.getUtilityData(building, util, starttime, endtime)
+        datas = []
+        for i in range(0, len(buildnums)):
+            building = Building.objects.get(b_num=buildnums[i])
+            datas.append(BR.getUtilityData(building, "Steam Total", starttime, endtime))
+
     if flag == "sens":
         if request.session.get('user.userprofile.permission') is '3':
             data = splitSensUrls(builddata)
@@ -141,17 +145,30 @@ def compare_view(request,builddata=None):
             data = ("0","0","0","0")
             permisflag = "error"
     #Loads the final data
-    print(request.session.get('user.userprofile.permission'))
-    usage = data[1]
-    date = data[0]
-    build_name = data[2]
-    utilname = data[3]
-    if(permisflag != "error"):
-        for i in range(0,len(date)):
-            t = date[i]
-            date[i] = t.strftime('%m:%d:%Y %H:%M')
+    usages = []
+    dates=[]
+    bgcolors = []
+    bordercols = []
+    content = []
+    bgcolor = ["#ffcc01","#1f61a8","#8c8b86","#10603a"]
+    bordercol = ["rgba(255,204,1,.3)","rgba(31,97,168,.3)","rgb(140, 139, 134,.3)","rgb(16, 96, 58,.3)"]
+    for i in datas:
+        dates.append(i[0])
+        usages.append(i[1])
+        buildnames.append(i[2])
+    for i in range(0,len(usages)):
+        content.append([usages[i],buildnames[i],bgcolor[i],bordercol[i]])
+    #usage = data[1]
+    #date = data[0]
+    #build_name = data[2]
+    #utilname = data[3]
+    #if(permisflag != "error"):
+    #    for i in range(0,len(dates)):
+    #        t = date[i]
+    #        dates[i] = t.strftime('%m:%d:%Y %H:%M')
+    print(content[0])
     return render(request, 'edashboard/compare.html',{'buildlist': buildings,'buildlistname':bname,'sensor':sensor,
-    'buildlistnum':bnum,'builddata':builddata,'usage':usage,'date':date, 'utilname':utilname,'build_name':build_name,'flag':flag})
+    'buildlistnum':bnum,'builddata':builddata,'date':dates[0], 'utilname':util,'build_names':buildnames,'flag':flag,'content': content})
 
 def export_view(request,builddata=None):
     buildings = BR.getBuildingStrings()
