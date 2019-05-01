@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 #Converts the given time to SQL Datetime
 def getTimes(times):
     #Convert to month number
@@ -25,6 +26,48 @@ def getTimes(times):
       #datetime.datetime(2018, 10, 1, 0, 0)
     return datetime.datetime(int(year), int(months[month]), int(day), int(hour), int(mins))
 
+def getDownData(data):
+    usages = [[],[],[],[]]
+    labels = []
+    date = []
+    content=[]
+    flag = 'usage'
+    flag2 = 'stay'
+    iteration = -1
+    for i in data:
+        #Changes iteration's Flag
+        if flag2 == 'change':
+            iteration +=1
+            flag2 = 'stay'
+        #Changes our util flag
+        if i == 'usage':
+            flag = 'usage'
+            flag2 = 'change'
+            continue
+        elif i == 'label':
+            flag = 'label'
+            continue
+        elif i == 'date':
+            flag = 'date'
+            continue
+
+        if flag == 'date':
+            i=i.replace("[","")
+            i=i.replace("]","")
+            i=i.replace("'", "")
+            i=i.strip()
+            date.append(i)
+
+        elif flag == 'label':
+            labels.append(i)
+        #its usage data
+        else:
+            i=float(i)
+            usages[iteration].append(i)
+
+    content=[date,labels,usages]
+    return content
+
 def getBuildInfo(str):
     starr = str.split(" ")
     bnum = starr[len(starr)-1]
@@ -35,26 +78,30 @@ def getBuildInfo(str):
         bname += starr[i]
     return [bname,bnum]
 
-def splitSensUrls(builddata):
+def splitSensUrls(builddata,senses):
+    print(senses)
     cleandata = []
     months = ["January","February","March","April","May",
     "June","July","August","September","October","November", "December"]
-    build = builddata.split("time=")
-    times=""
-    timesens = build[1].split("sensor=")
-    times = timesens[0]
-    sensor = timesens[1]
+    sens = builddata.split("time=")
+    times = sens[1]
     splitimes = times.split(" - ")
     start = splitimes[0]
     end = splitimes[1]
-    i=0
+    fsense=[]
     for i in range(0,len(months)-1):
         if(months[i] in start):
             monDay = start.split(",")
             num = monDay[0].split(months[i])
             start = "" + str(months[i]) + " " + str(num[1]) +","+ monDay[1]
+    for i in range(0,len(senses)):
+        if(senses[len(senses)-1-i]=="None"):
+            continue
+        else:
+            fsense.append(((sens[0]).split(senses[len(senses)-1-i]))[1].strip())
+            sens[0] = ((sens[0]).split(senses[len(senses)-1-i]))[0]
     #Adds sensor
-    cleandata.append(sensor)
+    cleandata.append(fsense)
     #Adds start time
     cleandata.append(start)
     #Adds end time
@@ -75,55 +122,21 @@ def splitUtilUrls(builddata, buildss):
     start = splitimes[0]
     end = splitimes[1]
     i=0
-    fbuilds=[]
+    fbuilds = []
     fbuilds2=[]
-    print(buildss)
     for i in range(0,len(months)-1):
         if(months[i] in start):
             monDay = start.split(",")
             num = monDay[0].split(months[i])
             start = "" + str(months[i]) + " " + str(num[1]) +","+ monDay[1]
-    print(builds[0])
     for i in range(0,len(buildss)):
         if(buildss[i]=="None"):
             continue
         else:
-            print("Splitting")
-            print(builds[0])
-            print("Splitting on")
-            print(buildss[len(builds)-1-i])
-            print("split 0")
-            print(builds[0].split(buildss[len(builds)-1-i])[0])
-            print("split 1")
-            print(builds[0].split(buildss[len(builds)-1-i])[1])
-            builds[0] = builds[0].split(buildss[len(builds)-1-i])[0]
             fbuilds.append(builds[0].split(buildss[len(builds)-1-i])[1])
-    print(fbuilds)
-    print(builddata)
-    print("----")
-    print(buildss)
-    for i in range(0,len(fbuilds)):
-        if(buildss[len(buildss)-1-i] == "None"):
-            continue
-        else:
-            print("1")
-            print(builds[0])
-            print("2")
-            print(buildss[len(buildss)-i])
-            builds[0] = builds[0].split(buildss[len(buildss)-1-i])
-            print("3")
-            print(builds[0])
-            key = builds[0].split("build"+i+"=")
-            fbuilds2.append(key)
-            keyy = "build%d"%i
-            fbuilds2.append(finalbuilds[i])
-    print(fbuilds2)
-    #print(fbuilds)
-    #Adds building number
-    #cleandata.append(build1)
-    #cleandata.append(build2)
-    #cleandata.append(build3)
-    #cleandata.append(build4)
+            builds[0] = builds[0].split(buildss[len(builds)-1-i])[0]
+    #Adds building numbers
+    cleandata.append(fbuilds)
     #Adds Utility
     cleandata.append(util)
     #Adds start time

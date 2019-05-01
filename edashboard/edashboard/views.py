@@ -85,16 +85,20 @@ def compare_view(request,builddata=None):
     buildings = BR.getBuildingStrings()
     flag = ""
     permisflag = ""
+    buildnames=[]
     sensor = ""
     util = ""
     data = ""
     starttime = ""
     endtime = ""
     builds = []
+    senses = []
+    datas = []
+    sensornums =[]
     #Sets the utility
     if "util=" in str(builddata):
         flag = "util"
-    if "sensor=" in str(builddata):
+    else:
         flag = "sens"
     #Does operations according to utility
     if flag == "util":
@@ -120,38 +124,62 @@ def compare_view(request,builddata=None):
         else:
             builds.append("None")
         data = splitUtilUrls(builddata,builds)
-        buildnum = data[0]
+        buildnums = data[0]
         util = data[1]
         starttime = getTimes(data[2])
         endtime = getTimes(data[3])
-        building = Building.objects.get(b_num=buildnum)
-        data = BR.getUtilityData(building, util, starttime, endtime)
+        for i in range(0, len(buildnums)):
+            building = Building.objects.get(b_num=buildnums[i])
+            datas.append(BR.getUtilityData(building, util, starttime, endtime))
+
     if flag == "sens":
-        if request.session.get('user.userprofile.permission') is '3':
-            data = splitSensUrls(builddata)
-            starttime = getTimes(data[1])
-            endtime = getTimes(data[2])
-            sensor = data[0]
-            data = BR.getSensorData(sensor, starttime, endtime)
+        #Checks for the number of buildings we have passed
+        if "sens0=" in str(builddata):
+            senses.append("sens0=")
         else:
-            data = splitSensUrls(builddata)
-            starttime = getTimes(data[1])
-            endtime = getTimes(data[2])
-            sensor = "None"
-            data = ("0","0","0","0")
-            permisflag = "error"
+            senses.append("None")
+
+        if "sens1=" in str(builddata):
+            senses.append("sens1=")
+        else:
+            senses.append("None")
+
+        if "sens2=" in str(builddata):
+            senses.append("sens2=")
+        else:
+            senses.append("None")
+
+        if "sens3=" in str(builddata):
+            senses.append("sens3=")
+        else:
+            senses.append("None")
+        data = splitSensUrls(builddata,senses)
+        sensornums = data[0]
+        starttime = getTimes(data[1])
+        endtime = getTimes(data[2])
+        for i in range(0, len(sensornums)):
+            datas.append(BR.getSensorData(sensornums[i], starttime, endtime))
     #Loads the final data
-    print(request.session.get('user.userprofile.permission'))
-    usage = data[1]
-    date = data[0]
-    build_name = data[2]
-    utilname = data[3]
-    if(permisflag != "error"):
-        for i in range(0,len(date)):
-            t = date[i]
-            date[i] = t.strftime('%m:%d:%Y %H:%M')
-    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'buildlistname':bname,'sensor':sensor,
-    'buildlistnum':bnum,'builddata':builddata,'usage':usage,'date':date, 'utilname':utilname,'build_name':build_name,'flag':flag})
+    usages = []
+    dates=[]
+    content = []
+    bgcolor = ["#ffcc01","#1f61a8","#8c8b86","#10603a"]
+    bordercol = ["rgba(255,204,1,.3)","rgba(31,97,168,.3)","rgb(140, 139, 134,.3)","rgb(16, 96, 58,.3)"]
+    for i in datas:
+        dates.append(i[0])
+        usages.append(i[1])
+        if flag == "util":
+            buildnames.append(i[2])
+        else:
+            buildnames.append(i[3])
+    for i in range(0,len(usages)):
+        if '/' in buildnames[i]:
+            buildnames[i] = buildnames[i].replace('/', 's per ')
+        content.append([usages[i],buildnames[i],bgcolor[i],bordercol[i]])
+    for i in range(0,len(dates[0])):
+        t = (dates[0])[i]
+        (dates[0])[i] = t.strftime('%m:%d:%Y %H:%M')
+    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'buildlistname':bname,'sensor':sensor,'buildlistnum':bnum,'builddata':builddata,'date':dates[0], 'utilname':util,'build_names':buildnames,'flag':flag,'content': content})
 
 def export_view(request,builddata=None):
     buildings = BR.getBuildingStrings()
@@ -192,10 +220,9 @@ def export_view(request,builddata=None):
     date = data[0]
     build_name = data[2]
     utilname = data[3]
-    if(permisflag != "error"):
-        for i in range(0,len(date)):
-            t = date[i]
-            date[i] = t.strftime('%m:%d:%Y %H:%M')
+    for i in range(0,len(date)):
+        t = date[i]
+        date[i] = t.strftime('%m:%d:%Y %H:%M')
     return render(request, 'edashboard/export.html',{'buildlist': buildings,'buildlistname':bname,'sensor':sensor,
     'buildlistnum':bnum,'builddata':builddata,'usage':usage,'date':date, 'utilname':utilname,'build_name':build_name,'flag':flag})
 
@@ -273,25 +300,70 @@ def compareh_view(request):
     'buildlistnum':bnum})
 
 def down_compare(request, data):
+        type(data)
         buildings = BR.getBuildingStrings()
-        i=0
-        finalstr="USAGE,DATE\n"
+        cleandata = data.split(",")
+        cleandata = getDownData(cleandata)
+        filename = "attachment; filename=" + (cleandata[0][0].replace(":","-")).replace(" ","_") + " to "+ (cleandata[0][-1].replace(":","-")).replace(" ","_") + ".csv"
         response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename=data_usage.csv'
+        response['Content-Disposition'] = filename
         writer = csv.writer(response, csv)
         response.write(u'\ufeff'.encode('utf8'))
-        writer.writerow([
-            smart_str(u"USAGE"),
-            smart_str(u"DATE"),
-        ])
-        cleandata = data.split(",")
-        j=cleandata.index("date")+1
-        for i in range(0,cleandata.index("date")):
+        #Writes our headers
+        if len(cleandata[1]) == 1:
             writer.writerow([
-                smart_str(cleandata[i]),
-                smart_str(cleandata[j]),
+            smart_str(cleandata[1][0]),
+            smart_str("DATE\n"),
             ])
-            j+=1
+        elif len(cleandata[1]) == 2:
+            writer.writerow([
+            smart_str(cleandata[1][0]),
+            smart_str(cleandata[1][1]),
+            smart_str("DATE\n"),
+            ])
+        elif len(cleandata[1]) == 3:
+            writer.writerow([
+            smart_str(cleandata[1][0]),
+            smart_str(cleandata[1][1]),
+            smart_str(cleandata[1][2]),
+            smart_str("DATE\n"),
+            ])
+        elif len(cleandata[1]) == 4:
+            writer.writerow([
+            smart_str(cleandata[1][0]),
+            smart_str(cleandata[1][1]),
+            smart_str(cleandata[1][2]),
+            smart_str(cleandata[1][3]),
+            smart_str("DATE\n"),
+            ])
+        #Writes our data
+        for i in range(0,len(cleandata[2][0])):
+                if len(cleandata[1]) == 1:
+                    writer.writerow([
+                            smart_str(cleandata[2][0][i]),
+                            smart_str(cleandata[0][i]),
+                    ])
+                elif len(cleandata[1]) == 2:
+                    writer.writerow([
+                            smart_str(cleandata[2][0][i]),
+                            smart_str(cleandata[2][1][i]),
+                            smart_str(cleandata[0][i]),
+                    ])
+                elif len(cleandata[1]) == 3:
+                    writer.writerow([
+                            smart_str(cleandata[2][0][i]),
+                            smart_str(cleandata[2][1][i]),
+                            smart_str(cleandata[2][2][i]),
+                            smart_str(cleandata[0][i]),
+                    ])
+                elif len(cleandata[1]) == 4:
+                    writer.writerow([
+                            smart_str(cleandata[2][0][i]),
+                            smart_str(cleandata[2][1][i]),
+                            smart_str(cleandata[2][2][i]),
+                            smart_str(cleandata[2][3][i]),
+                            smart_str(cleandata[0][i]),
+                    ])
         return response
 
 def help_view(request):

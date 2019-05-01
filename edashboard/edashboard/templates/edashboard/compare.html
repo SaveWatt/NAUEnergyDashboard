@@ -48,11 +48,16 @@ time.setAttribute("name","stringtime");
 
 function downloadData(event){
   event.preventDefault();
-  var dataset = [{{usage|safe}}, "date", {{date|safe}}];
+  var dataset = [];
+  {% for data in content%}
+  dataset.push("usage",[{{ data.0|safe }}],"label","{{data.1|safe}}");
+  {% endfor %}
+  dataset.push("date", "{{date|safe}}");
   var durl = "{% url 'down_compare' data=0%}".replace(/0/, dataset);
   window.location.href = "" + durl.toString() + "";
 }
 function getSensorData(event){
+  event.preventDefault();
   var times = ($("span#stringtime").text()).replace(" ","");
   var sens1 = "None";
   var sens2 = "None";
@@ -75,7 +80,6 @@ function getSensorData(event){
     sens4 = document.getElementById('extrasdiv2').getElementsByTagName('input')[0].value;
     sensors.push(sens4.toString())
   }
-  console.log(sensors);
   var sensincr;
   var details = ""
   sens1 = getNum(sens1);
@@ -83,8 +87,7 @@ function getSensorData(event){
     details += "sens" + sensincr +"="+ sensors[sensincr] + " ";
   }
   details += "time=" + times;
-  console.log(details);
-  var destinationUrl = "{% url 'export2' builddata=0 %}".replace(/0/, details.toString());
+  var destinationUrl = "{% url 'compare2' builddata=0 %}".replace(/0/, details.toString());
   window.location.href = "" + destinationUrl.toString() + "";
 }
 function getBuildingData(event){
@@ -114,7 +117,6 @@ function getBuildingData(event){
   var buildincr;
   var details = ""
   for (buildincr = 0; buildincr < builds.length; buildincr++) {
-    console.log(builds[buildincr]);
     if(builds[buildincr] != "None"){
       details += "build" + buildincr +"="+ getNum(builds[buildincr]);
     }
@@ -125,7 +127,6 @@ function getBuildingData(event){
   build1 = getNum(build1);
   var util = $('#select-selected-util').clone().children().remove().end().text();
   details += "time=" + times + "util=" +util;
-  console.log(details);
   var destinationUrl = "{% url 'compare2' builddata=0 %}".replace(/0/, details.toString());
   window.location.href = "" + destinationUrl.toString() + "";
 }
@@ -155,7 +156,6 @@ function getData(event){
       if($('#extradiv2#extrabuild').val() != undefined){
       bname4 = "b4=" + $("#extradiv2").find("input").val();}
     }
-    console.log(details);
     var destinationUrl = "{% url 'compare2' builddata=0 %}".replace(/0/, details.toString());
     window.location.href = "" + destinationUrl.toString() + "";
   }
@@ -174,7 +174,6 @@ function getData(event){
       if($('#extradiv2#extrabuild').val() != undefined){
       bname4 = "b4=" + $('#extradiv2#extrabuild').val();}
     }
-    console.log(details);
     //var destinationUrl = "{% url 'compare2' builddata=0 %}".replace(/0/, details.toString());
     //window.location.href = "" + destinationUrl.toString() + "";
   }
