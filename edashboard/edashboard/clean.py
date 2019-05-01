@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 #Converts the given time to SQL Datetime
 def getTimes(times):
     #Convert to month number
@@ -25,6 +26,48 @@ def getTimes(times):
       #datetime.datetime(2018, 10, 1, 0, 0)
     return datetime.datetime(int(year), int(months[month]), int(day), int(hour), int(mins))
 
+def getDownData(data):
+    usages = [[],[],[],[]]
+    labels = []
+    date = []
+    content=[]
+    flag = 'usage'
+    flag2 = 'stay'
+    iteration = -1
+    for i in data:
+        #Changes iteration's Flag
+        if flag2 == 'change':
+            iteration +=1
+            flag2 = 'stay'
+        #Changes our util flag
+        if i == 'usage':
+            flag = 'usage'
+            flag2 = 'change'
+            continue
+        elif i == 'label':
+            flag = 'label'
+            continue
+        elif i == 'date':
+            flag = 'date'
+            continue
+
+        if flag == 'date':
+            i=i.replace("[","")
+            i=i.replace("]","")
+            i=i.replace("'", "")
+            i=i.strip()
+            date.append(i)
+
+        elif flag == 'label':
+            labels.append(i)
+        #its usage data
+        else:
+            i=float(i)
+            usages[iteration].append(i)
+
+    content=[date,labels,usages]
+    return content
+
 def getBuildInfo(str):
     starr = str.split(" ")
     bnum = starr[len(starr)-1]
@@ -36,6 +79,7 @@ def getBuildInfo(str):
     return [bname,bnum]
 
 def splitSensUrls(builddata,senses):
+    print(senses)
     cleandata = []
     months = ["January","February","March","April","May",
     "June","July","August","September","October","November", "December"]
@@ -45,18 +89,17 @@ def splitSensUrls(builddata,senses):
     start = splitimes[0]
     end = splitimes[1]
     fsense=[]
-    i=0
     for i in range(0,len(months)-1):
         if(months[i] in start):
             monDay = start.split(",")
             num = monDay[0].split(months[i])
             start = "" + str(months[i]) + " " + str(num[1]) +","+ monDay[1]
     for i in range(0,len(senses)):
-        if(senses[i]=="None"):
+        if(senses[len(senses)-1-i]=="None"):
             continue
         else:
-            fsense.append(sens[0].split(senses[len(sens)-1-i])[1].strip())
-            sens[0] = sens[0].split(senses[len(sens)-1-i])[0]
+            fsense.append(((sens[0]).split(senses[len(senses)-1-i]))[1].strip())
+            sens[0] = ((sens[0]).split(senses[len(senses)-1-i]))[0]
     #Adds sensor
     cleandata.append(fsense)
     #Adds start time
