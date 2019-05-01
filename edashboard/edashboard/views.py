@@ -130,7 +130,7 @@ def compare_view(request,builddata=None):
         endtime = getTimes(data[3])
         for i in range(0, len(buildnums)):
             building = Building.objects.get(b_num=buildnums[i])
-            datas.append(BR.getUtilityData(building, "Steam Total", starttime, endtime))
+            datas.append(BR.getUtilityData(building, util, starttime, endtime))
 
     if flag == "sens":
         #Checks for the number of buildings we have passed
@@ -176,11 +176,6 @@ def compare_view(request,builddata=None):
         if '/' in buildnames[i]:
             buildnames[i] = buildnames[i].replace('/', 's per ')
         content.append([usages[i],buildnames[i],bgcolor[i],bordercol[i]])
-    #usage = data[1]
-    #date = data[0]
-    #build_name = data[2]
-    #utilname = data[3]
-    #if(permisflag != "error"):
     for i in range(0,len(dates[0])):
         t = (dates[0])[i]
         (dates[0])[i] = t.strftime('%m:%d:%Y %H:%M')
