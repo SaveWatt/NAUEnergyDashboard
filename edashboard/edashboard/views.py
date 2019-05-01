@@ -174,7 +174,7 @@ def compare_view(request,builddata=None):
             buildnames.append(i[3])
     for i in range(0,len(usages)):
         if '/' in buildnames[i]:
-            buildnames[i] = buildnames[i].replace('/', 'per')
+            buildnames[i] = buildnames[i].replace('/', 's per ')
         content.append([usages[i],buildnames[i],bgcolor[i],bordercol[i]])
     #usage = data[1]
     #date = data[0]
