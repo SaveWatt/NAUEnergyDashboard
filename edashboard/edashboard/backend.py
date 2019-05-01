@@ -252,9 +252,13 @@ class StaticDataRetriever:
                     row['objname'], row['TrendlogID'], 'None']
                     for t in types:
                         if t.upper() in desc:
-                            if t in desc and 'METER '+num in desc:
-                                type = desc.replace('METER '+str(num), '').strip()
-                                self.__log_dict[key][4] = type
+                            if t.upper() in desc and 'METER '+num in desc:
+                                _type = desc.split(' ')
+                                _type.pop(0)
+                                _type.pop(0)
+                                f_type = " "
+                                f_type.join(_type)
+                                self.__log_dict[key][4] = f_type.title()
 
     def update_logs(self):
         # Querying for trendlogs based on log_dict info
