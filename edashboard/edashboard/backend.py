@@ -257,7 +257,7 @@ class StaticDataRetriever:
                                 _type.pop(0)
                                 _type.pop(0)
                                 f_type = " "
-                                f_type.join(_type)
+                                f_type = f_type.join(_type)
                                 self.__log_dict[key][4] = f_type.title()
 
     def update_logs(self):
