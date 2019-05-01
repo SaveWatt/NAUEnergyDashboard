@@ -1,4 +1,4 @@
-from edashboard.models import Building, Sensor
+from edashboard.models import Building, Sensor, SensorType
 import pymssql as sql
 
 class BackendRetriever:
@@ -208,20 +208,30 @@ class StaticDataRetriever:
 
     def update_sensors(self):
         if not self.__log_dict:
+            print("Making log dict...")
             self.make_log_dict()
             count = len(self.__log_dict.keys())
+        print("Starting Sensor Update...")
         for key in sorted(self.__log_dict.keys()):
             print("Updating Sensor #%d" % count)
             count -= 1
-            b = Building.objects.get(b_num=self.__log_dict[key][0])
-            s = b.sensor_set.create(s_name=self.__log_dict[key][1], s_type=self.__log_dict[key][4], s_log=key)
-            s.save()
+            if Sensor.objects.filter(s_log=key):
+                s = Sensor.objects.get(s_log=key)
+                s.s_type = self.__log_dict[key][4]
+                s.s_name=self.__log_dict[key][1]
+                s.save()
+            else:
+                b = Building.objects.get(b_num=self.__log_dict[key][0])
+                s = b.sensor_set.create(s_name=self.__log_dict[key][1], s_type=self.__log_dict[key][4], s_log=key)
+                s.save()
 
     def make_log_dict(self):
-        types = ['Current Demand KW', 'Dom Water Gallons', 'Domestic Water',
-                 'Reclaimed Water Gallons', 'Steam KBTU', 'Electrical Usage',
-                 'Elect Demand', 'Electrical Demand', 'Electric Demand',
-                 'Reclaimed Water', 'Chilled Water']
+        '''types = SensorType.objects.all()
+        str_types = []
+        for type in types:
+            str_types.append(type.alias)
+        types = str_types'''
+        types = ['Steam', 'Gas', 'Water', 'Elec', 'Electric']
 
         cursor = self.__connection.cursor(as_dict=True)
         # Get list of trendlogs
@@ -242,7 +252,9 @@ class StaticDataRetriever:
                     row['objname'], row['TrendlogID'], 'None']
                     for t in types:
                         if t.upper() in desc:
-                            self.__log_dict[key][4] = t
+                            if t in desc and 'METER '+num in desc:
+                                type = desc.replace('METER '+str(num), '').strip()
+                                self.__log_dict[key][4] = type
 
     def update_logs(self):
         # Querying for trendlogs based on log_dict info

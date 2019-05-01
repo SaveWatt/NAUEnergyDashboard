@@ -22,7 +22,7 @@ class Sensor(models.Model):
 class SensorType(models.Model):
     utility = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
-    unit = models.CharField(max_length=200)
+    unit = models.CharField(max_length=200, default='?')
     alias = models.CharField(max_length=200)
 
     def __str__(self):
