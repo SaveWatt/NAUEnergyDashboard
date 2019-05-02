@@ -122,7 +122,6 @@ def splitUtilUrls(builddata, buildss):
     start = splitimes[0]
     end = splitimes[1]
     fbuilds = []
-    print(buildss)
     for i in range(0,len(months)-1):
         if(months[i] in start):
             monDay = start.split(",")
@@ -130,10 +129,13 @@ def splitUtilUrls(builddata, buildss):
             start = "" + str(months[i]) + " " + str(num[1]) +","+ monDay[1]
     for i in range(0,len(buildss)):
         if(buildss[len(buildss)-1-i] == "None"):
+            print(buildss[len(buildss)-1-i])
             continue
         else:
+            print("test")
+            print(builds[0])
             fbuilds.append(((builds[0]).split(buildss[len(buildss)-1-i]))[1].strip())
-            builds[0] = ((builds[0]).split(buildss[len(builds)-1-i]))[0]
+            builds[0] = ((builds[0]).split(buildss[len(buildss)-1-i]))[0].strip()
     #Adds building numbers
     cleandata.append(fbuilds)
     #Adds Utility
