@@ -150,8 +150,6 @@ def compare_view(request,builddata=None):
             builds.append("build3=")
         else:
             builds.append("None")
-        print(builddata)
-        print(builds)
         data = splitUtilUrls(builddata,builds)
         buildnums = data[0]
         util = data[1]

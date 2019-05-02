@@ -15,6 +15,7 @@ class Sensor(models.Model):
     s_name = models.CharField(max_length=200)
     s_type = models.CharField(max_length=200, default='None')
     s_log = models.CharField(max_length=200)
+    s_sub_type = models.CharField(max_length=200, default='None')
 
     def __str__(self):
         return str(self.s_name)

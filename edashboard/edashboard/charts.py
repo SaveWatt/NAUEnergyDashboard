@@ -70,6 +70,7 @@ def usage(list):
     temp = []
     usage = []
     log_dict = []
+    print("Poop_loop: %s" % str(list))
 
     for data in list:
         log_dict.append(sdr.get_log(data.s_log))
