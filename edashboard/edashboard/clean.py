@@ -79,7 +79,6 @@ def getBuildInfo(str):
     return [bname,bnum]
 
 def splitSensUrls(builddata,senses):
-    print(senses)
     cleandata = []
     months = ["January","February","March","April","May",
     "June","July","August","September","October","November", "December"]
@@ -129,11 +128,8 @@ def splitUtilUrls(builddata, buildss):
             start = "" + str(months[i]) + " " + str(num[1]) +","+ monDay[1]
     for i in range(0,len(buildss)):
         if(buildss[len(buildss)-1-i] == "None"):
-            print(buildss[len(buildss)-1-i])
             continue
         else:
-            print("test")
-            print(builds[0])
             fbuilds.append(((builds[0]).split(buildss[len(buildss)-1-i]))[1].strip())
             builds[0] = ((builds[0]).split(buildss[len(buildss)-1-i]))[0].strip()
     #Adds building numbers

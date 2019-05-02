@@ -23,9 +23,9 @@
       <li class="dropdown-toggle" style="display:none;">Utility</li>
       <h2 class="select">Select a Utility</h2>
       <select>
-        <option>Heating</option>
-        <option>Cooling</option>
-        <option>Electricity</option>
+        {% for util in utils %}
+          <option>{{ util }}</option>
+        {% endfor %}
       </select>
     </div>
     </div>
@@ -43,9 +43,9 @@
     <li class="dropdown-toggle" style="display:none;">Utility</li>
     <h2 class="select">Select a Utility</h2>
     <select>
-      <option>Heating</option>
-      <option>Cooling</option>
-      <option>Electricity</option>
+      {% for util in utils %}
+        <option>{{ util }}</option>
+      {% endfor %}
     </select>
   </div>
   </div>
