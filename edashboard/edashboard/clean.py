@@ -133,7 +133,6 @@ def splitUtilUrls(builddata, buildss):
         if(buildss[i]=="None"):
             continue
         else:
-            print(len(builds)-1-i)
             fbuilds.append(builds[0].split(buildss[len(builds)-1-i])[1])
             builds[0] = builds[0].split(buildss[len(builds)-1-i])[0]
     #Adds building numbers

@@ -241,6 +241,7 @@ class StaticDataRetriever:
             if Sensor.objects.filter(s_log=key):
                 s = Sensor.objects.get(s_log=key)
                 s.s_type = self.__log_dict[key][4]
+                s.s_sub_type = self.__log_dict[key][5]
                 s.s_name=self.__log_dict[key][1]
                 s.save()
             else:
@@ -254,7 +255,8 @@ class StaticDataRetriever:
         for type in types:
             str_types.append(type.alias)
         types = str_types'''
-        types = ['Steam', 'Gas', 'Water', 'Elec', 'Electric']
+        sub_types = ['Steam', 'Gas', 'Water', 'Elec', 'Electric']
+        utilites = {'Steam': ["Usage", "Total"]}
 
         cursor = self.__connection.cursor(as_dict=True)
         # Get list of trendlogs
@@ -272,8 +274,8 @@ class StaticDataRetriever:
                     key = logdevnum+"_"+loginst
                     # Storing bname, logdesc, objname, TrendlogID in log_dict
                     self.__log_dict[key] = [num, row['logdescription'],
-                    row['objname'], row['TrendlogID'], 'None']
-                    for t in types:
+                    row['objname'], row['TrendlogID'], 'None', 'None']
+                    for t in sub_types:
                         if t.upper() in desc:
                             if t.upper() in desc and 'METER '+num in desc:
                                 _type = desc.split(' ')
@@ -281,7 +283,7 @@ class StaticDataRetriever:
                                 _type.pop(0)
                                 f_type = " "
                                 f_type = f_type.join(_type)
-                                self.__log_dict[key][4] = f_type.title()
+                                self.__log_dict[key][5] = f_type.title()
 
     def update_logs(self):
         # Querying for trendlogs based on log_dict info
