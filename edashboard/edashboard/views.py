@@ -341,57 +341,57 @@ def down_compare(request, data):
         #Writes our headers
         if len(cleandata[1]) == 1:
             writer.writerow([
-            smart_str(cleandata[1][0]),
             smart_str("DATE\n"),
+            smart_str(cleandata[1][0]),
             ])
         elif len(cleandata[1]) == 2:
             writer.writerow([
+            smart_str("DATE\n"),
             smart_str(cleandata[1][0]),
             smart_str(cleandata[1][1]),
-            smart_str("DATE\n"),
             ])
         elif len(cleandata[1]) == 3:
             writer.writerow([
+            smart_str("DATE\n"),
             smart_str(cleandata[1][0]),
             smart_str(cleandata[1][1]),
             smart_str(cleandata[1][2]),
-            smart_str("DATE\n"),
             ])
         elif len(cleandata[1]) == 4:
             writer.writerow([
+            smart_str("DATE\n"),
             smart_str(cleandata[1][0]),
             smart_str(cleandata[1][1]),
             smart_str(cleandata[1][2]),
             smart_str(cleandata[1][3]),
-            smart_str("DATE\n"),
             ])
         #Writes our data
         for i in range(0,len(cleandata[2][0])):
                 if len(cleandata[1]) == 1:
                     writer.writerow([
-                            smart_str(cleandata[2][0][i]),
                             smart_str(cleandata[0][i]),
+                            smart_str(cleandata[2][0][i]),
                     ])
                 elif len(cleandata[1]) == 2:
                     writer.writerow([
+                            smart_str(cleandata[0][i]),
                             smart_str(cleandata[2][0][i]),
                             smart_str(cleandata[2][1][i]),
-                            smart_str(cleandata[0][i]),
                     ])
                 elif len(cleandata[1]) == 3:
                     writer.writerow([
+                            smart_str(cleandata[0][i]),
                             smart_str(cleandata[2][0][i]),
                             smart_str(cleandata[2][1][i]),
                             smart_str(cleandata[2][2][i]),
-                            smart_str(cleandata[0][i]),
                     ])
                 elif len(cleandata[1]) == 4:
                     writer.writerow([
+                            smart_str(cleandata[0][i]),
                             smart_str(cleandata[2][0][i]),
                             smart_str(cleandata[2][1][i]),
                             smart_str(cleandata[2][2][i]),
                             smart_str(cleandata[2][3][i]),
-                            smart_str(cleandata[0][i]),
                     ])
         return response
 
