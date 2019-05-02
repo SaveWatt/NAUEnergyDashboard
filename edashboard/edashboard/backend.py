@@ -10,6 +10,29 @@ class BackendRetriever:
             b_strings.append(str(building))
         return b_strings
 
+    def getUtilitiesByBuilding(self, building_num):
+        b_id = Building.objects.get(b_num=building_num).id
+        utilities = []
+        sensors = Sensor.objects.filter(building_id=b_id)
+        for sensor in sensors:
+            if sensor.s_type != 'None':
+                utilities.append(str(sensor))
+        return utilities
+
+    def getCommonUtilites(self, building_nums):
+        utilities = []
+        count = len(buildings_nums)
+        for n in buildings_nums:
+            temp_utils = self.getUtilitiesByBuilding(n)
+            for u in temp_utils:
+                utilities.append(u)
+        for u in utilities:
+            if count != utilities.count(u):
+                utilities = [x for x in utilities if x != u]
+        return utilities
+
+
+
     """
     A function that takes a building number, sensor type, inital date,
     and final date as inputs.
