@@ -1,0 +1,206 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="{% static '/edashboard/stylesheet.css'%}">
+    <link rel="shortcut icon" href="{% static '/edashboard/images/favicon.ico' %}" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  </head>
+  <body>
+    {% include "edashboard/header.html" %}
+    <div class="exp-container">
+      <div id="selector">
+        <div id="error-display">
+			  </div>
+        <h1 id="downloadrep">Compare Data</h1>
+        <div class="greyell" id="reportrange" style="cursor: pointer; padding: 5px 10px;">
+            <i class="fa fa-calendar"></i>&nbsp;
+            <span></span> <i class="fa fa-caret-down"></i>
+        </div>
+        {% include "edashboard/searchbuilding.html" %}
+      </div>
+      <div class="graph-cont" style=" display:inline-block;">
+        <div class="chart-container" style="text-align: -webkit-center;">
+          <canvas id="line-chart" width="800" height="450"></canvas>
+        </div>
+        <button id="Down-button" onClick="downloadData(event)">Download .CSV</button>
+      </div>
+    </div>
+  </body>
+<script>
+  {% include "edashboard/scripts/compgraph.js" %}
+  {% include "edashboard/scripts/buildingsearch.js" %}
+  {% include "edashboard/scripts/checkcfields.js" %}
+  {% include "edashboard/scripts/timeRange.js" %}
+/* If the user clicks anywhere outside the select box,
+then close all select boxes: */
+{% if user.userprofile.permission is 3 %}
+document.getElementById("utilswitch").style.backgroundColor = "rgb(255, 204, 1)";
+{% endif %}
+var time = document.getElementById("reportrange").getElementsByTagName('span')[0];
+time.setAttribute("id","stringtime");
+time.setAttribute("name","stringtime");
+
+function downloadData(event){
+  event.preventDefault();
+  var dataset = [];
+  {% for data in content%}
+  dataset.push("usage",[{{ data.0|safe }}],"label","{{data.1|safe}}");
+  {% endfor %}
+  dataset.push("date", "{{date|safe}}");
+  var durl = "{% url 'down_compare' data=0%}".replace(/0/, dataset);
+  window.location.href = "" + durl.toString() + "";
+}
+function getSensorData(event){
+  event.preventDefault();
+  var times = ($("span#stringtime").text()).replace(" ","");
+  var sens1 = "None";
+  var sens2 = "None";
+  var sens3 = "None";
+  var sens4 = "None";
+  var sensors = []
+  if(document.getElementById('sensoradder').getElementsByTagName('input')[0].value.length != 0){
+    sens1 = document.getElementById('sensoradder').getElementsByTagName('input')[0].value;
+    sensors.push(sens1.toString())
+  }
+  if(document.getElementById('extrasdiv0') != null && document.getElementById('extrasdiv0').getElementsByTagName('input')[0].value.length != 0){
+    sens2 = document.getElementById('extrasdiv0').getElementsByTagName('input')[0].value;
+    sensors.push(sens2.toString())
+  }
+  if(document.getElementById('extrasdiv1') != null && document.getElementById('extrasdiv1').getElementsByTagName('input')[0].value.length != 0){
+    sens3 = document.getElementById('extrasdiv1').getElementsByTagName('input')[0].value;
+    sensors.push(sens3.toString())
+  }
+  if(document.getElementById('extrasdiv2') != null && document.getElementById('extrasdiv2').getElementsByTagName('input')[0].value.length != 0){
+    sens4 = document.getElementById('extrasdiv2').getElementsByTagName('input')[0].value;
+    sensors.push(sens4.toString())
+  }
+  var sensincr;
+  var details = ""
+  sens1 = getNum(sens1);
+  for (sensincr = 0; sensincr < sensors.length; sensincr++) {
+    details += "sens" + sensincr +"="+ sensors[sensincr] + " ";
+  }
+  details += "time=" + times;
+  var destinationUrl = "{% url 'compare2' builddata=0 %}".replace(/0/, details.toString());
+  window.location.href = "" + destinationUrl.toString() + "";
+}
+function getBuildingData(event){
+  event.preventDefault();
+  var times = ($("span#stringtime").text()).replace(" ","");
+  var build1 = "None";
+  var build2 = "None";
+  var build3 = "None";
+  var build4 = "None";
+  var builds = []
+  if(document.getElementById('buildingadder').getElementsByTagName('input')[0].value.length != 0){
+    build1 = document.getElementById('buildingadder').getElementsByTagName('input')[0].value;
+    builds.push(build1.toString())
+  }
+  if(document.getElementById('extrabdiv0') != null && document.getElementById('extrabdiv0').getElementsByTagName('input')[0].value.length != 0){
+    build2 = document.getElementById('extrabdiv0').getElementsByTagName('input')[0].value;
+    builds.push(build2.toString())
+  }
+  if(document.getElementById('extrabdiv1') != null && document.getElementById('extrabdiv1').getElementsByTagName('input')[0].value.length != 0){
+    build3 = document.getElementById('extrabdiv1').getElementsByTagName('input')[0].value;
+    builds.push(build3.toString())
+  }
+  if(document.getElementById('extrabdiv2') != null && document.getElementById('extrabdiv2').getElementsByTagName('input')[0].value.length != 0){
+    build4 = document.getElementById('extrabdiv2').getElementsByTagName('input')[0].value;
+    builds.push(build4.toString())
+  }
+  var buildincr;
+  var details = ""
+  for (buildincr = 0; buildincr < builds.length; buildincr++) {
+    if(builds[buildincr] != "None"){
+      details += "build" + buildincr +"="+ getNum(builds[buildincr]);
+    }
+    else{
+      details += "build" + buildincr +"="+ "None";
+    }
+  }
+  build1 = getNum(build1);
+  var util = $('#select-selected-util').clone().children().remove().end().text();
+  details += "time=" + times + "util=" +util;
+  var destinationUrl = "{% url 'compare2' builddata=0 %}".replace(/0/, details.toString());
+  window.location.href = "" + destinationUrl.toString() + "";
+}
+function getData(event){
+  event.preventDefault();
+  var times = ($("span#stringtime").text()).replace(" ","");
+  var bname1 = $('#buildingsearchcompsearch').val();
+  var bname2 = null;
+  var bname3 = null;
+  var bname4 = null;
+  //Checks if Divs exist
+  bname1 = getNum(bname1);
+  var sensor = $('#sensorsearchexpcompsearch').val();
+  var util = $('#select-selected-util').clone().children().remove().end().text();
+  if(sensor.toString() == ""){
+    var details = "b1=" + bname1 + "time=" + times + "util=" + util;
+    if(document.getElementById("extradiv0") != null){
+      if($('#extradiv0#extrabuild').val() != undefined){
+        details += "b2=" + $("#extradiv0").find("input").val();
+      }
+    }
+    if(document.getElementById("extradiv1") != null){
+      if($('#extradiv1#extrabuild').val() != undefined){
+      details += "b3=" + $("#extradiv1").find("input").val();}
+    }
+    if(document.getElementById("extradiv2") != null){
+      if($('#extradiv2#extrabuild').val() != undefined){
+      bname4 = "b4=" + $("#extradiv2").find("input").val();}
+    }
+    var destinationUrl = "{% url 'compare2' builddata=0 %}".replace(/0/, details.toString());
+    window.location.href = "" + destinationUrl.toString() + "";
+  }
+  if(util.toString() == ""){
+    var details = "b1=" + bname1 + "time=" + times + "sensor=" +sensor;
+    if(document.getElementById("extradiv0") != null){
+      if($('#extradiv0#extrabuild').val() != undefined){
+        details += "b2=" + $('#extradiv0#extrabuild').val();
+      }
+    }
+    if(document.getElementById("extradiv1") != null){
+      if($('#extradiv1#extrabuild').val() != undefined){
+      details += "b3=" + $('#extradiv1#extrabuild').val();}
+    }
+    if(document.getElementById("extradiv2") != null){
+      if($('#extradiv2#extrabuild').val() != undefined){
+      bname4 = "b4=" + $('#extradiv2#extrabuild').val();}
+    }
+    //var destinationUrl = "{% url 'compare2' builddata=0 %}".replace(/0/, details.toString());
+    //window.location.href = "" + destinationUrl.toString() + "";
+  }
+  //var util = $('#select-selected-util').clone().children().remove().end().text();
+  //var myEvent = {'building': buildingname,'time': timestr, 'util': util, 'sensor': sensor};
+}
+//Removes parentheses
+function getNum(buildstr) {
+  var num = buildstr.split(" ");
+  var last = (num[num.length-1]).substring(1);
+  return last.substring(0, last.length - 1);
+}
+
+function chgColor(id){
+  // Changes colors of buttons
+  document.getElementById(id).style.backgroundColor = "rgb(255, 204, 1)";
+  if(id == "utilswitch"){
+    document.getElementById("form-info2").style.display = "unset";
+    document.getElementById("sensswitch").style.backgroundColor = "#e3e3e3";
+    document.getElementById("form-info").style.display = "none";
+  }
+  else if(id == "sensswitch"){
+    document.getElementById("form-info").style.display = "unset";
+    document.getElementById("utilswitch").style.backgroundColor = "#e3e3e3";
+    document.getElementById("form-info2").style.display = "none";
+  }
+}
+document.addEventListener("click", closeAllSelect);
+</script>
+</html>

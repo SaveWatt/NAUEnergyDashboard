@@ -1,0 +1,227 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href={% static '/edashboard/stylesheet.css'%}>
+    <link rel="shortcut icon" href="{% static '/edashboard/images/favicon.ico' %}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+  </head>
+  <body>
+    {% include "edashboard/header.html" %}
+    <div id="container">
+      <div id="left-cont">
+        <div id="descr">
+          <div id="banner">
+            <div id="innerbanner" style="background-image: url({% static '/edashboard/images/NAU2.jpg' %}); background-size:cover;">
+              <img id="logo" src="{% static 'edashboard/images/Logo2.png' %}" style="max-width: -webkit-fill-available;">
+            </div>
+          </div>
+          <h1 id="head">Energy Dashboard</h1>
+          <h2 style="margin-left:5%;">Utility Usage</h2>
+        </div>
+        <table style="margin-left:50px;">
+          <tr>
+            <td>Electricity Usage</td><td>{{ avg_elec|safe }} kW</td>
+            <td></td>
+            <td>Steam Usage</td><td>{{ avg_steam|safe }} BTU</td>
+          </tr>
+          <tr>
+            <td colspan="2"><canvas id="elec-chart" width="300" height="200"></canvas></td>
+            <td><canvas id="empty-chart" width="150" height="200"></td>
+            <td colspan="2"><canvas id="steam-chart" width="300" height="200"></canvas></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Chilled Water Usage</td><td>{{ avg_chilled|safe }} Gallons</td>
+            <td></td>
+            <td>Dom Water Usage</td><td>{{ avg_dom|safe }} Gallons</td>
+          </tr>
+          <tr>
+            <td colspan="2"><canvas id="chilled-chart" width="300" height="200"></canvas></td>
+            <td><canvas id="empty-chart" width="150" height="200"></td>
+            <td colspan="2"><canvas id="dom-chart" width="300" height="200"></canvas></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Reclaimed Water Usage</td><td>{{ avg_reclaimed|safe }} Gallons</td>
+            <td></td>
+            <td></td><td></td>
+          </tr>
+          <tr>
+            <td colspan="2"><canvas id="reclaimed-chart" width="300" height="200"></canvas></td>
+            <td><canvas id="empty-chart" width="150" height="200"></td>
+            <td colspan="2"><canvas id="empty-chart" width="300" height="200"></canvas></td>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+      <div id="right-cont">
+        <div class="chart-container">
+          <!--Chart Title-->
+          <h1 id="chartTitle">Current Campus Usage For Monitored Buildings:</h1>
+          <h2 id="chartNum">{{ overall|safe }} DOLLARS</h2>
+          <!--Chart-->
+          <canvas id="pie-chart" width="800" height="450"></canvas>
+        </div>
+        <!--Chart Labels-->
+        <div id="Labels">
+          <table class="label" cellpadding="8">
+            <tr><td bgcolor="#ffcc01">Electricity</td><td id="eval">{{ elecDollar|safe }}</td><td class="Labels">DOLLARS</td></tr>
+            <tr><td bgcolor="#ff6a6a">Steam</td><td id="sval">{{ steamDollar|safe }}</td><td class="Labels">DOLLARS</td></tr>
+            <tr><td bgcolor="#aed7f4">Chilled Water</td><td id="cval">{{ chilledDollar|safe }}</td><td class="LabelsG">DOLLARS</td></tr>
+            <tr><td bgcolor="#003467" style="color:white">Dom Water</td><td id="dval">{{ domDollar|safe }}</td><td class="LabelsG">DOLLARS</td></tr>
+            <tr><td bgcolor="#007867" style="color:white">Reclaimed Water</td><td id="rval">{{ reclaimedDollar|safe }}</td><td class="LabelsG">DOLLARS</td></tr>
+          </table>
+        </div>
+          <!-- Need python functions to Convert from BTU to kW, Ton, Gas, Dollars and for all combos -->
+        <div id="switWrap">
+          <!--Units buttons-->
+          <h2 style="margin:0;padding:2%;">Compare Usage In Equivalent Units:</h2>
+          <div id="switches">
+            <!--  gallon = $0.75, btu = $0.000001, kw = $0.12-->
+            <button id="btu" onclick="chgColor('btu')">BTU</button>
+            <button id="kw" onclick="chgColor('kw')">kW</button>
+            <button id="ton" onclick="chgColor('ton')">Ton</button>
+            <button id="gallon" onclick="chgColor('gallon')">Gallon</button>
+            <button id="cost" onclick="chgColor('cost')">Cost</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+<script>
+// Initializes global const
+const curre = document.getElementById("eval").innerHTML;
+const currs = document.getElementById("sval").innerHTML;
+const currd = document.getElementById("dval").innerHTML;
+const currr = document.getElementById("rval").innerHTML;
+const currc = document.getElementById("cval").innerHTML;
+document.getElementById("cost").style.backgroundColor = "#ffcc01";
+// // Gets the total usage from the header
+// var total = document.getElementById("chartNum").innerHTML + '';
+// total = total.split(" ", 1);
+// total = total[0].replace(/,/g, '');
+// total = parseInt(total);
+// greencomp(total);
+//
+// function greencomp(num){
+//   //Converts to kwh
+//   num=num*.00029307107;
+//   // converts to metric tons
+//   num = Math.ceil(num*.0007);
+//   // Converts to green comparisons
+//   trees = Math.round(num/.06054008285);
+//   oil = Math.round(num/0.43);
+//   gas = (num/8.887*Math.pow(10,-3)).toFixed(4);
+//   document.getElementById("carOff").innerHTML = gas;
+//   document.getElementById("treSav").innerHTML = trees;
+//   document.getElementById("barOil").innerHTML = oil;
+// }
+// Toggles button color and the labels
+function chgColor(id) {
+  // Changes colors of buttons
+  //Converts to BTUs
+  if(document.getElementById("btu").style.backgroundColor == "rgb(255, 204, 1)"){
+    document.getElementById("btu").style.backgroundColor = "#e3e3e3";
+  }
+  // Converts to kWh
+  else if(document.getElementById("kw").style.backgroundColor == "rgb(255, 204, 1)"){
+    document.getElementById("kw").style.backgroundColor = "#e3e3e3";
+  }
+  // Converts to Tons
+  else if(document.getElementById("ton").style.backgroundColor == "rgb(255, 204, 1)"){
+    document.getElementById("ton").style.backgroundColor = "#e3e3e3";
+  }
+  // Converts to Gas
+  else if(document.getElementById("gallon").style.backgroundColor == "rgb(255, 204, 1)"){
+    document.getElementById("gallon").style.backgroundColor = "#e3e3e3";
+  }
+  // Converts to Dollars
+  else{
+    document.getElementById("cost").style.backgroundColor = "#e3e3e3";
+  }
+  // Changes the button to be highlighted
+  document.getElementById(id).style.backgroundColor = "#ffcc01";
+  chgLabels(id);
+}
+function chgLabels(id){
+  // Changes displayed Labels
+  var labels = document.getElementsByClassName("Labels");
+  var waters = document.getElementsByClassName("LabelsG");
+  if (id== "kw"){
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "kW";
+    }
+    document.getElementById("eval").innerHTML= (curre / 0.12).toFixed(4);
+    document.getElementById("sval").innerHTML= (currs / 0.12).toFixed(4);
+    for(var i=0; i<waters.length; i++) {
+      waters[i].innerHTML= "GALLONS";
+    }
+    document.getElementById("dval").innerHTML= (currd / 0.0015).toFixed(4);
+    document.getElementById("rval").innerHTML= (currr / 0.0015).toFixed(4);
+    document.getElementById("cval").innerHTML= (currc / 0.0015).toFixed(4);
+  }
+  else if (id=="btu") {
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "BTU";
+    }
+    document.getElementById("eval").innerHTML= ((curre / 0.12) / 0.00029307108).toFixed(4);
+    document.getElementById("sval").innerHTML= ((currs / 0.12) / 0.00029307108).toFixed(4);
+    for(var i=0; i<waters.length; i++) {
+      waters[i].innerHTML= "GALLONS";
+    }
+    document.getElementById("dval").innerHTML= (currd / 0.0015).toFixed(4);
+    document.getElementById("rval").innerHTML= (currr / 0.0015).toFixed(4);
+    document.getElementById("cval").innerHTML= (currc / 0.0015).toFixed(4);
+  }
+  else if (id=="ton") {
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "TONS";
+    }
+    document.getElementById("eval").innerHTML= (((curre / 0.12) / 0.00029307107) * 0.00008333).toFixed(4)
+    document.getElementById("sval").innerHTML= (((currs / 0.12) / 0.00029307107) * 0.00008333).toFixed(4)
+    for(var i=0; i<waters.length; i++) {
+      waters[i].innerHTML= "TONS";
+    }
+    document.getElementById("dval").innerHTML= ((currd / 0.0015) * 0.031491395793499).toFixed(4);
+    document.getElementById("rval").innerHTML= ((currr / 0.0015) * 0.031491395793499).toFixed(4);
+    document.getElementById("cval").innerHTML= ((currc / 0.0015) * 0.031491395793499).toFixed(4);
+  }
+  else if (id=="gallon") {
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "GALLONS";
+    }
+    document.getElementById("eval").innerHTML= (((curre / 0.12) / 0.00029307107) * 0.00000800740664845).toFixed(4);
+    document.getElementById("sval").innerHTML= (((currs / 0.12) / 0.00029307107) * 0.00000800740664845).toFixed(4);
+    for(var i=0; i<waters.length; i++) {
+      waters[i].innerHTML= "GALLONS";
+    }
+    document.getElementById("dval").innerHTML= (currd / 0.0015).toFixed(4);
+    document.getElementById("rval").innerHTML= (currr / 0.0015).toFixed(4);
+    document.getElementById("cval").innerHTML= (currc / 0.0015).toFixed(4);
+  }
+  else {
+    for(var i=0; i<labels.length; i++) {
+      labels[i].innerHTML= "DOLLARS";
+    }
+    document.getElementById("eval").innerHTML= curre;
+    document.getElementById("sval").innerHTML= currs;
+    for(var i=0; i<waters.length; i++) {
+      waters[i].innerHTML= "DOLLARS";
+    }
+    document.getElementById("dval").innerHTML= currd;
+    document.getElementById("rval").innerHTML= currr;
+    document.getElementById("cval").innerHTML= currc;
+  }
+}
+{% include "edashboard/scripts/charts/piechart.js" %}
+{% include "edashboard/scripts/charts/elecchart.js" %}
+{% include "edashboard/scripts/charts/steamchart.js" %}
+{% include "edashboard/scripts/charts/chilledchart.js" %}
+{% include "edashboard/scripts/charts/domchart.js" %}
+{% include "edashboard/scripts/charts/reclaimedchart.js" %}
+</script>
+</html>
