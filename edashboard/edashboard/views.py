@@ -30,7 +30,6 @@ def index(request):
     'buildlistnum':bnum})
 
 def building_view(request, buildnum):
-    #TODO: Have the selector pass an increment and sensor type
     buildings = BR.getBuildingStrings()
     building = Building.objects.get(b_num=buildnum)
     b_name = building.b_name
@@ -42,7 +41,7 @@ def building_view(request, buildnum):
         if sens.s_type != 'None':
             util_strs.append(str(sens.s_type))
     #data = BR.getData(building, "Meter Current Demand kwh", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
-    data = BR.getData(building, "Meter Current Demand KW", datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
+    data = BR.getData(building, util_strs[0], datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
     usage = data[1]
     date = data[0]
     imagePath = '/edashboard/images/buildingPic/' + buildnum + '.jpg'
@@ -123,6 +122,8 @@ def compare_view(request,builddata=None):
             builds.append("build3=")
         else:
             builds.append("None")
+        print(builddata)
+        print(builds)
         data = splitUtilUrls(builddata,builds)
         buildnums = data[0]
         util = data[1]
@@ -131,6 +132,7 @@ def compare_view(request,builddata=None):
         for i in range(0, len(buildnums)):
             building = Building.objects.get(b_num=buildnums[i])
             datas.append(BR.getUtilityData(building, util, starttime, endtime))
+        print(BR.getCommonUtilites(buildnums))
 
     if flag == "sens":
         #Checks for the number of buildings we have passed
