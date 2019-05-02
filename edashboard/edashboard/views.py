@@ -9,6 +9,9 @@ from django import template
 from django.conf import settings
 from edashboard.clean import *
 from edashboard.models import *
+from edashboard.charts import *
+from edashboard.conversion import *
+from edashboard.weather import *
 from django.http import JsonResponse
 from edashboard.forms import *
 import statistics as stats
@@ -26,8 +29,33 @@ bname.sort()
 
 def index(request):
     buildings = BR.getBuildingStrings()
+    list_elec = elec_list()
+    list_steam = steam_list()
+    list_dom = dom_list()
+    list_reclaimed = reclaimed_list()
+    list_chilled = chilled_list()
+    usage_elec = usage(list_elec)
+    usage_steam = usage(list_steam)
+    usage_dom = usage(list_dom)
+    usage_reclaimed = usage(list_reclaimed)
+    usage_chilled = usage(list_chilled)
+    avg_elec = avg(usage_elec)
+    avg_steam = avg(usage_steam)
+    avg_dom = avg(usage_dom)
+    avg_reclaimed = avg(usage_reclaimed)
+    avg_chilled = avg(usage_chilled)
+    elecDollar = kwtodollar(avg_elec)
+    steamDollar = btutodollar(avg_steam)
+    domDollar = gallontodollar(avg_dom)
+    reclaimedDollar = gallontodollar(avg_reclaimed)
+    chilledDollar = gallontodollar(avg_chilled)
+    overall = elecDollar + steamDollar + domDollar + reclaimedDollar + chilledDollar
     return render(request, 'edashboard/index.html',{'buildlist': buildings,'buildlistname':bname,
-    'buildlistnum':bnum})
+    'buildlistnum':bnum,'usage_elec':usage_elec,'usage_steam':usage_steam,'usage_chilled':usage_chilled,
+    'usage_dom':usage_dom,'usage_reclaimed':usage_reclaimed,'avg_elec':avg_elec,'avg_steam':avg_steam,
+    'avg_chilled':avg_chilled,'avg_dom':avg_dom,'avg_reclaimed':avg_reclaimed,'elecDollar':elecDollar,
+    'steamDollar':steamDollar,'domDollar':domDollar,'reclaimedDollar':reclaimedDollar,'chilledDollar':chilledDollar,
+    'overall':overall})
 
 def building_view(request, buildnum):
     buildings = BR.getBuildingStrings()
