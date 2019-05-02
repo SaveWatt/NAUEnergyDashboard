@@ -65,10 +65,8 @@ class BackendRetriever:
     def getUtilityData(self,building, sens_type, init_date, fin_date):
         sdr = StaticDataRetriever()
         build_id = building.id
-        print(build_id)
-        print(sens_type)
         try:
-            sens = Sensor.objects.get(building_id=build_id, s_type=sens_type)
+            sens = Sensor.objects.get(building_id=build_id, s_type='Meter Current Demand KW')
             building = sens.building
             utilname = sens.s_name
             print(sens)
