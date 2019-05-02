@@ -151,14 +151,17 @@ def compare_view(request,builddata=None):
         else:
             builds.append("None")
         data = splitUtilUrls(builddata,builds)
-        buildnums = data[0]
+        print(data)
+        #buildnums = data[0]
+        buildnums = ['B88', 'B91']
         util = data[1]
         starttime = getTimes(data[2])
         endtime = getTimes(data[3])
         for i in range(0, len(buildnums)):
+            print(buildnums[i])
             building = Building.objects.get(b_num=buildnums[i])
             datas.append(BR.getUtilityData(building, util, starttime, endtime))
-        print(BR.getCommonUtilites(buildnums))
+        print("Common utils: %s" % str(BR.getCommonUtilites(buildnums)))
 
     if flag == "sens":
         #Checks for the number of buildings we have passed

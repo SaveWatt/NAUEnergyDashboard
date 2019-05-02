@@ -9,12 +9,11 @@ def elec_list():
 
     for data in Sensor.objects.filter(s_type="Electrical Usage"):
         listslog.append(data.s_log)
-    print(listslog)
 
     for data in listslog:
         eleclist.append(Sensor.objects.get(s_log=data))
 
-    return listslog
+    return eleclist
 
 def steam_list():
     steamlist = []
@@ -103,6 +102,8 @@ def sum(data):
 
 def avg(data):
     avg = sum(data)
+    if len(data) == 0:
+        return 0
     average = round(avg / len(data), 4)
 
     return average
