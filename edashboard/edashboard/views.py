@@ -63,9 +63,11 @@ def building2_view(request,builddata):
 def building_view(request, buildnum):
     print(buildnum)
     buildings = BR.getBuildingStrings()
+    inputs = []
     if 'incr' in buildnum:
         inputs = getBuildData(buildnum)
         buildnum = inputs[0]
+    print(inputs)
     building = Building.objects.get(b_num=buildnum)
     b_name = building.b_name
     sensors = Sensor.objects.filter(building_id=building.id)
@@ -75,8 +77,11 @@ def building_view(request, buildnum):
         sensor_strs.append(str(sens))
         if sens.s_sub_type != 'None':
             util_strs.append(str(sens.s_type))
-    #data = BR.getData(building, "Meter Current Demand kwh", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
-    data = BR.getData(building, util_strs[0], datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
+    if inputs != []:
+        data = BR.getData(building, inputs[2], datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=inputs[1])
+    else:
+        #data = BR.getData(building, "Meter Current Demand kwh", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
+        data = BR.getData(building, util_strs[0], datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
     usage = conv.consumption(data[1])
     date = data[0]
     date.pop(0)
