@@ -119,6 +119,9 @@ def compare_view(request,builddata=None):
     starttime = ""
     endtime = ""
     c_utils=""
+    searchtime = builddata.split('time=')
+    searchtime = searchtime[1].split("util=")
+    searchtime = str(searchtime[0])
     builds = []
     senses = []
     datas = []
@@ -213,10 +216,16 @@ def compare_view(request,builddata=None):
     for i in datas:
         c_usages.append(conv.consumption(i[1]))
     usages = c_usages
-    for i in range(0,len(usages)):
-        if '/' in buildnames[i]:
-            buildnames[i] = buildnames[i].replace('/', 's per ')
-        content.append([usages[i],buildnames[i],bgcolor[i],bordercol[i]])
+    if flag =="util":
+        for i in range(0,len(usages)):
+            if '/' in buildnames[i].b_name:
+                buildnames[i] = buildnames[i].b_name.replace('/', 's per ')
+            content.append([usages[i],buildnames[i],bgcolor[i],bordercol[i]])
+    else:
+        for i in range(0,len(usages)):
+            if '/' in buildnames[i]:
+                buildnames[i] = buildnames[i].replace('/', 's per ')
+            content.append([usages[i],buildnames[i],bgcolor[i],bordercol[i]])
     for i in range(0,len(dates[0])):
         t = (dates[0])[i]
         (dates[0])[i] = t.strftime('%m:%d:%Y %H:%M')
@@ -226,7 +235,7 @@ def compare_view(request,builddata=None):
     return render(request, 'edashboard/compare.html',{'buildlist': buildings,
     'buildlistname':bname,'sensor':sensor,'buildlistnum':bnum,
     'builddata':builddata,'date':dates[0], 'utilname':util,
-    'build_names':buildnames,'flag':flag,'content': content, 'utils':c_utils,'autofill':autofill})
+    'build_names':buildnames,'flag':flag,'content': content, 'searchtime':str(searchtime),'utils':c_utils,'autofill':autofill})
 
 def export_view(request,builddata=None):
     buildings = BR.getBuildingStrings()
@@ -267,6 +276,7 @@ def export_view(request,builddata=None):
     date = data[0]
     build_name = data[2]
     utilname = data[3]
+    searchtime = starttime + ' - ' + endtime
     for i in range(0,len(date)):
         t = date[i]
         date[i] = t.strftime('%m:%d:%Y %H:%M')

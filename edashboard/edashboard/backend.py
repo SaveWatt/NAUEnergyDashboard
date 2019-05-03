@@ -19,7 +19,7 @@ class BackendRetriever:
                 utilities.append(str(sensor))
         return utilities
 
-    def getCommonUtilites(self, building_nums):
+    def getCommonUtilites(self, buildings_nums):
         utilities = []
         count = len(buildings_nums)
         for n in buildings_nums:
@@ -30,6 +30,8 @@ class BackendRetriever:
             if count != utilities.count(u):
                 utilities = [x for x in utilities if x != u]
         return utilities
+
+
 
     """
     A function that takes a building number, sensor type, inital date,
@@ -52,6 +54,7 @@ class BackendRetriever:
                     date.append(log_dict[key][0])
                     usage.append(log_dict[key][1])
         return (date, usage)
+
 
     """
     RETRIEVER FOR EXPORT UTILITY
@@ -252,7 +255,8 @@ class StaticDataRetriever:
         for type in types:
             str_types.append(type.alias)
         types = str_types'''
-        types = ['Steam', 'Gas', 'Water', 'Elec', 'Hthw']
+        sub_types = ['Steam', 'Gas', 'Water', 'Elec', 'Electric']
+        utilites = {'Steam': ["Usage", "Total"]}
 
         cursor = self.__connection.cursor(as_dict=True)
         # Get list of trendlogs
@@ -271,7 +275,7 @@ class StaticDataRetriever:
                     # Storing bname, logdesc, objname, TrendlogID in log_dict
                     self.__log_dict[key] = [num, row['logdescription'],
                     row['objname'], row['TrendlogID'], 'None', 'None']
-                    for t in types:
+                    for t in sub_types:
                         if t.upper() in desc:
                             if t.upper() in desc and 'METER '+num in desc:
                                 _type = desc.split(' ')
@@ -279,7 +283,7 @@ class StaticDataRetriever:
                                 _type.pop(0)
                                 f_type = " "
                                 f_type = f_type.join(_type)
-                                self.__log_dict[key][4] = f_type.title()
+                                self.__log_dict[key][5] = f_type.title()
 
     def update_logs(self):
         # Querying for trendlogs based on log_dict info

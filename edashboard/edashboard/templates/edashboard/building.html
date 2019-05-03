@@ -65,20 +65,9 @@
               {% endfor %}
             </select>
           </div>
-          {% if user.is_authenticated %}
-            <div id="selectsens" class="custom-select" style="width:200px;">
-              <li class="dropdown-toggle" style="display:none;">Sensor</li>
-              <h2 class="select">Select a Sensor</h2>
-              <select>
-                {% for sensor in sensors %}
-                  <option>{{ sensor }}</option>
-                {% endfor %}
-              </select>
-            </div>
-          {% endif %}
           <div>
             <!--<button id="graphdata" onClick="getData(event)">Graph Data</button>-->
-            <button style="margin:0; margin-top: 5%;">Download Data</button>
+            <button onclick="graphBuildData(event)" style="margin:0; margin-top: 5%;">Graph Data</button>
           </div>
         </div>
           <div class="graphcont" style="margin:0; width: 50%; height: inherit;">
@@ -100,6 +89,24 @@
               }
               // Changes the button to be highlighted
               chgLabels(id);
+            }
+
+            function graphBuildData(event){
+              event.preventDefault();
+              var building = document.getElementById("buildimg").getElementsByTagName('h1')[0];
+              var buttons = document.getElementById('switches').getElementsByTagName('button');
+              var incr;
+              if(buttons[0]style.backgroundColor == 'background-color: rgb(255, 204, 1)'){
+                incr = 60;
+              }
+              else{
+                incr =15;
+              }
+              var util = document.getElementById('select-selected-util').innerHTML;
+              var buildnum = '{{bnum|safe}}';
+              var details = buildnum + "incr=" + incr +"util=" +util;
+              var destinationUrl = "{% url 'building' builddata=0 %}".replace(/0/, details.toString());
+              window.location.href = "" + destinationUrl.toString() + "";
             }
 
             </script>

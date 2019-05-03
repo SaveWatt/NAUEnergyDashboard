@@ -53,6 +53,7 @@ function autofill(){
   var incr;
   var extradiv = 0;
   var autofill = {{ autofill|safe }};
+  //var searchtimes = {{ searchtime|safe }}.toString();
   for (incr = 0; incr < autofill.length-1; incr++){
     if((autofill[autofill.length-1]).toString() == 'sens'){
       chgColor('sensswitch')
@@ -60,16 +61,14 @@ function autofill(){
         document.getElementById("sensoradder").getElementsByTagName('input')[0].value = autofill[autofill.length-2];
       }
       else {
-        console.log(incr);
         addSensor();
-        console.log("div:");
-        console.log("extrasdiv"+extradiv);
         var inputid = "extrasdiv"+extradiv;
-        console.log("value");
-        console.log(autofill[autofill.length-incr-2]);
         document.getElementById(inputid).getElementsByTagName('input')[0].value = autofill[autofill.length-incr-2];
         extradiv++;
       }
+    }
+    else{
+
     }
   }
 }
@@ -230,5 +229,6 @@ function chgColor(id){
   }
 }
 document.addEventListener("click", closeAllSelect);
+document.getElementById("stringtime").innerHTML = "{{ searchtime|safe }}";
 </script>
 </html>
