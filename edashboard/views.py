@@ -30,35 +30,46 @@ bname.sort()
 def index(request):
     buildings = BR.getBuildingStrings()
     list_elec = elec_list()
-    print(list_elec)
     list_steam = steam_list()
-    print(list_steam)
     list_dom = dom_list()
     list_reclaimed = reclaimed_list()
     list_chilled = chilled_list()
+    list_gas = gas_list()
+    print(list_elec)
+    print(list_steam)
+    print(list_dom)
+    print(list_reclaimed)
+    print(list_chilled)
+    print(list_gas)
     usage_elec = usage(list_elec)
-    print(usage_elec)
     usage_steam = usage(list_steam)
-    print(usage_steam)
     usage_dom = usage(list_dom)
     usage_reclaimed = usage(list_reclaimed)
     usage_chilled = usage(list_chilled)
+    usage_gas = usage(list_gas)
+    print(usage_elec)
+    print(usage_steam)
+    print(usage_dom)
+    print(usage_reclaimed)
+    print(usage_chilled)
+    print(usage_gas)
     avg_elec = avg(usage_elec)
     avg_steam = avg(usage_steam)
     avg_dom = avg(usage_dom)
     avg_reclaimed = avg(usage_reclaimed)
     avg_chilled = avg(usage_chilled)
+    avg_gas = avg(usage_gas)
     elecDollar = kwtodollar(avg_elec)
     steamDollar = btutodollar(avg_steam)
     domDollar = gallontodollar(avg_dom)
     reclaimedDollar = gallontodollar(avg_reclaimed)
     chilledDollar = gallontodollar(avg_chilled)
     overall = elecDollar + steamDollar + domDollar + reclaimedDollar + chilledDollar
-    return render(request, 'edashboard/index.html',{'buildlist': buildings,'buildlistname':bname,
-    'buildlistnum':bnum,'usage_elec':usage_elec,'usage_steam':usage_steam,'usage_chilled':usage_chilled,
-    'usage_dom':usage_dom,'usage_reclaimed':usage_reclaimed,'avg_elec':avg_elec,'avg_steam':avg_steam,
-    'avg_chilled':avg_chilled,'avg_dom':avg_dom,'avg_reclaimed':avg_reclaimed,'elecDollar':elecDollar,
-    'steamDollar':steamDollar,'domDollar':domDollar,'reclaimedDollar':reclaimedDollar,'chilledDollar':chilledDollar,
+    return render(request, 'edashboard/index.html',{'buildlist': buildings,'buildlistname':bname,'buildlistnum':bnum,
+    'list_elec':list_elec,'list_steam':list_steam,'list_dom':list_dom,'list_reclaimed':list_reclaimed,'list_chilled':list_chilled,'list_gas':list_gas,
+    'usage_elec':usage_elec,'usage_steam':usage_steam,'usage_chilled':usage_chilled,'usage_dom':usage_dom,'usage_reclaimed':usage_reclaimed,'usage_gas':usage_gas,
+    'avg_elec':avg_elec,'avg_steam':avg_steam,'avg_chilled':avg_chilled,'avg_dom':avg_dom,'avg_reclaimed':avg_reclaimed,'avg_gas':avg_gas,
+    'elecDollar':elecDollar,'steamDollar':steamDollar,'domDollar':domDollar,'reclaimedDollar':reclaimedDollar,'chilledDollar':chilledDollar,
     'overall':overall})
 
 def building_view(request, buildnum):

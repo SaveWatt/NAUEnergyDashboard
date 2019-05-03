@@ -2,7 +2,9 @@
 new Chart(document.getElementById("elec-chart"), {
     "type": "horizontalBar",
     "data": {
-        "labels": ["B60"],
+        "labels": [{% for data in list_elec %}
+                      "{{ data|safe }}",
+                      {% endfor %}],
         "datasets": [{
             "label": "Elec kWh",
             "data": [{% for data in usage_elec %}

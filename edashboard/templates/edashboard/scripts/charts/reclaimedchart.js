@@ -2,7 +2,9 @@
 new Chart(document.getElementById("reclaimed-chart"), {
     "type": "horizontalBar",
     "data": {
-        "labels": ["B60","B86"],
+        "labels": [{% for data in list_reclaimed %}
+                      "{{ data|safe }}",
+                      {% endfor %}],
         "datasets": [{
             "label": "Reclaimed Water Gallons",
             "data": [{% for data in usage_reclaimed %}

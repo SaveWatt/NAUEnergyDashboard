@@ -1,18 +1,18 @@
 //Code for charts
-new Chart(document.getElementById("chilled-chart"), {
+new Chart(document.getElementById("gas-chart"), {
     "type": "horizontalBar",
     "data": {
-        "labels": [{% for data in list_chilled %}
+        "labels": [{% for data in list_gas %}
                       "{{ data|safe }}",
                       {% endfor %}],
         "datasets": [{
-            "label": "Chilled Water Gallons",
-            "data": [{% for data in usage_chilled %}
+            "label": "Gas Usage",
+            "data": [{% for data in usage_gas %}
                           {{ data|safe }},
                           {% endfor %}],
             "fill": false,
-            "backgroundColor": ["#76a6fa", "#7bb5e5", "#aed7f4", "#c5e1f5", "#d3ebf0"],
-            "borderColor": ["#76a6fa", "#7bb5e5", "#aed7f4", "#c5e1f5", "#d3ebf0"],
+            "backgroundColor": ["#000000", "#478868", "#619a87", "#6fa597", "#7baea9"],
+            "borderColor": ["#000000", "#478868", "#619a87", "#6fa597", "#7baea9"],
             "borderWidth": 1
         }]
     },

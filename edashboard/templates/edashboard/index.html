@@ -29,9 +29,9 @@
             <td>Steam Usage</td><td>{{ avg_steam|safe }} BTU</td>
           </tr>
           <tr>
-            <td colspan="2"><canvas id="elec-chart" width="300" height="200"></canvas></td>
+            <td colspan="2"><canvas id="elec-chart" width="300" height="350"></canvas></td>
             <td><canvas id="empty-chart" width="150" height="200"></td>
-            <td colspan="2"><canvas id="steam-chart" width="300" height="200"></canvas></td>
+            <td colspan="2"><canvas id="steam-chart" width="300" height="350"></canvas></td>
             <td></td>
           </tr>
           <tr>
@@ -40,20 +40,20 @@
             <td>Dom Water Usage</td><td>{{ avg_dom|safe }} Gallons</td>
           </tr>
           <tr>
-            <td colspan="2"><canvas id="chilled-chart" width="300" height="200"></canvas></td>
+            <td colspan="2"><canvas id="chilled-chart" width="300" height="350"></canvas></td>
             <td><canvas id="empty-chart" width="150" height="200"></td>
-            <td colspan="2"><canvas id="dom-chart" width="300" height="200"></canvas></td>
+            <td colspan="2"><canvas id="dom-chart" width="300" height="350"></canvas></td>
             <td></td>
           </tr>
           <tr>
             <td>Reclaimed Water Usage</td><td>{{ avg_reclaimed|safe }} Gallons</td>
             <td></td>
-            <td></td><td></td>
+            <td>Gas Usage</td><td>{{ avg_gas|safe }} BTU</td>
           </tr>
           <tr>
-            <td colspan="2"><canvas id="reclaimed-chart" width="300" height="200"></canvas></td>
+            <td colspan="2"><canvas id="reclaimed-chart" width="300" height="350"></canvas></td>
             <td><canvas id="empty-chart" width="150" height="200"></td>
-            <td colspan="2"><canvas id="empty-chart" width="300" height="200"></canvas></td>
+            <td colspan="2"><canvas id="gas-chart" width="300" height="350"></canvas></td>
             <td></td>
           </tr>
         </table>
@@ -72,8 +72,9 @@
             <tr><td bgcolor="#ffcc01">Electricity</td><td id="eval">{{ elecDollar|safe }}</td><td class="Labels">DOLLARS</td></tr>
             <tr><td bgcolor="#ff6a6a">Steam</td><td id="sval">{{ steamDollar|safe }}</td><td class="Labels">DOLLARS</td></tr>
             <tr><td bgcolor="#aed7f4">Chilled Water</td><td id="cval">{{ chilledDollar|safe }}</td><td class="LabelsG">DOLLARS</td></tr>
-            <tr><td bgcolor="#003467" style="color:white">Dom Water</td><td id="dval">{{ domDollar|safe }}</td><td class="LabelsG">DOLLARS</td></tr>
-            <tr><td bgcolor="#007867" style="color:white">Reclaimed Water</td><td id="rval">{{ reclaimedDollar|safe }}</td><td class="LabelsG">DOLLARS</td></tr>
+            <tr><td bgcolor="#003467" style="color:white">Dom Water</td><td id="dval">{{ domDollar|safe }}</td><td class="LabelsW">DOLLARS</td></tr>
+            <tr><td bgcolor="#007867" style="color:white">Reclaimed Water</td><td id="rval">{{ reclaimedDollar|safe }}</td><td class="LabelsW">DOLLARS</td></tr>
+            <tr><td bgcolor="#000000" style="color:white">Gas</td><td id="gval">{{ gasDollar|safe }}</td><td class="LabelsG">DOLLARS</td></tr>
           </table>
         </div>
           <!-- Need python functions to Convert from BTU to kW, Ton, Gas, Dollars and for all combos -->
@@ -99,6 +100,7 @@ const currs = document.getElementById("sval").innerHTML;
 const currd = document.getElementById("dval").innerHTML;
 const currr = document.getElementById("rval").innerHTML;
 const currc = document.getElementById("cval").innerHTML;
+const currg = document.getElementById("gval").innerHTML;
 document.getElementById("cost").style.backgroundColor = "#ffcc01";
 // // Gets the total usage from the header
 // var total = document.getElementById("chartNum").innerHTML + '';
@@ -150,7 +152,8 @@ function chgColor(id) {
 function chgLabels(id){
   // Changes displayed Labels
   var labels = document.getElementsByClassName("Labels");
-  var waters = document.getElementsByClassName("LabelsG");
+  var waters = document.getElementsByClassName("LabelsW");
+  var gases = document.getElementsByClassName("LabelsG");
   if (id== "kw"){
     for(var i=0; i<labels.length; i++) {
       labels[i].innerHTML= "kW";
@@ -223,5 +226,6 @@ function chgLabels(id){
 {% include "edashboard/scripts/charts/chilledchart.js" %}
 {% include "edashboard/scripts/charts/domchart.js" %}
 {% include "edashboard/scripts/charts/reclaimedchart.js" %}
+{% include "edashboard/scripts/charts/gaschart.js" %}
 </script>
 </html>

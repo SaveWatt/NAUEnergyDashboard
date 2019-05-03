@@ -2,7 +2,9 @@
 new Chart(document.getElementById("dom-chart"), {
     "type": "horizontalBar",
     "data": {
-        "labels": ["B46","B62","B50A","B60","B86","B14"],
+        "labels": [{% for data in list_dom %}
+                      "{{ data|safe }}",
+                      {% endfor %}],
         "datasets": [{
             "label": "Dom Water Gallons",
             "data": [{% for data in usage_dom %}

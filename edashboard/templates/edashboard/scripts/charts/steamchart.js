@@ -2,7 +2,9 @@
 new Chart(document.getElementById("steam-chart"), {
     "type": "horizontalBar",
     "data": {
-        "labels": ["B88","B36","B60","B60"],
+        "labels": [{% for data in list_steam %}
+                      "{{ data|safe }}",
+                      {% endfor %}],
         "datasets": [{
             "label": "Steam BTU",
             "data": [{% for data in usage_steam %}
