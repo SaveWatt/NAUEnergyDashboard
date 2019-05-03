@@ -18,6 +18,7 @@ import statistics as stats
 import datetime
 from edashboard.backend import BackendRetriever
 from edashboard.backend import StaticDataRetriever as SDR
+import edashboard.conversion as conv
 
 sdr = SDR()
 BR = BackendRetriever()
@@ -68,8 +69,9 @@ def building_view(request, buildnum):
             util_strs.append(str(sens.s_type))
     #data = BR.getData(building, "Meter Current Demand kwh", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
     data = BR.getData(building, util_strs[0], datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
-    usage = data[1]
+    usage = conv.consumption(data[1])
     date = data[0]
+    date.pop(0)
     imagePath = '/edashboard/images/buildingPic/' + buildnum + '.jpg'
     if usage:
         percent = sum(usage)/10000*100
@@ -184,7 +186,7 @@ def compare_view(request,builddata=None):
             senses.append("sens3=")
         else:
             senses.append("None")
-        data = splitSensUrls(builddata,senses)
+        data = splitSensUrls(builddata, senses)
         sensornums = data[0]
         starttime = getTimes(data[1])
         endtime = getTimes(data[2])
@@ -192,6 +194,7 @@ def compare_view(request,builddata=None):
             datas.append(BR.getSensorData(sensornums[i], starttime, endtime))
         autofill = sensornums
         autofill.append('sens')
+        c_utils = []
     #Loads the final data
     usages = []
     dates=[]
@@ -206,7 +209,10 @@ def compare_view(request,builddata=None):
             buildnames.append(i[2])
         else:
             buildnames.append(i[3])
-    # print(buildnames)
+    c_usages = []
+    for i in datas:
+        c_usages.append(conv.consumption(i[1]))
+    usages = c_usages
     for i in range(0,len(usages)):
         if '/' in buildnames[i]:
             buildnames[i] = buildnames[i].replace('/', 's per ')
