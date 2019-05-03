@@ -78,13 +78,14 @@ def building_view(request, buildnum):
         if sens.s_sub_type != 'None':
             util_strs.append(str(sens.s_type))
     if inputs != []:
-        data = BR.getData(building, inputs[2], datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=inputs[1])
+        data = BR.getData(building, inputs[2], datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=int(inputs[1]))
     else:
         #data = BR.getData(building, "Meter Current Demand kwh", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
         data = BR.getData(building, util_strs[0], datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
+    print(data)
     usage = conv.consumption(data[1])
     date = data[0]
-    date.pop(0)
+    #date.pop(0)
     imagePath = '/edashboard/images/buildingPic/' + buildnum + '.jpg'
     if usage:
         percent = sum(usage)/10000*100

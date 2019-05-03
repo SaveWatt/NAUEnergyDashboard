@@ -38,19 +38,32 @@ class BackendRetriever:
     and final date as inputs.
     The function returns sample values as an array to be passed to a chart builder.
     """
-    def getData(self,building, sens_type, init_date, fin_date, incr=1):
+    def getData(self, building, sens_type, init_date, fin_date, incr=1):
         sdr = StaticDataRetriever()
         build_id = building.id
+        print(sens_type)
         try:
-            sens = Sensor.objects.get(building_id=build_id, s_type=sens_type)
+            sens = Sensor.objects.get(building_id=build_id, s_type=sens_type.title())
         except:
             sens = Sensor.objects.get(building_id=57 , s_type='Meter Current Demand KW')
         log_dict = sdr.get_log(sens.s_log)
         usage = []
         date = []
+        last = None
         for key in sorted(log_dict.keys()):
             if log_dict[key][0] >= init_date and log_dict[key][0] <= fin_date:
-                if log_dict[key][0].minute % incr == 0:
+                if incr != 60:
+                    current_min = log_dict[key][0].minute
+                    if last != None:
+                        min_dif = current_min - last
+                    else:
+                        min_dif = 0
+                    print(min_dif)
+                    if  min_dif % incr == 0:
+                        date.append(log_dict[key][0])
+                        usage.append(log_dict[key][1])
+                    last = current_min
+                else:
                     date.append(log_dict[key][0])
                     usage.append(log_dict[key][1])
         return (date, usage)
