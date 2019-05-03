@@ -19,6 +19,7 @@ import datetime
 from edashboard.backend import BackendRetriever
 from edashboard.backend import StaticDataRetriever as SDR
 import edashboard.conversion as conv
+from django.contrib.auth.models import User
 
 sdr = SDR()
 BR = BackendRetriever()
@@ -180,78 +181,131 @@ def compare_view(request,builddata=None):
         c_utils = BR.getCommonUtilites(buildnums)
         autofill = buildnums
         autofill.append('util')
+        #Loads the final data
+        usages = []
+        dates=[]
+        content = []
+        bgcolor = ["#ffcc01","#1f61a8","#8c8b86","#10603a"]
+        bordercol = ["rgba(255,204,1,.3)","rgba(31,97,168,.3)","rgb(140, 139, 134,.3)"
+        ,"rgb(16, 96, 58,.3)"]
+        for i in datas:
+            dates.append(i[0])
+            usages.append(i[1])
+            if flag == "util":
+                buildnames.append(i[2])
+            else:
+                buildnames.append(i[3])
+        print(sensornums)
+        c_usages = []
+        for i in datas:
+            c_usages.append(conv.consumption(i[1]))
+        usages = c_usages
+        if flag =="util":
+            for i in range(0,len(usages)):
+                if '/' in buildnames[i].b_name:
+                    buildnames[i] = buildnames[i].b_name.replace('/', 's per ')
+                content.append([usages[i],buildnames[i],bgcolor[i],bordercol[i]])
+        else:
+            for i in range(0,len(usages)):
+                if '/' in buildnames[i]:
+                    buildnames[i] = buildnames[i].replace('/', 's per ')
+                content.append([usages[i],buildnames[i],bgcolor[i],bordercol[i]])
+        for i in range(0,len(dates[0])):
+            t = (dates[0])[i]
+            (dates[0])[i] = t.strftime('%m:%d:%Y %H:%M')
+        for i in range(0, len(autofill)):
+            if autofill[i] == "None":
+                autofill.remove(autofill[i])
+        url = 'edashboard/compare.html'
+        context = {'buildlist': buildings,
+        'buildlistname':bname,'sensor':sensor,'buildlistnum':bnum,
+        'builddata':builddata,'date':dates[0], 'utilname':util,
+        'build_names':buildnames,'flag':flag,'content': content, 'searchtime':str(searchtime),'utils':c_utils,'autofill':autofill}
 
     if flag == "sens":
-        #Checks for the number of buildings we have passed
-        if "sens0=" in str(builddata):
-            senses.append("sens0=")
-        else:
-            senses.append("None")
+        if(request.user.is_authenticated):
+            username = request.user.id
+            user = UserProfile.objects.get(user=username)
+            if(user.permission is 3):
+                #Checks for the number of buildings we have passed
+                if "sens0=" in str(builddata):
+                    senses.append("sens0=")
+                else:
+                    senses.append("None")
 
-        if "sens1=" in str(builddata):
-            senses.append("sens1=")
-        else:
-            senses.append("None")
+                if "sens1=" in str(builddata):
+                    senses.append("sens1=")
+                else:
+                    senses.append("None")
 
-        if "sens2=" in str(builddata):
-            senses.append("sens2=")
-        else:
-            senses.append("None")
+                if "sens2=" in str(builddata):
+                    senses.append("sens2=")
+                else:
+                    senses.append("None")
 
-        if "sens3=" in str(builddata):
-            senses.append("sens3=")
+                if "sens3=" in str(builddata):
+                    senses.append("sens3=")
+                else:
+                    senses.append("None")
+                data = splitSensUrls(builddata, senses)
+                sensornums = data[0]
+                print(data[1])
+                print(data[2])
+                starttime = getTimes(data[1])
+                endtime = getTimes(data[2])
+                for i in range(0, len(sensornums)):
+                    datas.append(BR.getSensorData(sensornums[i], starttime, endtime))
+                autofill = sensornums
+                autofill.append('sens')
+                c_utils = []
+                #Loads the final data
+                usages = []
+                dates=[]
+                content = []
+                bgcolor = ["#ffcc01","#1f61a8","#8c8b86","#10603a"]
+                bordercol = ["rgba(255,204,1,.3)","rgba(31,97,168,.3)","rgb(140, 139, 134,.3)"
+                ,"rgb(16, 96, 58,.3)"]
+                for i in datas:
+                    dates.append(i[0])
+                    usages.append(i[1])
+                    if flag == "util":
+                        buildnames.append(i[2])
+                    else:
+                        buildnames.append(i[3])
+                print(sensornums)
+                c_usages = []
+                for i in datas:
+                    c_usages.append(conv.consumption(i[1]))
+                usages = c_usages
+                if flag =="util":
+                    for i in range(0,len(usages)):
+                        if '/' in buildnames[i].b_name:
+                            buildnames[i] = buildnames[i].b_name.replace('/', 's per ')
+                        content.append([usages[i],buildnames[i],bgcolor[i],bordercol[i]])
+                else:
+                    for i in range(0,len(usages)):
+                        if '/' in buildnames[i]:
+                            buildnames[i] = buildnames[i].replace('/', 's per ')
+                        content.append([usages[i],buildnames[i],bgcolor[i],bordercol[i]])
+                for i in range(0,len(dates[0])):
+                    t = (dates[0])[i]
+                    (dates[0])[i] = t.strftime('%m:%d:%Y %H:%M')
+                for i in range(0, len(autofill)):
+                    if autofill[i] == "None":
+                        autofill.remove(autofill[i])
+                url = 'edashboard/compare.html'
+                context = {'buildlist': buildings,
+                'buildlistname':bname,'sensor':sensor,'buildlistnum':bnum,
+                'builddata':builddata,'date':dates[0], 'utilname':util,
+                'build_names':buildnames,'flag':flag,'content': content, 'searchtime':str(searchtime),'utils':c_utils,'autofill':autofill}
+            else:
+                context = {'buildlist': buildings}
+                url = 'edashboard/error.html'
         else:
-            senses.append("None")
-        data = splitSensUrls(builddata, senses)
-        sensornums = data[0]
-        print(data[1])
-        print(data[2])
-        starttime = getTimes(data[1])
-        endtime = getTimes(data[2])
-        for i in range(0, len(sensornums)):
-            datas.append(BR.getSensorData(sensornums[i], starttime, endtime))
-        autofill = sensornums
-        autofill.append('sens')
-        c_utils = []
-    #Loads the final data
-    usages = []
-    dates=[]
-    content = []
-    bgcolor = ["#ffcc01","#1f61a8","#8c8b86","#10603a"]
-    bordercol = ["rgba(255,204,1,.3)","rgba(31,97,168,.3)","rgb(140, 139, 134,.3)"
-    ,"rgb(16, 96, 58,.3)"]
-    for i in datas:
-        dates.append(i[0])
-        usages.append(i[1])
-        if flag == "util":
-            buildnames.append(i[2])
-        else:
-            buildnames.append(i[3])
-    print(sensornums)
-    c_usages = []
-    for i in datas:
-        c_usages.append(conv.consumption(i[1]))
-    usages = c_usages
-    if flag =="util":
-        for i in range(0,len(usages)):
-            if '/' in buildnames[i].b_name:
-                buildnames[i] = buildnames[i].b_name.replace('/', 's per ')
-            content.append([usages[i],buildnames[i],bgcolor[i],bordercol[i]])
-    else:
-        for i in range(0,len(usages)):
-            if '/' in buildnames[i]:
-                buildnames[i] = buildnames[i].replace('/', 's per ')
-            content.append([usages[i],buildnames[i],bgcolor[i],bordercol[i]])
-    for i in range(0,len(dates[0])):
-        t = (dates[0])[i]
-        (dates[0])[i] = t.strftime('%m:%d:%Y %H:%M')
-    for i in range(0, len(autofill)):
-        if autofill[i] == "None":
-            autofill.remove(autofill[i])
-    return render(request, 'edashboard/compare.html',{'buildlist': buildings,
-    'buildlistname':bname,'sensor':sensor,'buildlistnum':bnum,
-    'builddata':builddata,'date':dates[0], 'utilname':util,
-    'build_names':buildnames,'flag':flag,'content': content, 'searchtime':str(searchtime),'utils':c_utils,'autofill':autofill})
+            context = {'buildlist': buildings}
+            url = 'edashboard/error.html'
+        return render(request, url, context)
+
 
 def export_view(request,builddata=None):
     buildings = BR.getBuildingStrings()

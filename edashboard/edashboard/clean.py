@@ -100,11 +100,6 @@ def splitSensUrls(builddata,senses):
     end = splitimes[1]
     print(end)
     fsense=[]
-    for i in range(0,len(months)-1):
-        if(months[i] in start):
-            monDay = start.split(",")
-            num = monDay[0].split(months[i])
-            start = "" + str(months[i]) + str(num[1]) +","+ monDay[1]
     for i in range(0,len(senses)):
         if(senses[len(senses)-1-i]=="None"):
             continue
