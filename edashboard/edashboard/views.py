@@ -33,6 +33,7 @@ def index(request):
     list_dom = dom_list()
     list_reclaimed = reclaimed_list()
     list_chilled = chilled_list()
+    list_gas = gas_list()
     usage_elec = usage(list_elec)
     usage_steam = usage(list_steam)
     usage_dom = usage(list_dom)
@@ -65,7 +66,7 @@ def building_view(request, buildnum):
     util_strs = []
     for sens in sensors:
         sensor_strs.append(str(sens))
-        if sens.s_type != 'None':
+        if sens.s_sub_type != 'None':
             util_strs.append(str(sens.s_type))
     #data = BR.getData(building, "Meter Current Demand kwh", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
     data = BR.getData(building, util_strs[0], datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
@@ -209,6 +210,7 @@ def compare_view(request,builddata=None):
             buildnames.append(i[2])
         else:
             buildnames.append(i[3])
+    print(sensornums)
     c_usages = []
     for i in datas:
         c_usages.append(conv.consumption(i[1]))
