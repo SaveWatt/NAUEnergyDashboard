@@ -61,7 +61,11 @@ def building2_view(request,builddata):
     return True
 
 def building_view(request, buildnum):
+    print(buildnum)
     buildings = BR.getBuildingStrings()
+    if 'incr' in buildnum:
+        inputs = getBuildData(buildnum)
+        buildnum = inputs[0]
     building = Building.objects.get(b_num=buildnum)
     b_name = building.b_name
     sensors = Sensor.objects.filter(building_id=building.id)
