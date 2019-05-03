@@ -96,7 +96,7 @@
               var building = document.getElementById("buildimg").getElementsByTagName('h1')[0];
               var buttons = document.getElementById('switches').getElementsByTagName('button');
               var incr;
-              if(buttons[0]style.backgroundColor == 'background-color: rgb(255, 204, 1)'){
+              if(buttons[0].style.backgroundColor == 'background-color: rgb(255, 204, 1)'){
                 incr = 60;
               }
               else{
@@ -105,7 +105,7 @@
               var util = document.getElementById('select-selected-util').innerHTML;
               var buildnum = '{{bnum|safe}}';
               var details = buildnum + "incr=" + incr +"util=" +util;
-              var destinationUrl = "{% url 'building' builddata=0 %}".replace(/0/, details.toString());
+              var destinationUrl = "{% url 'building2' builddata=0 %}".replace(/0/, details.toString());
               window.location.href = "" + destinationUrl.toString() + "";
             }
 
