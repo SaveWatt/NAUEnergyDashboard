@@ -32,7 +32,7 @@ def getBuildData(builddata):
     incr = util[0].split('incr=')
     buildnum=incr[0]
     incr = incr[1]
-    content=[buildnum,incr,util]
+    content=[buildnum,incr,util[1]]
     return content
 
 def getDownData(data):
