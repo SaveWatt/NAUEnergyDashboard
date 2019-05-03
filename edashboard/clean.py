@@ -7,9 +7,10 @@ def getTimes(times):
     "June":"06","July":"07","August":"08","September":"09","October":"10","November":"11", "December": "12"}
     splittime = times.split(" ")
     month = splittime[0]
-    day = ((splittime[1]).split(",", 1))[0]
+    day = ((splittime[1]).split(","))[0]
     hour=0
     mins=0
+    print(splittime)
     #Adds leading 0
     if(int(day)<10):
       day = "0"+day
@@ -25,6 +26,14 @@ def getTimes(times):
       time = str(hour) + mins + ":00"
       #datetime.datetime(2018, 10, 1, 0, 0)
     return datetime.datetime(int(year), int(months[month]), int(day), int(hour), int(mins))
+
+def getBuildData(builddata):
+    util = builddata.split('util=')
+    incr = util[0].split('incr=')
+    buildnum=incr[0]
+    incr = incr[1]
+    content=[buildnum,incr,util[1]]
+    return content
 
 def getDownData(data):
     usages = [[],[],[],[]]
@@ -87,13 +96,10 @@ def splitSensUrls(builddata,senses):
     times = sens[1]
     splitimes = times.split(" - ")
     start = splitimes[0]
+    print(start)
     end = splitimes[1]
+    print(end)
     fsense=[]
-    for i in range(0,len(months)-1):
-        if(months[i] in start):
-            monDay = start.split(",")
-            num = monDay[0].split(months[i])
-            start = "" + str(months[i]) + " " + str(num[1]) +","+ monDay[1]
     for i in range(0,len(senses)):
         if(senses[len(senses)-1-i]=="None"):
             continue
@@ -121,21 +127,13 @@ def splitUtilUrls(builddata, buildss):
     splitimes = times.split(" - ")
     start = splitimes[0]
     end = splitimes[1]
-    i=0
     fbuilds = []
-    fbuilds2=[]
-    for i in range(0,len(months)-1):
-        if(months[i] in start):
-            monDay = start.split(",")
-            num = monDay[0].split(months[i])
-            start = "" + str(months[i]) + " " + str(num[1]) +","+ monDay[1]
     for i in range(0,len(buildss)):
-        if(buildss[i]=="None"):
+        if(buildss[len(buildss)-1-i] == "None"):
             continue
         else:
-            print(len(builds)-1-i)
-            fbuilds.append(builds[0].split(buildss[len(builds)-1-i])[1])
-            builds[0] = builds[0].split(buildss[len(builds)-1-i])[0]
+            fbuilds.append(((builds[0]).split(buildss[len(buildss)-1-i]))[1].strip())
+            builds[0] = ((builds[0]).split(buildss[len(buildss)-1-i]))[0].strip()
     #Adds building numbers
     cleandata.append(fbuilds)
     #Adds Utility

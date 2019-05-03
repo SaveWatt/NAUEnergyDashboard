@@ -11,8 +11,8 @@ new Chart(document.getElementById("chilled-chart"), {
                           {{ data|safe }},
                           {% endfor %}],
             "fill": false,
-            "backgroundColor": ["#76a6fa", "#7bb5e5", "#aed7f4", "#c5e1f5", "#d3ebf0"],
-            "borderColor": ["#76a6fa", "#7bb5e5", "#aed7f4", "#c5e1f5", "#d3ebf0"],
+            "backgroundColor": ["#7bb5e5","#7bb5e5","#7bb5e5"],
+            "borderColor": ["#7bb5e5","#7bb5e5","#7bb5e5"],
             "borderWidth": 1
         }]
     },

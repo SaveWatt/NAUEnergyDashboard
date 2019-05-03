@@ -11,8 +11,8 @@ new Chart(document.getElementById("gas-chart"), {
                           {{ data|safe }},
                           {% endfor %}],
             "fill": false,
-            "backgroundColor": ["#000000", "#478868", "#619a87", "#6fa597", "#7baea9"],
-            "borderColor": ["#000000", "#478868", "#619a87", "#6fa597", "#7baea9"],
+            "backgroundColor": ["#000000","#000000","#000000","#000000","#000000","#000000"],
+            "borderColor": ["#000000","#000000","#000000","#000000","#000000","#000000"],
             "borderWidth": 1
         }]
     },

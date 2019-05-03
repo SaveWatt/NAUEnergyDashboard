@@ -11,8 +11,8 @@ new Chart(document.getElementById("steam-chart"), {
                           {{ data|safe }},
                           {% endfor %}],
             "fill": false,
-            "backgroundColor": ["#ff6a6a", "#ff8667", "#ffba69", "#ffcf85", "#fff6b7"],
-            "borderColor": ["#ff6a6a", "#ff8667", "#ffba69", "#ffcf85", "#fff6b7"],
+            "backgroundColor": ["#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a"],
+            "borderColor": ["#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a"],
             "borderWidth": 1
         }]
     },

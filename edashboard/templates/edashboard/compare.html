@@ -17,7 +17,7 @@
       <div id="selector">
         <div id="error-display">
 			  </div>
-        <h1 id="downloadrep">Compare Data</h1>
+        <h1 id="downloadrep">Graph Data</h1>
         <div class="greyell" id="reportrange" style="cursor: pointer; padding: 5px 10px;">
             <i class="fa fa-calendar"></i>&nbsp;
             <span></span> <i class="fa fa-caret-down"></i>
@@ -45,6 +45,33 @@ document.getElementById("utilswitch").style.backgroundColor = "rgb(255, 204, 1)"
 var time = document.getElementById("reportrange").getElementsByTagName('span')[0];
 time.setAttribute("id","stringtime");
 time.setAttribute("name","stringtime");
+{% if autofill %}
+  autofill();
+{%endif%}
+
+function autofill(){
+  var incr;
+  var extradiv = 0;
+  var autofill = {{ autofill|safe }};
+  //var searchtimes = {{ searchtime|safe }}.toString();
+  for (incr = 0; incr < autofill.length-1; incr++){
+    if((autofill[autofill.length-1]).toString() == 'sens'){
+      chgColor('sensswitch')
+      if(incr == 0){
+        document.getElementById("sensoradder").getElementsByTagName('input')[0].value = autofill[autofill.length-2];
+      }
+      else {
+        addSensor();
+        var inputid = "extrasdiv"+extradiv;
+        document.getElementById(inputid).getElementsByTagName('input')[0].value = autofill[autofill.length-incr-2];
+        extradiv++;
+      }
+    }
+    else{
+
+    }
+  }
+}
 
 function downloadData(event){
   event.preventDefault();
@@ -58,7 +85,7 @@ function downloadData(event){
 }
 function getSensorData(event){
   event.preventDefault();
-  var times = ($("span#stringtime").text()).replace(" ","");
+  var times = ($("span#stringtime").text());
   var sens1 = "None";
   var sens2 = "None";
   var sens3 = "None";
@@ -92,7 +119,7 @@ function getSensorData(event){
 }
 function getBuildingData(event){
   event.preventDefault();
-  var times = ($("span#stringtime").text()).replace(" ","");
+  var times = ($("span#stringtime").text());
   var build1 = "None";
   var build2 = "None";
   var build3 = "None";
@@ -202,5 +229,6 @@ function chgColor(id){
   }
 }
 document.addEventListener("click", closeAllSelect);
+document.getElementById("stringtime").innerHTML = "{{ searchtime|safe }}";
 </script>
 </html>

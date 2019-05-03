@@ -1,6 +1,6 @@
 import requests
 
-url = 'https://api.openweathermap.org/data/2.5/forecast?q={}&units=imperial&appid=ec447c97b1d6b713f803898111798f50'
+url = 'http://api.openweathermap.org/data/2.5/forecast?q={}&units=imperial&appid=ec447c97b1d6b713f803898111798f50'
 city = 'Flagstaff'
 r = requests.get(url.format(city)).json()
 

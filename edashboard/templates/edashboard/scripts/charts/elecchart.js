@@ -11,8 +11,8 @@ new Chart(document.getElementById("elec-chart"), {
                           {{ data|safe }},
                           {% endfor %}],
             "fill": false,
-            "backgroundColor": ["#ffcc01"],
-            "borderColor": ["#ffcc01"],
+            "backgroundColor": ["#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01"],
+            "borderColor": ["#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01","#ffcc01"],
             "borderWidth": 1
         }]
     },

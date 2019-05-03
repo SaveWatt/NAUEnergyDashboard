@@ -1,0 +1,28 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="{% static '/edashboard/stylesheet.css'%}">
+    <link rel="shortcut icon" href="{% static '/edashboard/images/favicon.ico' %}" />
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://www.amcharts.com/lib/4/core.js"></script>
+    <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="https://www.amcharts.com/lib/3/gauge.js"></script>
+  </head>
+  <body>
+    <div class="container" style="clear:both; height:100%; width:100%;">
+      <div style="float: left; width:-webkit-fill-available;">
+        {% include "edashboard/header.html" %}
+      </div>
+      <div class="errcont">
+        <div class="error">
+          <h1 id="error">An Error Has Occurred</h1>
+          <p id="error">If you think this is a mistake, please contact you local administrator</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

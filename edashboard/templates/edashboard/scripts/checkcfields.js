@@ -95,7 +95,7 @@ function addSensor(){
     else{
       alert("You can only graph up to 4 Sensors!");
     }
-    checkSensorValues()
+    //checkSensorValues()
 }
 function removeBuilding(num){
   innerdiv=document.getElementById("extrabdiv"+num);
@@ -107,7 +107,7 @@ function removeSensor(num){
   innerdiv=document.getElementById("extrasdiv"+num);
   innerdiv.parentNode.removeChild(innerdiv);
   sensor[num]=null;
-  checkSensorValues()
+  //checkSensorValues()
 }
 //TIME RANGE CODE
 $(function() {

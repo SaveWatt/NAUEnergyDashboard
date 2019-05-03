@@ -757,3 +757,20 @@ form#login a{
 button#add-sens{
       display: -webkit-box;
 }
+h1#error,p#error{
+  color: #003467;
+  text-align: left;
+  margin-left: 5%;
+}
+div.errcont{
+  width: -webkit-fill-available;
+  height: -webkit-fill-available;
+  position: absolute;
+  margin-top: 70px;
+}
+div.error{
+  height: auto;
+  margin: 0 auto;
+  position: relative;
+
+}

@@ -19,7 +19,7 @@ class BackendRetriever:
                 utilities.append(str(sensor))
         return utilities
 
-    def getCommonUtilites(self, building_nums):
+    def getCommonUtilites(self, buildings_nums):
         utilities = []
         count = len(buildings_nums)
         for n in buildings_nums:
@@ -38,19 +38,32 @@ class BackendRetriever:
     and final date as inputs.
     The function returns sample values as an array to be passed to a chart builder.
     """
-    def getData(self,building, sens_type, init_date, fin_date, incr=1):
+    def getData(self, building, sens_type, init_date, fin_date, incr=1):
         sdr = StaticDataRetriever()
         build_id = building.id
+        print(sens_type)
         try:
-            sens = Sensor.objects.get(building_id=build_id, s_type=sens_type)
+            sens = Sensor.objects.get(building_id=build_id, s_type=sens_type.title())
         except:
             sens = Sensor.objects.get(building_id=57 , s_type='Meter Current Demand KW')
         log_dict = sdr.get_log(sens.s_log)
         usage = []
         date = []
+        last = None
         for key in sorted(log_dict.keys()):
             if log_dict[key][0] >= init_date and log_dict[key][0] <= fin_date:
-                if log_dict[key][0].minute % incr == 0:
+                if incr != 60:
+                    current_min = log_dict[key][0].minute
+                    if last != None:
+                        min_dif = current_min - last
+                    else:
+                        min_dif = 0
+                    print(min_dif)
+                    if  min_dif % incr == 0:
+                        date.append(log_dict[key][0])
+                        usage.append(log_dict[key][1])
+                    last = current_min
+                else:
                     date.append(log_dict[key][0])
                     usage.append(log_dict[key][1])
         return (date, usage)
@@ -65,14 +78,14 @@ class BackendRetriever:
     def getUtilityData(self,building, sens_type, init_date, fin_date):
         sdr = StaticDataRetriever()
         build_id = building.id
-        print(build_id)
         try:
             sens = Sensor.objects.get(building_id=build_id, s_type=sens_type)
             building = sens.building
             utilname = sens.s_name
-            print(sens)
         except:
-            sens = Sensor.objects.get(building_id=57 , s_type='Meter Current Demand KW')
+            sens = Sensor.objects.get(building_id=27 , s_type='Chilled Water')
+            building = sens.building
+            utilname = sens.s_name
         log_dict = sdr.get_log(sens.s_log)
         usage = []
         date = []
@@ -241,6 +254,7 @@ class StaticDataRetriever:
             if Sensor.objects.filter(s_log=key):
                 s = Sensor.objects.get(s_log=key)
                 s.s_type = self.__log_dict[key][4]
+                s.s_sub_type = self.__log_dict[key][5]
                 s.s_name=self.__log_dict[key][1]
                 s.save()
             else:
@@ -254,7 +268,8 @@ class StaticDataRetriever:
         for type in types:
             str_types.append(type.alias)
         types = str_types'''
-        types = ['Steam', 'Gas', 'Water', 'Elec', 'Electric']
+        sub_types = ['Steam', 'Gas', 'Water', 'Elec', 'Electric']
+        utilites = {'Steam': ["Usage", "Total"]}
 
         cursor = self.__connection.cursor(as_dict=True)
         # Get list of trendlogs
@@ -272,8 +287,8 @@ class StaticDataRetriever:
                     key = logdevnum+"_"+loginst
                     # Storing bname, logdesc, objname, TrendlogID in log_dict
                     self.__log_dict[key] = [num, row['logdescription'],
-                    row['objname'], row['TrendlogID'], 'None']
-                    for t in types:
+                    row['objname'], row['TrendlogID'], 'None', 'None']
+                    for t in sub_types:
                         if t.upper() in desc:
                             if t.upper() in desc and 'METER '+num in desc:
                                 _type = desc.split(' ')
@@ -281,7 +296,7 @@ class StaticDataRetriever:
                                 _type.pop(0)
                                 f_type = " "
                                 f_type = f_type.join(_type)
-                                self.__log_dict[key][4] = f_type.title()
+                                self.__log_dict[key][5] = f_type.title()
 
     def update_logs(self):
         # Querying for trendlogs based on log_dict info
