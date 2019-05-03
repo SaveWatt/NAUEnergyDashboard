@@ -27,6 +27,14 @@ def getTimes(times):
       #datetime.datetime(2018, 10, 1, 0, 0)
     return datetime.datetime(int(year), int(months[month]), int(day), int(hour), int(mins))
 
+def getBuildData(builddata):
+    util = builddata.split('util=')
+    incr = util[0].split('incr=')
+    buildnum=incr[0]
+    incr = incr[1]
+    content=[buildnum,incr,util]
+    return content
+
 def getDownData(data):
     usages = [[],[],[],[]]
     labels = []
