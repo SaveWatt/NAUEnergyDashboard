@@ -76,7 +76,10 @@ def building_view(request, buildnum):
         if sens.s_sub_type != 'None':
             util_strs.append(str(sens.s_type))
     #data = BR.getData(building, "Meter Current Demand kwh", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
-    data = BR.getData(building, util_strs[0], datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
+    if 'incr' in buildnum:
+        data = BR.getData(building, util_strs[0], datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=inputs[1])
+    else:
+        data = BR.getData(building, util_strs[0], datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
     usage = conv.consumption(data[1])
     date = data[0]
     date.pop(0)
