@@ -85,7 +85,7 @@ function downloadData(event){
 }
 function getSensorData(event){
   event.preventDefault();
-  var times = ($("span#stringtime").text()).replace(" ","");
+  var times = ($("span#stringtime").text());
   var sens1 = "None";
   var sens2 = "None";
   var sens3 = "None";
@@ -119,7 +119,7 @@ function getSensorData(event){
 }
 function getBuildingData(event){
   event.preventDefault();
-  var times = ($("span#stringtime").text()).replace(" ","");
+  var times = ($("span#stringtime").text());
   var build1 = "None";
   var build2 = "None";
   var build3 = "None";
