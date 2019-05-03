@@ -116,10 +116,12 @@ def compare_view(request,builddata=None):
     data = ""
     starttime = ""
     endtime = ""
+    c_utils=""
     builds = []
     senses = []
     datas = []
     sensornums =[]
+    autofill=[]
     #Sets the utility
     if "util=" in str(builddata):
         flag = "util"
@@ -156,7 +158,10 @@ def compare_view(request,builddata=None):
         for i in range(0, len(buildnums)):
             building = Building.objects.get(b_num=buildnums[i])
             datas.append(BR.getUtilityData(building, util, starttime, endtime))
+            #buildnums[i]=building.b_name
         c_utils = BR.getCommonUtilites(buildnums)
+        autofill = buildnums
+        autofill.append('util')
 
     if flag == "sens":
         #Checks for the number of buildings we have passed
@@ -185,6 +190,8 @@ def compare_view(request,builddata=None):
         endtime = getTimes(data[2])
         for i in range(0, len(sensornums)):
             datas.append(BR.getSensorData(sensornums[i], starttime, endtime))
+        autofill = sensornums
+        autofill.append('sens')
     #Loads the final data
     usages = []
     dates=[]
@@ -196,10 +203,10 @@ def compare_view(request,builddata=None):
         dates.append(i[0])
         usages.append(i[1])
         if flag == "util":
-            buildnames.append(i[2].b_name)
+            buildnames.append(i[2])
         else:
-            buildnames.append(i[3].b_name)
-    print(buildnames)
+            buildnames.append(i[3])
+    # print(buildnames)
     for i in range(0,len(usages)):
         if '/' in buildnames[i]:
             buildnames[i] = buildnames[i].replace('/', 's per ')
@@ -207,10 +214,13 @@ def compare_view(request,builddata=None):
     for i in range(0,len(dates[0])):
         t = (dates[0])[i]
         (dates[0])[i] = t.strftime('%m:%d:%Y %H:%M')
+    for i in range(0, len(autofill)):
+        if autofill[i] == "None":
+            autofill.remove(autofill[i])
     return render(request, 'edashboard/compare.html',{'buildlist': buildings,
     'buildlistname':bname,'sensor':sensor,'buildlistnum':bnum,
     'builddata':builddata,'date':dates[0], 'utilname':util,
-    'build_names':buildnames,'flag':flag,'content': content, 'utils':c_utils})
+    'build_names':buildnames,'flag':flag,'content': content, 'utils':c_utils,'autofill':autofill})
 
 def export_view(request,builddata=None):
     buildings = BR.getBuildingStrings()
@@ -325,8 +335,9 @@ def validate_username(request):
 
 def compareh_view(request):
     buildings = BR.getBuildingStrings()
+    autofill = None
     return render(request, 'edashboard/compare.html',{'buildlist': buildings,'buildlistname':bname,
-    'buildlistnum':bnum})
+    'buildlistnum':bnum,'autofill':autofill})
 
 def down_compare(request, data):
         type(data)
