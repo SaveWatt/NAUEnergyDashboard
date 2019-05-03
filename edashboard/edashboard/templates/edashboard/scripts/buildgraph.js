@@ -21,7 +21,7 @@
       responsive: false,
       title: {
         display: true,
-        text: "{{ bname|safe }} Building Electricity usage",
+        text: "{{ bname|safe }} Building {{ util|safe }}",
       },
       scales: {
       xAxes: [{
@@ -33,7 +33,7 @@
       yAxes: [{
         scaleLabel: {
           display: true,
-          labelString: 'Electricity (kWh)'
+          labelString: '{{ util|safe }}'
         }
       }]
     }

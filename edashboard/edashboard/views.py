@@ -65,6 +65,7 @@ def building_view(request, buildnum):
     print(buildnum)
     buildings = BR.getBuildingStrings()
     inputs = []
+    util = ""
     if 'incr' in buildnum:
         inputs = getBuildData(buildnum)
         buildnum = inputs[0]
@@ -80,9 +81,11 @@ def building_view(request, buildnum):
             util_strs.append(str(sens.s_type))
     if inputs != []:
         data = BR.getData(building, inputs[2], datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=int(inputs[1]))
+        util = inputs[2]
     else:
         #data = BR.getData(building, "Meter Current Demand kwh", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
         data = BR.getData(building, util_strs[0], datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
+        util = util_strs[0]
     print(data)
     usage = conv.consumption(data[1])
     date = data[0]
@@ -116,6 +119,7 @@ def building_view(request, buildnum):
                                                         'median': median,
                                                         'trees': trees,
                                                         'oil': oil,
+                                                        'util': util,
                                                         'carbon': carbon,
                                                         'utilities': util_strs,
                                                         'imagePath': imagePath,
