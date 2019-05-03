@@ -204,6 +204,8 @@ def compare_view(request,builddata=None):
             senses.append("None")
         data = splitSensUrls(builddata, senses)
         sensornums = data[0]
+        print(data[1])
+        print(data[2])
         starttime = getTimes(data[1])
         endtime = getTimes(data[2])
         for i in range(0, len(sensornums)):
