@@ -56,7 +56,7 @@ def index(request):
     'steamDollar':steamDollar,'domDollar':domDollar,'reclaimedDollar':reclaimedDollar,'chilledDollar':chilledDollar,
     'overall':overall})
 
-def building_view(request, buildnum):
+def building_view(request, buildata):
     buildings = BR.getBuildingStrings()
     building = Building.objects.get(b_num=buildnum)
     b_name = building.b_name
