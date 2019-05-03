@@ -57,19 +57,13 @@ def index(request):
     'steamDollar':steamDollar,'domDollar':domDollar,'reclaimedDollar':reclaimedDollar,'chilledDollar':chilledDollar,
     'overall':overall})
 
-def building2_view(request,builddata):
-    print("Whoo")
-    return True
-
 def building_view(request, buildnum):
-    print(buildnum)
     buildings = BR.getBuildingStrings()
     inputs = []
     util = ""
     if 'incr' in buildnum:
         inputs = getBuildData(buildnum)
         buildnum = inputs[0]
-    print(inputs)
     building = Building.objects.get(b_num=buildnum)
     b_name = building.b_name
     sensors = Sensor.objects.filter(building_id=building.id)
@@ -86,7 +80,6 @@ def building_view(request, buildnum):
         #data = BR.getData(building, "Meter Current Demand kwh", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
         data = BR.getData(building, util_strs[0], datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
         util = util_strs[0]
-    print(data)
     usage = conv.consumption(data[1])
     date = data[0]
     #date.pop(0)
@@ -200,7 +193,6 @@ def compare_view(request,builddata=None):
                 buildnames.append(i[2])
             else:
                 buildnames.append(i[3])
-        print(sensornums)
         c_usages = []
         for i in datas:
             c_usages.append(conv.consumption(i[1]))
@@ -254,8 +246,6 @@ def compare_view(request,builddata=None):
                     senses.append("None")
                 data = splitSensUrls(builddata, senses)
                 sensornums = data[0]
-                print(data[1])
-                print(data[2])
                 starttime = getTimes(data[1])
                 endtime = getTimes(data[2])
                 for i in range(0, len(sensornums)):
@@ -277,7 +267,6 @@ def compare_view(request,builddata=None):
                         buildnames.append(i[2])
                     else:
                         buildnames.append(i[3])
-                print(sensornums)
                 c_usages = []
                 for i in datas:
                     c_usages.append(conv.consumption(i[1]))
