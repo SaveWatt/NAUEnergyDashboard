@@ -33,7 +33,6 @@ def index(request):
     list_dom = dom_list()
     list_reclaimed = reclaimed_list()
     list_chilled = chilled_list()
-    list_gas = gas_list()
     usage_elec = usage(list_elec)
     usage_steam = usage(list_steam)
     usage_dom = usage(list_dom)
