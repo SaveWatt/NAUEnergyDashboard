@@ -14,7 +14,7 @@ class Sensor(models.Model):
     building = models.ForeignKey(Building, on_delete=models.CASCADE)
     s_name = models.CharField(max_length=200)
     s_type = models.CharField(max_length=200, default='None')
-    s_log = models.CharField(max_length=200)
+    s_log = models.CharField(max_length=200, unique=True)
     s_sub_type = models.CharField(max_length=200, default='None')
 
     def __str__(self):
