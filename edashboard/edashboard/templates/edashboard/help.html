@@ -18,34 +18,44 @@
           <div style="margin-left:5%;">
             <div>
               <h3>How can I use it?</h3>
-              <p>Here, we will give you some tip how to use the energy dashboard.<br/></p>
               <div style="display:flex;">
-                <p>
-                  When a user first access to the homepage, there are buttons on the top of the screen.
-                  The first red box at the top left shows some buttons. These buttons allows users to explore each page.
-                  A building button opens a small window under the building button, such as a second red box on the left top.
-                  Users can search the building by number or name. Also, if a user presses a small button under the search window,
-                  the buildings display lists of buildings. These lists will navigate users to each building page that they select.
-                  <br/><br/>
-                  There is a login/sign-up button in the upper right corner.
-                  The energy dashboard is available to everyone, but more features require login. However, the user has original permission when first sign up, therefore they should ask to get authorization to view more.
+                <p>Here, we will give you some tip how to use the energy dashboard.<br/><br/>
+                   When a user first access to the homepage, there are buttons on the top of the screen.
+                   The first red box at the top left shows some buttons. These buttons allows users to explore each page.
+                   A building button opens a small window under the building button, such as a second red box on the left top.
+                   Users can search the building by number or name. Also, if a user presses a small button under the search window,
+                   the buildings display lists of buildings. These lists will navigate users to each building page that they select.
+                   <br/><br/>
+                   There is a login/sign-up button in the upper right corner.
+                   The energy dashboard is available to everyone, but more features require login. However, the user has original permission when first sign up, therefore they should ask to get authorization to view more.
                 </p>
                 <img src="{% static 'edashboard/images/helpPic/home.png' %}" style="margin:2%;width:55%;height:55%;">
               </div>
 
-              <p>More detailed data is available on the Reports page.<br/></p>
               <div style="display:flex;">
-                <p>
-                  Users can compare one or more graphs up to four.<br/>
-                  First, users need to search a building by the name or number and select an exact date time; year, month, date, hour.
-                  When users click a graph button after choosing a utility type, a graph will display on the right of the screen.
-                  After the searches have been done,
-                  the data will be downloaded by clicking a button under the graph. The data will be provided as a CSV file.
+                <p>More detailed data is available on the Reports page.<br/><br/>
+                   There will be some different ways to display data depends on users' permission level.
+                   Standard users can search only for utilities, but administrators can even search for both utilities and sensors.
+                   Users can compare one or more graphs up to four on this page.<br/>
+                   First, users need to search a building by the name or number and select an exact date time; year, month, date, hour.
+                   When users click a graph button after choosing a utility type, a graph will display on the right of the screen.
+                   After the searches have been done,
+                   the data will be downloaded by clicking a button under the graph. The data will be provided as a CSV file.
+                   For sensors, the only thing the user need to do is type in sensor number that the user want to search.
                 </p>
                 <img src="{% static 'edashboard/images/helpPic/report.png' %}" style="margin:2%;width:55%;height:55%;">
 
               </div>
-
+              <div style="display:flex;">
+                <p>Building Page<br/><br/>
+                   The Building page displays on the upper left corner with the name and image of the building selected by the users.
+                   For easy comparing with a sensor, there is a graph on the upper right screen, and it shows the utility usage of today and yesterday.
+                   A figure on the bottom middle shows historical data chart over time intervals.
+                   Basically, it's 60 minutes setup, but if you select 15 minutes, the graph becomes more detailed.
+                   The following statistics are the results based on the data drawn on the graph.
+                   If a user draws a new graph, a new chart will appear based on users' choice.
+                </p>
+                <img src="{% static 'edashboard/images/helpPic/building.png' %}" style="margin:2%;width:55%;height:55%;">
             </div>
           </div>
         </div>
