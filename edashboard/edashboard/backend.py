@@ -1,4 +1,4 @@
-from edashboard.models import Building, Sensor, SensorType
+from edashboard.models import Building, Sensor, SensorType, Connection
 import pymssql as sql
 
 class BackendRetriever:
@@ -147,10 +147,11 @@ class BackendRetriever:
 class StaticDataRetriever:
 
     def __init__(self):
-        self.__host = r'Sweetleaf.nau.froot.nau.edu\GPDEV'
-        self.__user = r'NAU\idd6'
-        self.__pass = "Itsuko23272147"
-        self.__base = 'EnergyCap'
+        con = Connection.objects.get(c_type = 'Main')
+        self.__host = str(con.host)
+        self.__user = str(con.user)
+        self.__pass = str(con.password)
+        self.__base = str(con.database)
         self.__b_identifiers = {'B1': ['Gammage','gamage'],
                          'B2': ['Blome', 'blome'],
                          'B3': ['1899 Bar and Grill', 'north union'],

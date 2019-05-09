@@ -29,7 +29,6 @@ class SensorType(models.Model):
     def __str__(self):
         return str(self.name)
 
-
 class ExportBuilding(models.Model):
     date = models.DateTimeField()
     usage = models.IntegerField()
@@ -41,6 +40,16 @@ class ExportBuilding(models.Model):
     class Meta:
        managed = False
        db_table = 'export_demo'
+
+class Connection(models.Model):
+    host = models.CharField(max_length=200)
+    user = models.CharField(max_length=200)
+    password = models.CharField(max_length=200)
+    database = models.CharField(max_length=200)
+    c_type = models.CharField(max_length=200, default='None')
+
+    def __str__(self):
+        return str(self.database)
 
 class UserProfile(models.Model):
    user = models.OneToOneField(User, on_delete=models.PROTECT)
