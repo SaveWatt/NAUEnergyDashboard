@@ -31,6 +31,7 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('building/', views.building_view, name='building'),
     path('building/<buildnum>/', views.building_view, name='building'),
+    path('building/<builddata>/', views.building_view, name='building2'),
     path('compare/', views.compareh_view, name='compare'),
     path('compare/<builddata>/', views.compare_view, name='compare2'),
     path('comparedata/<data>/', views.down_compare, name='down_compare'),

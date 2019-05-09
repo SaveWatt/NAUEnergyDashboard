@@ -73,6 +73,9 @@ def building_view(request, buildnum):
         sensor_strs.append(str(sens))
         if sens.s_sub_type != 'None':
             util_strs.append(str(sens.s_type))
+    for t in util_strs:
+        if 1 < util_strs.count(t):
+            util_strs = [x for x in util_strs if x != t]
     if inputs != []:
         data = BR.getData(building, inputs[2], datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=int(inputs[1]))
         util = inputs[2]

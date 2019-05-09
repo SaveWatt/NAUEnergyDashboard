@@ -23,7 +23,7 @@ EDASH_PATH = '/edashboard/'
 SECRET_KEY = 'qh(3m_k0mhp=eeo1^sb^#ue+=vhifu0=3l!@)3m^@3eiz0*$f6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['felucia-dev.ceias.nau.edu',
                  'localhost', '127.0.0.1', 'felucia.ceias.nau.edu']
