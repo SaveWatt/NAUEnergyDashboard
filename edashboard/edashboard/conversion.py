@@ -1,3 +1,6 @@
+def gastodollar(data):
+    dollar = round((data * 14.71 / 1000000), 4)
+    return dollar
 
 def kwtodollar(data):
     dollar = round((data * 0.12), 4)
