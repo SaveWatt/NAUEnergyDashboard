@@ -7,7 +7,9 @@ def elec_list():
     eleclist = []
     listslog = []
 
-    for data in Sensor.objects.filter(s_type="Electrical Usage"):
+    for data in Sensor.objects.filter(s_type="Elec Demand Kw"):
+        listslog.append(data.s_log)
+    for data in Sensor.objects.filter(s_type="Electric Demand"):
         listslog.append(data.s_log)
 
     for data in listslog:
@@ -19,12 +21,13 @@ def steam_list():
     steamlist = []
     listslog = []
 
-    for data in Sensor.objects.filter(s_type="Steam KBTU"):
+    for data in Sensor.objects.filter(s_type="Steam Usage"):
+        listslog.append(data.s_log)
+    for data in Sensor.objects.filter(s_type="Steam Usage Btu"):
         listslog.append(data.s_log)
 
     for data in listslog:
         steamlist.append(Sensor.objects.get(s_log=data))
-
     return steamlist
 
 def chilled_list():
@@ -32,6 +35,8 @@ def chilled_list():
     listslog = []
 
     for data in Sensor.objects.filter(s_type="Chilled Water"):
+        listslog.append(data.s_log)
+    for data in Sensor.objects.filter(s_type="Chilled Water Btu"):
         listslog.append(data.s_log)
 
     for data in listslog:
@@ -43,9 +48,11 @@ def dom_list():
     domlist = []
     listslog = []
 
-    for data in Sensor.objects.filter(s_type="Dom Water Gallons"):
+    for data in Sensor.objects.filter(s_type="Dom Water"):
         listslog.append(data.s_log)
-    for data in Sensor.objects.filter(s_type="Domestic Water"):
+    for data in Sensor.objects.filter(s_type="Dom Water Usage"):
+        listslog.append(data.s_log)
+    for data in Sensor.objects.filter(s_type="Domestic Water Usage"):
         listslog.append(data.s_log)
 
     for data in listslog:
@@ -57,7 +64,7 @@ def reclaimed_list():
     reclaimedlist = []
     listslog = []
 
-    for data in Sensor.objects.filter(s_type="Reclaimed Water"):
+    for data in Sensor.objects.filter(s_type="Reclaimed Water Gallons"):
         listslog.append(data.s_log)
 
     for data in listslog:
