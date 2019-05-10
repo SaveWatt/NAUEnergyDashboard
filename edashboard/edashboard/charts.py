@@ -65,13 +65,27 @@ def reclaimed_list():
 
     return reclaimedlist
 
+def gas_list():
+    gaslist = []
+    listslog = []
+
+    for data in Sensor.objects.filter(s_type="Gas Usage"):
+        listslog.append(data.s_log)
+    for data in Sensor.objects.filter(s_type="Nat Gas Usage"):
+        listslog.append(data.s_log)
+
+    for data in listslog:
+        gaslist.append(Sensor.objects.get(s_log=data))
+
+    return gaslist
+
 def usage(list):
     temp = []
     usage = []
     log_dict = []
 
     for data in list:
-        log_dict.append(sdr.get_log(data.s_log))
+        log_dict.append(sdr.get_change(data.s_log))
 
     for i in range (0,len(log_dict)):
         count = 0;
