@@ -242,10 +242,15 @@ def compare_view(request,builddata=None):
             for i in range(0,len(dates[0])):
                 t = (dates[0])[i]
                 (dates[0])[i] = t.strftime('%m:%d:%Y %H:%M')
+
             for i in range(0, len(autofill)):
                 if autofill[i] == "None":
                     autofill.remove(autofill[i])
+                else:
+                    building = Building.objects.get(b_num=autofill[i])
+                    i = building.b_name + "(" + i + ")"
             print(autofill)
+
             url = 'edashboard/compare.html'
             context = {'buildlist': buildings,
             'buildlistname':bname,'sensor':sensor,'buildlistnum':bnum,
