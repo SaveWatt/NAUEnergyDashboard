@@ -125,13 +125,14 @@ def building_view(request, buildnum):
 
 def commonutils_view(request,utildata=None):
     buildings = BR.getBuildingStrings()
-    autofill = None
+    autofill = utildata.split(",")
     builds = utildata.split(",")
     buildnums = []
     for i in builds:
         buildnums.append(getBuildInfo(i)[1])
     utils = BR.getCommonUtilites(buildnums)
     print(utils)
+    autofill.append("util")
     return render(request, 'edashboard/compare.html',{'buildlist': buildings,'buildlistname':bname,
     'buildlistnum':bnum,'autofill':autofill,'utils':utils})
 

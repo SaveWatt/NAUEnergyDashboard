@@ -69,7 +69,15 @@ function autofill(){
       }
     }
     else{
-
+      if(incr == 0){
+        document.getElementById("buildingadder").getElementsByTagName('input')[0].value = autofill[autofill.length-2];
+      }
+      else {
+        addBuilding();
+        var inputid = "extrabdiv"+extradiv;
+        document.getElementById(inputid).getElementsByTagName('input')[0].value = autofill[autofill.length-incr-2];
+        extradiv++;
+      }
     }
   }
 }
