@@ -2,15 +2,17 @@
 new Chart(document.getElementById("steam-chart"), {
     "type": "horizontalBar",
     "data": {
-        "labels": ["B88","B36","B60","B60"],
+        "labels": [{% for data in list_steam %}
+                      "{{ data|safe }}",
+                      {% endfor %}],
         "datasets": [{
             "label": "Steam BTU",
             "data": [{% for data in usage_steam %}
                           {{ data|safe }},
                           {% endfor %}],
             "fill": false,
-            "backgroundColor": ["#ff6a6a", "#ff8667", "#ffba69", "#ffcf85", "#fff6b7"],
-            "borderColor": ["#ff6a6a", "#ff8667", "#ffba69", "#ffcf85", "#fff6b7"],
+            "backgroundColor": ["#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a"],
+            "borderColor": ["#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a","#ff6a6a"],
             "borderWidth": 1
         }]
     },
