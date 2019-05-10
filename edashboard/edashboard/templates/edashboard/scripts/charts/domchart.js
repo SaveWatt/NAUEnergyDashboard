@@ -2,15 +2,17 @@
 new Chart(document.getElementById("dom-chart"), {
     "type": "horizontalBar",
     "data": {
-        "labels": ["B46","B62","B50A","B60","B86","B14"],
+        "labels": [{% for data in list_dom %}
+                      "{{ data|safe }}",
+                      {% endfor %}],
         "datasets": [{
             "label": "Dom Water Gallons",
             "data": [{% for data in usage_dom %}
                           {{ data|safe }},
                           {% endfor %}],
             "fill": false,
-            "backgroundColor": ["#0c64c9", "#1b75c8", "#2b8cbe", "#3ca0c8", "#4eb3d3", "#71c2dc"],
-            "borderColor": ["#0c64c9", "#1b75c8", "#2b8cbe", "#3ca0c8", "#4eb3d3", "#71c2dc"],
+            "backgroundColor": ["#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9"],
+            "borderColor": ["#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9","#0c64c9"],
             "borderWidth": 1
         }]
     },
