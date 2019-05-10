@@ -2,15 +2,17 @@
 new Chart(document.getElementById("chilled-chart"), {
     "type": "horizontalBar",
     "data": {
-        "labels": ["B91","B88","B30","B30A/B","B54"],
+        "labels": [{% for data in list_chilled %}
+                      "{{ data|safe }}",
+                      {% endfor %}],
         "datasets": [{
             "label": "Chilled Water Gallons",
             "data": [{% for data in usage_chilled %}
                           {{ data|safe }},
                           {% endfor %}],
             "fill": false,
-            "backgroundColor": ["#76a6fa", "#7bb5e5", "#aed7f4", "#c5e1f5", "#d3ebf0"],
-            "borderColor": ["#76a6fa", "#7bb5e5", "#aed7f4", "#c5e1f5", "#d3ebf0"],
+            "backgroundColor": ["#7bb5e5","#7bb5e5","#7bb5e5"],
+            "borderColor": ["#7bb5e5","#7bb5e5","#7bb5e5"],
             "borderWidth": 1
         }]
     },

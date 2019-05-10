@@ -29,8 +29,8 @@ function checkBuildingValues(){
   else{
     input5 = "None"
   }
-  console.log(input4);
-  console.log(input5);
+  if(input3 == "None" && input4 == "None" && input5 == "None"){
+  }
 }
 // functions
 function autocompletee(val) {

@@ -22,23 +22,48 @@
             <h1 style="color: #003467;text-align:left;height:fit-content;"> {{ bname|safe }} </h1>
             <img src="{% static imagePath %}" style="margin:1%;">
           </div>
-          <div id="weagreenstack">
-          <div class="greyell" id="greencomp">
-            <table class="greencomp">
-              <tr>
-                <td>CARBON OFFSET</td>
-                <td><span class="circle"><img id="factory" src={% static 'edashboard/images/factory.png' %} style="max-width: -webkit-fill-available;"></span></td>
-                <td>TREES PLANTED</td>
-                <td><span class="circle"><img id="factory" src={% static 'edashboard/images/tree.png' %} style="max-width: -webkit-fill-available;"></span></td>
-                <td>BARRELS OF OIL CONSUMED</td>
-                <td><span class="circle"><img id="factory" src={% static 'edashboard/images/barrel.png' %} style="max-width: -webkit-fill-available;"></span></td>
-              </tr>
-              <tr id="compval">
-                <td colspan="2" id=carOff><b>{{carbon|safe}} Lbs.</b></td>
-                <td colspan="2" id=treSav><b>{{trees|safe}} Trees</b></td>
-                <td colspan="2" id=barOil><b>{{oil|safe}} Barrels</b></td>
-              </tr>
-            </table>
+          <div>
+            <div style="margin-left:25px;text-align:left;height:250px;">
+              <h4>Weather in Flagstaff</h4>
+              <div id="forecast" style="display:flex;">
+                <div style="margin-right:20px;align:center">
+                  <h4>Today</h4>
+                  <h4>{{ weather_day1.temperature|safe }}°F</h4>
+                  <img align="center" src="http://openweathermap.org/img/w/{{ weather_day1.icon|safe }}.png" alt="Image">
+                  <h4>{{ weather_day1.description|safe }}</h4>
+                </div>
+                <div style="margin-right:20px;align:center">
+                  <h4>Tomorrow</h4>
+                  <h4>{{ weather_day2.temperature|safe }}°F</h4>
+                  <img align="center" src="http://openweathermap.org/img/w/{{ weather_day2.icon|safe }}.png" alt="Image">
+                  <h4>{{ weather_day2.description|safe }}</h4>
+                </div>
+                <div style="margin-right:20px;align:center">
+                  <h4>Day after tomorrow</h4>
+                  <h4>{{ weather_day3.temperature|safe }}°F</h4>
+                  <img align="center" src="http://openweathermap.org/img/w/{{ weather_day3.icon|safe }}.png" alt="Image">
+                  <h4>{{ weather_day3.description|safe }}</h4>
+                </div>
+              </div>
+            </div>
+            <div id="weagreenstack">
+            <div class="greyell" id="greencomp">
+              <table class="greencomp">
+                <tr>
+                  <td>CARBON OFFSET</td>
+                  <td><span class="circle"><img id="factory" src={% static 'edashboard/images/factory.png' %} style="max-width: -webkit-fill-available;"></span></td>
+                  <td>TREES PLANTED</td>
+                  <td><span class="circle"><img id="factory" src={% static 'edashboard/images/tree.png' %} style="max-width: -webkit-fill-available;"></span></td>
+                  <td>BARRELS OF OIL CONSUMED</td>
+                  <td><span class="circle"><img id="factory" src={% static 'edashboard/images/barrel.png' %} style="max-width: -webkit-fill-available;"></span></td>
+                </tr>
+                <tr id="compval">
+                  <td colspan="2" id=carOff><b>{{carbon|safe}} Lbs.</b></td>
+                  <td colspan="2" id=treSav><b>{{trees|safe}} Trees</b></td>
+                  <td colspan="2" id=barOil><b>{{oil|safe}} Barrels</b></td>
+                </tr>
+              </table>
+            </div>
           </div>
         </div>
           <div>

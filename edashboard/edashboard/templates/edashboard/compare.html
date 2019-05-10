@@ -68,7 +68,15 @@ function autofill(){
       }
     }
     else{
-
+      if(incr == 0){
+        document.getElementById("buildingadder").getElementsByTagName('input')[0].value = autofill[autofill.length-2];
+      }
+      else {
+        addBuilding();
+        var inputid = "extrabdiv"+extradiv;
+        document.getElementById(inputid).getElementsByTagName('input')[0].value = autofill[autofill.length-incr-2];
+        extradiv++;
+      }
     }
   }
 }
@@ -212,6 +220,43 @@ function getNum(buildstr) {
   var num = buildstr.split(" ");
   var last = (num[num.length-1]).substring(1);
   return last.substring(0, last.length - 1);
+}
+function getCommonUtilites(event){
+  event.preventDefault();
+  var builds = new Array();
+  if($('#buildingsearchcompsearch').val() != ""){
+    builds.push($('#buildingsearchcompsearch').val());
+  }
+  if(document.getElementById("extrabdiv0") != null){
+    if($('#extrabdiv0').find('#extrabuild').val() != undefined){
+      builds.push($('#extrabdiv0').find('#extrabuild').val());
+    }
+  }
+  if(document.getElementById("extrabdiv1") != null){
+    if($('#extrabdiv1').find('#extrabuild').val() != undefined){
+      builds.push($('#extrabdiv1').find('#extrabuild').val());
+    }
+  }
+  if(document.getElementById("extrabdiv2") != null){
+    if($('#extrabdiv2').find('#extrabuild').val() != undefined){
+      builds.push($('#extrabdiv2').find('#extrabuild').val());
+    }
+  }
+  var buildsincr;
+  var details = "";
+  for (buildsincr = 0; buildsincr < builds.length; buildsincr++){
+    if(buildsincr == builds.length-1){
+      details += builds[buildsincr];
+    }
+    else{
+      details += builds[buildsincr] + ",";
+    }
+  }
+  if(builds.length != 0){
+    var destinationUrl = "{% url 'commonutils' utildata=0 %}".replace(/0/, details.toString());
+    console.log(destinationUrl);
+    window.location.href = "" + destinationUrl.toString() + "";
+  }
 }
 
 function chgColor(id){

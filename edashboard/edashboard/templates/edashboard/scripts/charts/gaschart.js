@@ -1,18 +1,18 @@
 //Code for charts
-new Chart(document.getElementById("reclaimed-chart"), {
+new Chart(document.getElementById("gas-chart"), {
     "type": "horizontalBar",
     "data": {
-        "labels": [{% for data in list_reclaimed %}
+        "labels": [{% for data in list_gas %}
                       "{{ data|safe }}",
                       {% endfor %}],
         "datasets": [{
-            "label": "Reclaimed Water Gallons",
-            "data": [{% for data in usage_reclaimed %}
+            "label": "Gas Usage",
+            "data": [{% for data in usage_gas %}
                           {{ data|safe }},
                           {% endfor %}],
             "fill": false,
-            "backgroundColor": ["#387f55", "#387f55"],
-            "borderColor": ["#387f55", "#387f55"],
+            "backgroundColor": ["#000000","#000000","#000000","#000000","#000000","#000000"],
+            "borderColor": ["#000000","#000000","#000000","#000000","#000000","#000000"],
             "borderWidth": 1
         }]
     },
