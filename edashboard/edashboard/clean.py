@@ -10,7 +10,6 @@ def getTimes(times):
     day = ((splittime[1]).split(","))[0]
     hour=0
     mins=0
-    print(splittime)
     #Adds leading 0
     if(int(day)<10):
       day = "0"+day
@@ -88,7 +87,6 @@ def getBuildInfo(str):
     return [bname,bnum]
 
 def splitSensUrls(builddata,senses):
-    print(senses)
     cleandata = []
     months = ["January","February","March","April","May",
     "June","July","August","September","October","November", "December"]
@@ -96,9 +94,7 @@ def splitSensUrls(builddata,senses):
     times = sens[1]
     splitimes = times.split(" - ")
     start = splitimes[0]
-    print(start)
     end = splitimes[1]
-    print(end)
     fsense=[]
     for i in range(0,len(senses)):
         if(senses[len(senses)-1-i]=="None"):
@@ -115,7 +111,6 @@ def splitSensUrls(builddata,senses):
     return cleandata
 
 def splitUtilUrls(builddata, buildss):
-    #print(builddata)
     cleandata = []
     months = ["January","February","March","April","May",
     "June","July","August","September","October","November", "December"]
@@ -142,5 +137,4 @@ def splitUtilUrls(builddata, buildss):
     cleandata.append(start)
     #Adds end time
     cleandata.append(end)
-    #print(cleandata)
     return cleandata

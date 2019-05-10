@@ -41,7 +41,6 @@ class BackendRetriever:
     def getData(self, building, sens_type, init_date, fin_date, incr=1):
         sdr = StaticDataRetriever()
         build_id = building.id
-        print(sens_type)
         try:
             sens = Sensor.objects.get(building_id=build_id, s_type=sens_type.title())
         except:
@@ -52,14 +51,13 @@ class BackendRetriever:
         last = None
         for key in sorted(log_dict.keys()):
             if log_dict[key][0] >= init_date and log_dict[key][0] <= fin_date:
-                if incr == 60:
-                    if  log_dict[key][0].minute % incr < 5:
-                        date.append(log_dict[key][0])
-                        print(log_dict[key][0].minute)
-                        usage.append(log_dict[key][1])
-                else:
+                #if incr == 60:
+                if  log_dict[key][0].minute % incr <= 1:
                     date.append(log_dict[key][0])
                     usage.append(log_dict[key][1])
+                #else:
+                    #date.append(log_dict[key][0])
+                    #usage.append(log_dict[key][1])
         return (date, usage)
 
 
@@ -77,7 +75,6 @@ class BackendRetriever:
             building = sens.building
             utilname = sens.s_name
         except Exception as e:
-            print(e)
             return 0
         log_dict = sdr.get_log(sens.s_log)
         usage = []
@@ -292,27 +289,6 @@ class StaticDataRetriever:
                                 f_type = f_type.join(_type)
                                 self.__log_dict[key][5] = f_type.title()
 
-    def update_logs(self):
-        # Querying for trendlogs based on log_dict info
-        lognum = 1
-        for key in sorted(self.__log_dict.keys()):
-            # Creating string which identifies trendlog
-            logstring = self.__create_trend_string(key)
-
-            print(str(lognum) + ": logid: " + key + " logstring: " + logstring +
-            " building: " + log_dict[key][0])
-            print("--- " + log_dict[key][1])
-            lognum +=1
-
-            num_results = Building.objects.filter(b_num = key).count()
-            if num_results < 1:
-                b = Building(b_name='lol', b_num=key, b_alias=self.__b_identifiers[key])
-                b.save()
-
-            # Creating dynamic query for trendlog table
-            #query = ('SELECT * FROM %s' % logstring)
-            # Querying for trendlog table
-            #cursor.execute(query, ())
 
     def __create_trend_string(self, log_id):
         # Creating string which identifies trendlog
@@ -350,7 +326,7 @@ class StaticDataRetriever:
         # Creating cursor to parse database
         cursor = self.__connection.cursor(as_dict=True)
         # Creating dynamic query for trendlog table
-        query = ("SELECT TOP 2 * FROM %s ORDER BY 'TimeOfSample' DESC" % logstring)
+        query = ("SELECT TOP 2* FROM %s ORDER BY 'TimeOfSample' DESC" % logstring)
         # Querying for trendlog table
         cursor.execute(query, ())
 
@@ -360,18 +336,6 @@ class StaticDataRetriever:
             ret_dict[row['Sequence']] = [row['TimeOfSample'], row['SampleValue']]
 
         return ret_dict
-
-    def dict_printer(self):
-        count = 0
-        for key in sorted(self.__log_dict.keys()):
-            count+=1
-            print(str(count) + ": " + key + ": " + str(self.__log_dict[key]))
-
-    def log_printer(self):
-        cursor = self.__connection.cursor()
-        cursor.execute('SELECT * FROM ')
-        self.__table = cursor.fetchall()
-        print(self.__table)
 
 br = BackendRetriever()
 br.getNumStrings()

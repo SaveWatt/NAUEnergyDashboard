@@ -10,7 +10,7 @@
           data: [{% for data in usage %}
                         {{ data|safe }},
                         {% endfor %}],
-          label: "Week 1",
+          label: '{{ util|safe }}',
           borderColor: "#1f61a8",
           fill: origin,
           backgroundColor: "rgba(31,97,168,.3)",

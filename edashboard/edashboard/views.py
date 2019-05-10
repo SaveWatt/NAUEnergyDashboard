@@ -94,8 +94,12 @@ def building_view(request, buildnum):
         #data = BR.getData(building, "Meter Current Demand kwh", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
         data = BR.getData(building, util_strs[0], datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
         util = util_strs[0]
-    raw_usage = data[1]
+    raw_usages = data[1]
     usage = conv.consumption(data[1])
+    for i in usage:
+        if i < 0:
+            usage = raw_usages
+            break
     date = data[0]
     imagePath = '/edashboard/images/buildingPic/' + buildnum + '.jpg'
     if usage:
@@ -145,7 +149,6 @@ def commonutils_view(request,utildata=None):
     for i in builds:
         buildnums.append(getBuildInfo(i)[1])
     utils = BR.getCommonUtilites(buildnums)
-    print(utils)
     autofill.append("util")
     return render(request, 'edashboard/compare.html',{'buildlist': buildings,'buildlistname':bname,
     'buildlistnum':bnum,'autofill':autofill,'utils':utils})
@@ -205,11 +208,12 @@ def compare_view(request,builddata=None):
             endtime = getTimes(data[3])
             for i in range(0, len(buildnums)):
                 building = Building.objects.get(b_num=buildnums[i])
-                if BR.getUtilityData(building, util, starttime, endtime) == 0:
+                temp_data = BR.getUtilityData(building, util, starttime, endtime)
+                if  temp_data == 0:
                     context = {'buildlist': buildings}
                     url = 'edashboard/error.html'
                     return render(request, url, context)
-                datas.append(BR.getUtilityData(building, util, starttime, endtime))
+                datas.append(temp_data)
                 #buildnums[i]=building.b_name
             c_utils = BR.getCommonUtilites(buildnums)
             autofill = buildnums
@@ -232,6 +236,11 @@ def compare_view(request,builddata=None):
                 c_usages.append(conv.consumption(i[1]))
             raw_usages = usages
             usages = c_usages
+            for i in range(len(usages)):
+                for j in usages[i]:
+                    if j < 0:
+                        usages[i] = raw_usages[i]
+                        break
             if flag =="util":
                 for i in range(0,len(usages)):
                     if '/' in buildnames[i].b_name:
@@ -245,12 +254,13 @@ def compare_view(request,builddata=None):
             for i in range(0,len(dates[0])):
                 t = (dates[0])[i]
                 (dates[0])[i] = t.strftime('%m:%d:%Y %H:%M')
+
+            clean_autofill = []
             for i in range(0, len(autofill)):
-                if autofill[i] == "None":
-                    autofill.remove(autofill[i])
-                else:
+                if autofill[i] != "None":
                     building = Building.objects.get(b_num=autofill[i])
-                    autofill[i] = building.b_name + " (" + autofill[i] + ")"
+                    clean_autofill.append(building.b_name + " (" + autofill[i] + ")")
+            autofill = clean_autofill
             autofill.append('util')
             url = 'edashboard/compare.html'
             context = {'buildlist': buildings,
@@ -258,6 +268,7 @@ def compare_view(request,builddata=None):
             'builddata':builddata,'date':dates[0], 'utilname':util,
             'build_names':buildnames,'flag':flag,'content': content,
             'searchtime':str(searchtime),'utils':c_utils,'autofill':autofill}
+            return render(request, url, context)
 
         elif flag == "sens":
             if(request.user.is_authenticated):
@@ -312,6 +323,10 @@ def compare_view(request,builddata=None):
                         c_usages.append(conv.consumption(i[1]))
                     raw_usages = usages
                     usages = c_usages
+                    for i in usages:
+                        if i < 0:
+                            usages = raw_usages
+                            break
                     if flag =="util":
                         for i in range(0,len(usages)):
                             if '/' in buildnames[i].b_name:
@@ -326,15 +341,14 @@ def compare_view(request,builddata=None):
                         t = (dates[0])[i]
                         (dates[0])[i] = t.strftime('%m:%d:%Y %H:%M')
                     for i in range(0, len(autofill)):
-                        print(autofill[i])
                         if autofill[i] == "None":
                             autofill.remove(autofill[i])
-                    print(autofill)
                     url = 'edashboard/compare.html'
                     context = {'buildlist': buildings,
                     'buildlistname':bname,'sensor':sensor,'buildlistnum':bnum,
                     'builddata':builddata,'date':dates[0], 'utilname':util,
                     'build_names':buildnames,'flag':flag,'content': content, 'searchtime':str(searchtime),'utils':c_utils,'autofill':autofill}
+                    return render(request, url, context)
             else:
                 context = {'buildlist': buildings}
                 url = 'edashboard/error.html'
@@ -343,7 +357,6 @@ def compare_view(request,builddata=None):
             context = {'buildlist': buildings}
             url = 'edashboard/error.html'
             return render(request, url, context)
-        return render(request, url, context)
     except:
         context = {'buildlist': buildings}
         url = 'edashboard/error.html'
