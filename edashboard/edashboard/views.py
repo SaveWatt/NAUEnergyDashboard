@@ -123,6 +123,18 @@ def building_view(request, buildnum):
                                                         'buildlistname':bname,
                                                         'buildlistnum':bnum})
 
+def commonutils_view(request,utildata=None):
+    buildings = BR.getBuildingStrings()
+    autofill = None
+    builds = utildata.split(",")
+    buildnums = []
+    for i in builds:
+        buildnums.append(getBuildInfo(i)[1])
+    utils = BR.getCommonUtilites(buildnums)
+    print(utils)
+    return render(request, 'edashboard/compare.html',{'buildlist': buildings,'buildlistname':bname,
+    'buildlistnum':bnum,'autofill':autofill,'utils':utils})
+
 def compare_view(request,builddata=None):
     buildings = BR.getBuildingStrings()
     flag = ""

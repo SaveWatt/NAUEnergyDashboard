@@ -34,6 +34,7 @@ urlpatterns = [
     path('building/<builddata>/', views.building_view, name='building2'),
     path('compare/', views.compareh_view, name='compare'),
     path('compare/<builddata>/', views.compare_view, name='compare2'),
+    path('comparecommonutils/<utildata>/', views.commonutils_view, name='commonutils'),
     path('comparedata/<data>/', views.down_compare, name='down_compare'),
     path('export/', views.exporth_view, name='export'),
     path('export/<builddata>/', views.export_view, name='export2'),
