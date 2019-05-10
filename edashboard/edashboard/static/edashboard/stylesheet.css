@@ -777,4 +777,5 @@ div.error{
 button#get-util{
   margin: auto;
   margin-top: 5%;
+  display: block;
 }

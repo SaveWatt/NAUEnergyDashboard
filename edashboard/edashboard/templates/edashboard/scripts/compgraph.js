@@ -58,7 +58,7 @@
   responsive: false,
   title: {
     display: true,
-    text: "Comparison of {% for data in content%}{% if forloop.last %}{{data.1|safe}}{% else %}{{data.1|safe}}, {% endif %}{% endfor %} {{utilname|safe}}",
+    text: "Analysis of {% for data in content%}{% if forloop.last %}{{data.1|safe}}{% else %}{{data.1|safe}}, {% endif %}{% endfor %} {{utilname|safe}}",
   },
   scales: {
   xAxes: [{

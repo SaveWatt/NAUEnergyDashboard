@@ -11,7 +11,6 @@ function checkBuildingValues(){
   if(document.getElementById('extrabdiv0') != null){
     input3 = document.getElementById('extrabdiv0').getElementsByTagName('input')[0];
     input3.setAttribute("onkeyup", "input3KeyUp(event)");
-    document.getElementById("get-util").style.display = "block";
   }
   else{
     input3 = "None"
@@ -19,7 +18,6 @@ function checkBuildingValues(){
   if(document.getElementById('extrabdiv1') != null){
     input4 = document.getElementById('extrabdiv1').getElementsByTagName('input')[0];
     input4.setAttribute("onkeyup", "input4KeyUp(event)");
-    document.getElementById("get-util").style.display = "block";
   }
   else{
     input4 = "None"
@@ -27,13 +25,11 @@ function checkBuildingValues(){
   if(document.getElementById('extrabdiv2') != null){
     input5 = document.getElementById('extrabdiv2').getElementsByTagName('input')[0];
     input5.setAttribute("onkeyup", "input5KeyUp(event)");
-    document.getElementById("get-util").style.display = "block";
   }
   else{
     input5 = "None"
   }
   if(input3 == "None" && input4 == "None" && input5 == "None"){
-    document.getElementById("get-util").style.display = "none";
   }
 }
 // functions

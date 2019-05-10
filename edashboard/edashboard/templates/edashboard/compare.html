@@ -41,7 +41,6 @@
 then close all select boxes: */
 {% if user.userprofile.permission is 3 %}
 document.getElementById("utilswitch").style.backgroundColor = "rgb(255, 204, 1)";
-document.getElementById("get-util").style.display = "none";
 {% endif %}
 var time = document.getElementById("reportrange").getElementsByTagName('span')[0];
 time.setAttribute("id","stringtime");
