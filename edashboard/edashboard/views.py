@@ -34,30 +34,37 @@ def index(request):
     list_dom = dom_list()
     list_reclaimed = reclaimed_list()
     list_chilled = chilled_list()
+    list_gas = gas_list()
     usage_elec = usage(list_elec)
     usage_steam = usage(list_steam)
     usage_dom = usage(list_dom)
     usage_reclaimed = usage(list_reclaimed)
     usage_chilled = usage(list_chilled)
+    usage_gas = usage(list_gas)
     avg_elec = avg(usage_elec)
     avg_steam = avg(usage_steam)
     avg_dom = avg(usage_dom)
     avg_reclaimed = avg(usage_reclaimed)
     avg_chilled = avg(usage_chilled)
+    avg_gas = avg(usage_gas)
     elecDollar = kwtodollar(avg_elec)
     steamDollar = btutodollar(avg_steam)
     domDollar = gallontodollar(avg_dom)
     reclaimedDollar = gallontodollar(avg_reclaimed)
     chilledDollar = gallontodollar(avg_chilled)
-    overall = elecDollar + steamDollar + domDollar + reclaimedDollar + chilledDollar
-    return render(request, 'edashboard/index.html',{'buildlist': buildings,'buildlistname':bname,
-    'buildlistnum':bnum,'usage_elec':usage_elec,'usage_steam':usage_steam,'usage_chilled':usage_chilled,
-    'usage_dom':usage_dom,'usage_reclaimed':usage_reclaimed,'avg_elec':avg_elec,'avg_steam':avg_steam,
-    'avg_chilled':avg_chilled,'avg_dom':avg_dom,'avg_reclaimed':avg_reclaimed,'elecDollar':elecDollar,
-    'steamDollar':steamDollar,'domDollar':domDollar,'reclaimedDollar':reclaimedDollar,'chilledDollar':chilledDollar,
+    gasDollar = gastodollar(avg_gas)
+    overall = round(elecDollar + steamDollar + domDollar + reclaimedDollar + chilledDollar + gasDollar, 4)
+    return render(request, 'edashboard/index.html',{'buildlist': buildings,'buildlistname':bname,'buildlistnum':bnum,
+    'list_elec':list_elec,'list_steam':list_steam,'list_dom':list_dom,'list_reclaimed':list_reclaimed,'list_chilled':list_chilled,'list_gas':list_gas,
+    'usage_elec':usage_elec,'usage_steam':usage_steam,'usage_chilled':usage_chilled,'usage_dom':usage_dom,'usage_reclaimed':usage_reclaimed,'usage_gas':usage_gas,
+    'avg_elec':avg_elec,'avg_steam':avg_steam,'avg_chilled':avg_chilled,'avg_dom':avg_dom,'avg_reclaimed':avg_reclaimed,'avg_gas':avg_gas,
+    'elecDollar':elecDollar,'steamDollar':steamDollar,'domDollar':domDollar,'reclaimedDollar':reclaimedDollar,'chilledDollar':chilledDollar,'gasDollar':gasDollar,
     'overall':overall})
 
 def building_view(request, buildnum):
+    weather_day1 = day1()
+    weather_day2 = day2()
+    weather_day3 = day3()
     buildings = BR.getBuildingStrings()
     inputs = []
     util = ""
@@ -121,7 +128,10 @@ def building_view(request, buildnum):
                                                         'imagePath': imagePath,
                                                         'sensors': sensor_strs,
                                                         'buildlistname':bname,
-                                                        'buildlistnum':bnum})
+                                                        'buildlistnum':bnum,
+                                                        'weather_day1':weather_day1,
+                                                        'weather_day2':weather_day2,
+                                                        'weather_day3':weather_day3})
 
 def commonutils_view(request,utildata=None):
     buildings = BR.getBuildingStrings()
