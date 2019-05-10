@@ -213,7 +213,6 @@ def compare_view(request,builddata=None):
                 #buildnums[i]=building.b_name
             c_utils = BR.getCommonUtilites(buildnums)
             autofill = buildnums
-            autofill.append('util')
             #Loads the final data
             usages = []
             dates=[]
@@ -249,7 +248,10 @@ def compare_view(request,builddata=None):
             for i in range(0, len(autofill)):
                 if autofill[i] == "None":
                     autofill.remove(autofill[i])
-            print(autofill)
+                else:
+                    building = Building.objects.get(b_num=autofill[i])
+                    autofill[i] = building.b_name + " (" + autofill[i] + ")"
+            autofill.append('util')
             url = 'edashboard/compare.html'
             context = {'buildlist': buildings,
             'buildlistname':bname,'sensor':sensor,'buildlistnum':bnum,
@@ -324,8 +326,10 @@ def compare_view(request,builddata=None):
                         t = (dates[0])[i]
                         (dates[0])[i] = t.strftime('%m:%d:%Y %H:%M')
                     for i in range(0, len(autofill)):
+                        print(autofill[i])
                         if autofill[i] == "None":
                             autofill.remove(autofill[i])
+                    print(autofill)
                     url = 'edashboard/compare.html'
                     context = {'buildlist': buildings,
                     'buildlistname':bname,'sensor':sensor,'buildlistnum':bnum,
