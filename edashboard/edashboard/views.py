@@ -205,6 +205,10 @@ def compare_view(request,builddata=None):
             endtime = getTimes(data[3])
             for i in range(0, len(buildnums)):
                 building = Building.objects.get(b_num=buildnums[i])
+                if BR.getUtilityData(building, util, starttime, endtime) == 0:
+                    context = {'buildlist': buildings}
+                    url = 'edashboard/error.html'
+                    return render(request, url, context)
                 datas.append(BR.getUtilityData(building, util, starttime, endtime))
                 #buildnums[i]=building.b_name
             c_utils = BR.getCommonUtilites(buildnums)
@@ -368,6 +372,11 @@ def export_view(request,builddata=None):
         endtime = getTimes(data[3])
         building = Building.objects.get(b_num=buildnum)
         data = BR.getUtilityData(building, util, starttime, endtime)
+        if data == 0:
+            context = {'buildlist': buildings}
+            url = 'edashboard/error.html'
+            return render(request, url, context)
+
     if flag == "sens":
         if request.session.get('user.userprofile.permission') is 3:
             data = splitSensUrls(builddata)

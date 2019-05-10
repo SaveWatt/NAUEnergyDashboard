@@ -79,13 +79,12 @@ class BackendRetriever:
         sdr = StaticDataRetriever()
         build_id = building.id
         try:
-            sens = Sensor.objects.get(building_id=build_id, s_type=sens_type)
+            sens = Sensor.objects.get(building_id=build_id, s_sub_type=sens_type)
             building = sens.building
             utilname = sens.s_name
-        except:
-            sens = Sensor.objects.get(building_id=27 , s_type='Chilled Water')
-            building = sens.building
-            utilname = sens.s_name
+        except Exception as e:
+            print(e)
+            return 0
         log_dict = sdr.get_log(sens.s_log)
         usage = []
         date = []
