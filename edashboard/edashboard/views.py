@@ -85,14 +85,18 @@ def building_view(request, buildnum):
             util_strs = [x for x in util_strs if x != t]
     if inputs != []:
         data = BR.getData(building, inputs[2], datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=int(inputs[1]))
+        if data == 0:
+            context = {'buildlist': buildings}
+            url = 'edashboard/error.html'
+            return render(request, url, context)
         util = inputs[2]
     else:
         #data = BR.getData(building, "Meter Current Demand kwh", datetime.datetime.now()-datetime.timedelta(hours=24), datetime.datetime.now())
         data = BR.getData(building, util_strs[0], datetime.datetime(2018, 10, 1, 0, 0), datetime.datetime(2018, 10, 1, 23, 59), incr=60)
         util = util_strs[0]
+    raw_usage = data[1]
     usage = conv.consumption(data[1])
     date = data[0]
-    #date.pop(0)
     imagePath = '/edashboard/images/buildingPic/' + buildnum + '.jpg'
     if usage:
         percent = sum(usage)/10000*100
@@ -111,7 +115,6 @@ def building_view(request, buildnum):
         trees = 0
         carbon = 0
         oil = 0
-        return HttpResponseNotFound
     return render(request, 'edashboard/building.html', {'buildlist': buildings,
                                                         'bnum': buildnum,
                                                         'bname':b_name,
@@ -224,6 +227,7 @@ def compare_view(request,builddata=None):
             c_usages = []
             for i in datas:
                 c_usages.append(conv.consumption(i[1]))
+            raw_usages = usages
             usages = c_usages
             if flag =="util":
                 for i in range(0,len(usages)):
@@ -241,13 +245,15 @@ def compare_view(request,builddata=None):
             for i in range(0, len(autofill)):
                 if autofill[i] == "None":
                     autofill.remove(autofill[i])
+            print(autofill)
             url = 'edashboard/compare.html'
             context = {'buildlist': buildings,
             'buildlistname':bname,'sensor':sensor,'buildlistnum':bnum,
             'builddata':builddata,'date':dates[0], 'utilname':util,
-            'build_names':buildnames,'flag':flag,'content': content, 'searchtime':str(searchtime),'utils':c_utils,'autofill':autofill}
+            'build_names':buildnames,'flag':flag,'content': content,
+            'searchtime':str(searchtime),'utils':c_utils,'autofill':autofill}
 
-        if flag == "sens":
+        elif flag == "sens":
             if(request.user.is_authenticated):
                 username = request.user.id
                 user = UserProfile.objects.get(user=username)
@@ -298,6 +304,7 @@ def compare_view(request,builddata=None):
                     c_usages = []
                     for i in datas:
                         c_usages.append(conv.consumption(i[1]))
+                    raw_usages = usages
                     usages = c_usages
                     if flag =="util":
                         for i in range(0,len(usages)):
@@ -320,15 +327,19 @@ def compare_view(request,builddata=None):
                     'buildlistname':bname,'sensor':sensor,'buildlistnum':bnum,
                     'builddata':builddata,'date':dates[0], 'utilname':util,
                     'build_names':buildnames,'flag':flag,'content': content, 'searchtime':str(searchtime),'utils':c_utils,'autofill':autofill}
-                else:
-                    context = {'buildlist': buildings}
-                    url = 'edashboard/error.html'
             else:
                 context = {'buildlist': buildings}
                 url = 'edashboard/error.html'
+                return render(request, url, context)
+        else:
+            context = {'buildlist': buildings}
+            url = 'edashboard/error.html'
             return render(request, url, context)
+        return render(request, url, context)
     except:
-        return HttpResponseNotFound
+        context = {'buildlist': buildings}
+        url = 'edashboard/error.html'
+        return render(request, url, context)
 
 
 def export_view(request,builddata=None):

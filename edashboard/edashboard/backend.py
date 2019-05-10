@@ -16,7 +16,7 @@ class BackendRetriever:
         sensors = Sensor.objects.filter(building_id=b_id)
         for sensor in sensors:
             if sensor.s_type != 'None':
-                utilities.append(str(sensor))
+                utilities.append(sensor)
         return utilities
 
     def getCommonUtilites(self, buildings_nums):
@@ -25,12 +25,12 @@ class BackendRetriever:
         for n in buildings_nums:
             temp_utils = self.getUtilitiesByBuilding(n)
             for u in temp_utils:
-                utilities.append(u)
+                utilities.append(u.s_sub_type)
         for u in utilities:
             if count != utilities.count(u):
                 utilities = [x for x in utilities if x != u]
+        utilities = list(dict.fromkeys(utilities))
         return utilities
-
 
 
     """
@@ -45,7 +45,7 @@ class BackendRetriever:
         try:
             sens = Sensor.objects.get(building_id=build_id, s_type=sens_type.title())
         except:
-            return ([], [])
+            return 0
         log_dict = sdr.get_log(sens.s_log)
         usage = []
         date = []
