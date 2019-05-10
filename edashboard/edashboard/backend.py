@@ -45,7 +45,7 @@ class BackendRetriever:
         try:
             sens = Sensor.objects.get(building_id=build_id, s_type=sens_type.title())
         except:
-            sens = Sensor.objects.get(building_id=57 , s_type='Meter Current Demand KW')
+            return ([], [])
         log_dict = sdr.get_log(sens.s_log)
         usage = []
         date = []
