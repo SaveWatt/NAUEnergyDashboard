@@ -62,9 +62,7 @@ def index(request):
     'overall':overall})
 
 def building_view(request, buildnum):
-    weather_day1 = day1()
-    weather_day2 = day2()
-    weather_day3 = day3()
+
     buildings = BR.getBuildingStrings()
     inputs = []
     util = ""
@@ -137,9 +135,7 @@ def building_view(request, buildnum):
                                                         'sensors': sensor_strs,
                                                         'buildlistname':bname,
                                                         'buildlistnum':bnum,
-                                                        'weather_day1':weather_day1,
-                                                        'weather_day2':weather_day2,
-                                                        'weather_day3':weather_day3})
+                                                        })
 
 def commonutils_view(request,utildata=None):
     buildings = BR.getBuildingStrings()
