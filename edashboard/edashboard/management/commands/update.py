@@ -12,5 +12,4 @@ class Command(BaseCommand):
 
    def handle(self, **options):
        sdr = StaticDataRetriever()
-       print("Updating Sensors...")
        sdr.update_sensors()

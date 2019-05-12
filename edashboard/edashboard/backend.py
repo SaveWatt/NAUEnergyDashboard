@@ -51,13 +51,13 @@ class BackendRetriever:
         last = None
         for key in sorted(log_dict.keys()):
             if log_dict[key][0] >= init_date and log_dict[key][0] <= fin_date:
-                #if incr == 60:
-                if  log_dict[key][0].minute % incr <= 1:
+                if incr == 60:
+                    if  log_dict[key][0].minute % incr < 5:
+                        date.append(log_dict[key][0])
+                        usage.append(log_dict[key][1])
+                else:
                     date.append(log_dict[key][0])
                     usage.append(log_dict[key][1])
-                #else:
-                    #date.append(log_dict[key][0])
-                    #usage.append(log_dict[key][1])
         return (date, usage)
 
 
@@ -71,11 +71,13 @@ class BackendRetriever:
         sdr = StaticDataRetriever()
         build_id = building.id
         try:
-            sens = Sensor.objects.get(building_id=build_id, s_sub_type=sens_type)
+            sens = Sensor.objects.get(building_id=build_id, s_type=sens_type)
             building = sens.building
             utilname = sens.s_name
-        except Exception as e:
-            return 0
+        except:
+            sens = Sensor.objects.get(building_id=27 , s_type='Chilled Water')
+            building = sens.building
+            utilname = sens.s_name
         log_dict = sdr.get_log(sens.s_log)
         usage = []
         date = []
@@ -235,12 +237,9 @@ class StaticDataRetriever:
 
     def update_sensors(self):
         if not self.__log_dict:
-            print("Making log dict...")
             self.make_log_dict()
             count = len(self.__log_dict.keys())
-        print("Starting Sensor Update...")
         for key in sorted(self.__log_dict.keys()):
-            print("Updating Sensor #%d" % count)
             count -= 1
             if Sensor.objects.filter(s_log=key):
                 s = Sensor.objects.get(s_log=key)
@@ -289,6 +288,23 @@ class StaticDataRetriever:
                                 f_type = f_type.join(_type)
                                 self.__log_dict[key][5] = f_type.title()
 
+    def update_logs(self):
+        # Querying for trendlogs based on log_dict info
+        lognum = 1
+        for key in sorted(self.__log_dict.keys()):
+            # Creating string which identifies trendlog
+            logstring = self.__create_trend_string(key)
+            lognum +=1
+
+            num_results = Building.objects.filter(b_num = key).count()
+            if num_results < 1:
+                b = Building(b_name='lol', b_num=key, b_alias=self.__b_identifiers[key])
+                b.save()
+
+            # Creating dynamic query for trendlog table
+            #query = ('SELECT * FROM %s' % logstring)
+            # Querying for trendlog table
+            #cursor.execute(query, ())
 
     def __create_trend_string(self, log_id):
         # Creating string which identifies trendlog
@@ -326,7 +342,7 @@ class StaticDataRetriever:
         # Creating cursor to parse database
         cursor = self.__connection.cursor(as_dict=True)
         # Creating dynamic query for trendlog table
-        query = ("SELECT TOP 2* FROM %s ORDER BY 'TimeOfSample' DESC" % logstring)
+        query = ("SELECT TOP 2 * FROM %s ORDER BY 'TimeOfSample' DESC" % logstring)
         # Querying for trendlog table
         cursor.execute(query, ())
 
@@ -336,6 +352,16 @@ class StaticDataRetriever:
             ret_dict[row['Sequence']] = [row['TimeOfSample'], row['SampleValue']]
 
         return ret_dict
+
+    def dict_printer(self):
+        count = 0
+        for key in sorted(self.__log_dict.keys()):
+            count+=1
+
+    def log_printer(self):
+        cursor = self.__connection.cursor()
+        cursor.execute('SELECT * FROM ')
+        self.__table = cursor.fetchall()
 
 br = BackendRetriever()
 br.getNumStrings()

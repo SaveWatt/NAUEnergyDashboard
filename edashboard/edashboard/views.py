@@ -231,6 +231,8 @@ def compare_view(request,builddata=None):
             for i in datas:
                 c_usages.append(conv.consumption(i[1]))
             raw_usages = usages
+            for i in range(0,len(buildnames)):
+                raw_usages[i] = [raw_usages[i],buildnames[i]]
             usages = c_usages
             for i in range(len(usages)):
                 for j in usages[i]:
@@ -259,7 +261,7 @@ def compare_view(request,builddata=None):
             autofill = clean_autofill
             autofill.append('util')
             url = 'edashboard/compare.html'
-            context = {'buildlist': buildings,
+            context = {'raw_usages':raw_usages,'buildlist': buildings,
             'buildlistname':bname,'sensor':sensor,'buildlistnum':bnum,
             'builddata':builddata,'date':dates[0], 'utilname':util,
             'build_names':buildnames,'flag':flag,'content': content,

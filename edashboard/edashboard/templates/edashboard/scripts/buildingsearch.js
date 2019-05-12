@@ -1,6 +1,5 @@
 {% load staticfiles %}
 var input2 = document.getElementById('buildingadder').getElementsByTagName('input')[0];
-console.log(input2);
 var input3 = "None"
 var input4 = "None"
 var input5 = "None"
@@ -72,7 +71,6 @@ input2.onkeyup = function(e){
   }
 }
 function FillInput(listid){
-  console.log(listid);
   var listName = document.getElementById(listid).innerHTML;
   document.getElementById('buildingadder').getElementsByTagName('input')[0].value = listName;
   document.getElementById("autocomplete-results10").innerHTML = ''
@@ -92,8 +90,6 @@ function input3KeyUp(e){
     autocomplete_results = document.getElementById("autocomplete-results0");
     autocomplete_results.innerHTML = '';
     build_to_show = autocompletee(input_val);
-    console.log(input_val);
-    console.log(build_to_show);
     if(build_to_show.length != 0){
 
       for (i = 0; i < build_to_show.length; i++) {
@@ -126,7 +122,6 @@ function FillInput0(listid){
 // functions
 // events
 function input4KeyUp(e){
-    console.log("Test");
   input_val = input4.value; // updates the variable on each ocurrence
   if (input_val.length > 0) {
     var build_to_show = [];

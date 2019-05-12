@@ -84,7 +84,7 @@ function autofill(){
 function downloadData(event){
   event.preventDefault();
   var dataset = [];
-  {% for data in content%}
+  {% for data in raw_usages%}
   dataset.push("usage",[{{ data.0|safe }}],"label","{{data.1|safe}}");
   {% endfor %}
   dataset.push("date", "{{date|safe}}");
@@ -254,7 +254,6 @@ function getCommonUtilites(event){
   }
   if(builds.length != 0){
     var destinationUrl = "{% url 'commonutils' utildata=0 %}".replace(/0/, details.toString());
-    console.log(destinationUrl);
     window.location.href = "" + destinationUrl.toString() + "";
   }
 }
