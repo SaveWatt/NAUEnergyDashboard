@@ -4,6 +4,8 @@
   <head>
     <link rel="stylesheet" type="text/css" href="{% static '/edashboard/stylesheet.css'%}">
     <link rel="shortcut icon" href="{% static '/edashboard/images/favicon.ico' %}" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.8.10/themes/smoothness/jquery-ui.css" type="text/css">
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.10/jquery-ui.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
@@ -224,7 +226,7 @@ function getNum(buildstr) {
 function getCommonUtilites(event){
   event.preventDefault();
   var builds = new Array();
-  if($('#buildingsearchcompsearch').val() != ""){
+  if($('#buildingsearchcompsearch').val() != undefined){
     builds.push($('#buildingsearchcompsearch').val());
   }
   if(document.getElementById("extrabdiv0") != null){
